@@ -1,31 +1,18 @@
 {
-  "title": "carlog",
-  "uid": "carlog-infinity",
-  "tags": [
-    "carlog"
-  ],
-  "timezone": "browser",
-  "schemaVersion": 40,
-  "version": 1,
-  "editable": true,
-  "refresh": "1m",
-  "time": {
-    "from": "now-30d",
-    "to": "now"
-  },
-  "templating": {
-    "list": []
-  },
   "annotations": {
     "list": []
   },
+  "editable": true,
+  "id": 2070581229600768,
   "panels": [
     {
-      "type": "stat",
-      "title": "Zusammenfassung (Zeitraum)",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -33,13 +20,8 @@
         "x": 0,
         "y": 0
       },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "options": {
-        "textMode": "value_and_name",
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
@@ -51,6 +33,7 @@
           "values": false
         },
         "text": {},
+        "textMode": "value_and_name",
         "wideLayout": true
       },
       "targets": [
@@ -59,31 +42,25 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "json",
           "format": "table",
-          "source": "url",
-          "url": "/api/trip?from=${__from}&to=${__to}",
-          "refId": "A",
           "parser": "backend",
+          "refId": "A",
+          "source": "url",
+          "type": "json",
+          "url": "/api/trip?from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
+            "data": "",
+            "method": "GET"
           }
         }
-      ]
+      ],
+      "title": "Zusammenfassung (Zeitraum)",
+      "type": "stat"
     },
     {
-      "type": "timeseries",
-      "title": "Drehzahl",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 6
       },
       "fieldConfig": {
         "defaults": {
@@ -91,10 +68,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -107,18 +91,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=rpm&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=rpm&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Drehzahl",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -135,26 +120,18 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Öldruck",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 6
-      },
       "fieldConfig": {
         "defaults": {
-          "unit": "pressurebar",
-          "min": 0,
           "max": 7,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -167,14 +144,22 @@
                 "value": 0.6
               }
             ]
-          }
+          },
+          "unit": "pressurebar"
         },
         "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
       },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -187,18 +172,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
+          "parser": "backend",
+          "refId": "A",
           "source": "url",
+          "type": "csv",
           "url": "/api/series.csv?kind=oil_bar&from=${__from}&to=${__to}",
-          "refId": "A",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Öldruck",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -215,20 +201,13 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Getriebeöltemperatur",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -236,10 +215,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -252,18 +238,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
+          "parser": "backend",
+          "refId": "A",
           "source": "url",
+          "type": "csv",
           "url": "/api/series.csv?kind=gear_c&from=${__from}&to=${__to}",
-          "refId": "A",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Getriebeöltemperatur",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -280,20 +267,13 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Kühlmitteltemperatur",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -301,10 +281,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -317,18 +304,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
+          "parser": "backend",
+          "refId": "A",
           "source": "url",
+          "type": "csv",
           "url": "/api/series.csv?kind=coolant&from=${__from}&to=${__to}",
-          "refId": "A",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Kühlmitteltemperatur",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -345,28 +333,27 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Bordspannung (+B / Adapter)",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 22
-      },
       "fieldConfig": {
         "defaults": {
-          "unit": "volt",
+          "max": 15,
           "min": 11,
-          "max": 15
+          "unit": "volt"
         },
         "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 22
       },
       "options": {
         "legend": {
@@ -380,40 +367,41 @@
       },
       "targets": [
         {
+          "alias": "+B (ELM ATRV)",
           "datasource": {
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=bplus&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
-          "alias": "+B (ELM ATRV)",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=bplus&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         },
         {
+          "alias": "Adapter",
           "datasource": {
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=voltage&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "B",
-          "alias": "Adapter",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=voltage&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Bordspannung (+B / Adapter)",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -430,14 +418,19 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Geschwindigkeit (OBD)",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -445,16 +438,11 @@
         "x": 12,
         "y": 22
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "velocitykmh"
-        },
-        "overrides": []
-      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -467,18 +455,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=speed&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=speed&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Geschwindigkeit (OBD)",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -495,14 +484,19 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "GPS-Geschwindigkeit",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -510,16 +504,11 @@
         "x": 0,
         "y": 30
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "velocitykmh"
-        },
-        "overrides": []
-      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -532,18 +521,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=gps_speed&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=gps_speed&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "GPS-Geschwindigkeit",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -560,20 +550,13 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Ladedruck (MAP)",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 30
       },
       "fieldConfig": {
         "defaults": {
@@ -581,10 +564,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -597,18 +587,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=map&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=map&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Ladedruck (MAP)",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -625,20 +616,13 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Ansaugtemperatur",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 38
       },
       "fieldConfig": {
         "defaults": {
@@ -646,10 +630,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 38
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -662,18 +653,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=intake&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=intake&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Ansaugtemperatur",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -690,14 +682,21 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Motorlast",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -705,18 +704,11 @@
         "x": 12,
         "y": 38
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100
-        },
-        "overrides": []
-      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -729,18 +721,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=load&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=load&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Motorlast",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -757,20 +750,13 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Tankkosten je Tankung",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 46
       },
       "fieldConfig": {
         "defaults": {
@@ -778,10 +764,17 @@
         },
         "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 46
+      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -794,18 +787,19 @@
             "type": "yesoreyeram-infinity-datasource",
             "uid": "bg3i058esdxq8c"
           },
-          "type": "csv",
           "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=fillup_cost&from=${__from}&to=${__to}",
+          "parser": "backend",
           "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=fillup_cost&from=${__from}&to=${__to}",
           "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend"
+            "data": "",
+            "method": "GET"
+          }
         }
       ],
+      "title": "Tankkosten je Tankung",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -822,14 +816,21 @@
             ]
           }
         }
-      ]
+      ],
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Gaspedal",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -837,24 +838,36 @@
         "x": 0,
         "y": 54
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100
-        },
-        "overrides": []
-      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
           "sort": "none"
         }
       },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "bg3i058esdxq8c"
+          },
+          "format": "timeseries",
+          "parser": "backend",
+          "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=throttle&from=${__from}&to=${__to}",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Gaspedal",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -872,31 +885,20 @@
           }
         }
       ],
-      "targets": [
-        {
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "bg3i058esdxq8c"
-          },
-          "type": "csv",
-          "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=throttle&from=${__from}&to=${__to}",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend",
-          "refId": "A"
-        }
-      ]
+      "type": "timeseries"
     },
     {
-      "type": "timeseries",
-      "title": "Tankfüllstand",
       "datasource": {
         "type": "yesoreyeram-infinity-datasource",
         "uid": "bg3i058esdxq8c"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "unit": "percent"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -904,24 +906,36 @@
         "x": 12,
         "y": 54
       },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "percent",
-          "min": 0,
-          "max": 100
-        },
-        "overrides": []
-      },
       "options": {
         "legend": {
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
           "sort": "none"
         }
       },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "bg3i058esdxq8c"
+          },
+          "format": "timeseries",
+          "parser": "backend",
+          "refId": "A",
+          "source": "url",
+          "type": "csv",
+          "url": "/api/series.csv?kind=fuel&from=${__from}&to=${__to}",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Tankfüllstand",
       "transformations": [
         {
           "id": "convertFieldType",
@@ -939,24 +953,23 @@
           }
         }
       ],
-      "targets": [
-        {
-          "datasource": {
-            "type": "yesoreyeram-infinity-datasource",
-            "uid": "bg3i058esdxq8c"
-          },
-          "type": "csv",
-          "format": "timeseries",
-          "source": "url",
-          "url": "/api/series.csv?kind=fuel&from=${__from}&to=${__to}",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "parser": "backend",
-          "refId": "A"
-        }
-      ]
+      "type": "timeseries"
     }
-  ]
+  ],
+  "refresh": "1m",
+  "schemaVersion": 40,
+  "tags": [
+    "carlog"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timezone": "browser",
+  "title": "carlog",
+  "uid": "carlog-infinity",
+  "version": 8
 }

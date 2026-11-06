@@ -442,7 +442,7 @@ def trip_summary(t_from, t_to):
     return [{
         "Strecke (km)": round(km, 1),
         "Hoechstgeschw. (km/h)": round(float(max_kmh or 0)),
-        "Fahrzeit (min)": round(fahren_min),
+        "Fahrzeit": "{} h {} min".format(int(round(fahren_min)) // 60, int(round(fahren_min)) % 60),
         "Fahrten": len(blocks),
         "Schnitt (km/h)": round(avg, 1),
         "Tankstand (%)": round(float(tank[-1]["f"]), 1) if tank else None,

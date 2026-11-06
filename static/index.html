@@ -206,11 +206,10 @@ async function loadTrips(){
     const now=Math.floor(Date.now()/1000);
     const d=await api('/api/trip?from='+(now-tripDays*86400)+'&to='+now);
     const t=d[0]||{};
-    const mins=t['Fahrzeit (min)']||0;
     const cards=[
       ['Strecke',t['Strecke (km)']!=null?fmt(t['Strecke (km)'],1)+' km':'–'],
       ['Höchstgeschw.',t['Hoechstgeschw. (km/h)']!=null?fmt(t['Hoechstgeschw. (km/h)'],0)+' km/h':'–'],
-      ['Fahrzeit',mins?Math.floor(mins/60)+' h '+(mins%60)+' min':'–'],
+      ['Fahrzeit',t['Fahrzeit']||'–'],
       ['Fahrten',t['Fahrten']!=null?fmt(t['Fahrten'],0):'–'],
       ['Ø Tempo',t['Schnitt (km/h)']!=null?fmt(t['Schnitt (km/h)'],1)+' km/h':'–'],
       ['Tankstand',t['Tankstand (%)']!=null?fmt(t['Tankstand (%)'],0)+' %':'–'],

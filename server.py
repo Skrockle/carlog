@@ -127,6 +127,7 @@ def fillups_with_stats():
     items = [dict(r) for r in rows]
     prev_any = prev_full = None
     total_cost = 0.0
+    liters_acc = cost_acc = 0.0  # Liter/Kosten seit dem letzten Volltanken (inkl. Teilfuellungen)
     for it in items:
         it["full"] = bool(it["full"])
         it["l_100"] = None
@@ -142,14 +143,20 @@ def fillups_with_stats():
                 and it["odometer"] > prev_any["odometer"]):
             it["km"] = round(it["odometer"] - prev_any["odometer"], 1)
         if it["full"]:
+            # Voll-zu-Voll: ALLE Liter seit dem letzten Volltanken (Teilfuellungen
+            # sind im Tank dazwischen gefahren und gehoeren in die Rechnung)
             if (prev_full is not None and it["odometer"] is not None
                     and prev_full["odometer"] is not None):
                 delta = it["odometer"] - prev_full["odometer"]
                 if delta > 0:
-                    it["l_100"] = round(it["liters"] * 100.0 / delta, 2)
-                    it["e_100"] = round(it["cost"] * 100.0 / delta, 2)
+                    it["l_100"] = round((liters_acc + it["liters"]) * 100.0 / delta, 2)
+                    it["e_100"] = round((cost_acc + it["cost"]) * 100.0 / delta, 2)
             if it["odometer"] is not None:
                 prev_full = it
+            liters_acc = cost_acc = 0.0
+        else:
+            liters_acc += it["liters"]
+            cost_acc += it["cost"]
         prev_any = it
 
     overall = {
@@ -170,9 +177,13 @@ def fillups_with_stats():
     fulls = [it for it in items if it["full"] and it["odometer"] is not None
              and not it.get("pending")]
     if len(fulls) >= 2:
-        km = fulls[-1]["odometer"] - fulls[0]["odometer"]
-        liters = sum(it["liters"] for it in fulls[1:])
-        cost = sum(it["cost"] for it in fulls[1:])
+        o0, o1 = fulls[0]["odometer"], fulls[-1]["odometer"]
+        km = o1 - o0
+        # Alle Tankungen im Spannraum (inkl. Teilfuellungen zwischen den Voll-Tankungen)
+        span = [it for it in items if not it.get("pending")
+                and it["odometer"] is not None and o0 < it["odometer"] <= o1]
+        liters = sum(it["liters"] for it in span)
+        cost = sum(it["cost"] for it in span)
         if km > 0:
             overall["avg_l_100"] = round(liters * 100.0 / km, 2)
             overall["avg_e_100"] = round(cost * 100.0 / km, 2)

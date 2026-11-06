@@ -3,7 +3,7 @@
 <rect x="0.5" y="0.5" width="979" height="719" rx="13.5" fill="none" stroke="#242c36"/>
 <text x="26" y="42" font-size="20" font-weight="700" fill="#e8ecf1">🚗 carlog</text>
 <text x="136" y="42" font-size="13" fill="#8b96a5">Toyota GR Yaris</text>
-<text x="954" y="42" font-size="12" fill="#8b96a5" text-anchor="end">· 3 Tankungen · 37866 GPS-Punkte · 37866 OBD-Messungen</text>
+<text x="954" y="42" font-size="12" fill="#8b96a5" text-anchor="end">· 46 Tankungen · 621748 GPS-Punkte · 621748 OBD-Messungen</text>
 <rect x="26" y="60" width="72" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
 <text x="62.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Tanken</text>
 <rect x="106" y="60" width="80" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
@@ -14,40 +14,122 @@
 <text x="335.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Automatik</text>
 <rect x="26" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="126" font-size="11" fill="#8b96a5">km gesamt (Tanklog)</text>
-<text x="42" y="148" font-size="19" font-weight="700" fill="#e8ecf1">797</text>
+<text x="42" y="148" font-size="19" font-weight="700" fill="#e8ecf1">13.593</text>
 <rect x="354" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="370" y="126" font-size="11" fill="#8b96a5">Ø l/100 km</text>
-<text x="370" y="148" font-size="19" font-weight="700" fill="#e8ecf1">8,86</text>
+<text x="370" y="148" font-size="19" font-weight="700" fill="#e8ecf1">10,05</text>
 <rect x="682" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="698" y="126" font-size="11" fill="#8b96a5">Ø €/100 km</text>
-<text x="698" y="148" font-size="19" font-weight="700" fill="#e8ecf1">17,01</text>
+<text x="698" y="148" font-size="19" font-weight="700" fill="#e8ecf1">19,17</text>
 <rect x="26" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="188" font-size="11" fill="#8b96a5">Kosten gesamt</text>
-<text x="42" y="210" font-size="19" font-weight="700" fill="#e8ecf1">222,58 €</text>
+<text x="42" y="210" font-size="19" font-weight="700" fill="#e8ecf1">2.309,11 €</text>
 <rect x="354" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="370" y="188" font-size="11" fill="#8b96a5">km gesamt (GPS)</text>
-<text x="370" y="210" font-size="19" font-weight="700" fill="#e8ecf1">825</text>
+<text x="370" y="210" font-size="19" font-weight="700" fill="#e8ecf1">13.676</text>
 <rect x="682" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="698" y="188" font-size="11" fill="#8b96a5">GPS-Punkte</text>
-<text x="698" y="210" font-size="19" font-weight="700" fill="#e8ecf1">37.866</text>
+<text x="698" y="210" font-size="19" font-weight="700" fill="#e8ecf1">621.748</text>
 <rect x="26" y="236" width="928" height="230" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="260" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERBRAUCH L/100 KM (VOLL-ZU-VOLL)</text>
 <rect x="858" y="251" width="10" height="10" rx="2" fill="#ff5252"/>
 <text x="874" y="260" font-size="11" fill="#8b96a5">l/100 km</text>
 <line x1="86" y1="444.0" x2="938" y2="444.0" stroke="#242c36"/>
-<text x="78" y="448.0" font-size="10" fill="#8b96a5" text-anchor="end">8,0</text>
+<text x="78" y="448.0" font-size="10" fill="#8b96a5" text-anchor="end">0,3</text>
 <line x1="86" y1="383.3" x2="938" y2="383.3" stroke="#242c36"/>
 <text x="78" y="387.3" font-size="10" fill="#8b96a5" text-anchor="end">8,6</text>
 <line x1="86" y1="322.7" x2="938" y2="322.7" stroke="#242c36"/>
-<text x="78" y="326.7" font-size="10" fill="#8b96a5" text-anchor="end">9,1</text>
+<text x="78" y="326.7" font-size="10" fill="#8b96a5" text-anchor="end">16,8</text>
 <line x1="86" y1="262.0" x2="938" y2="262.0" stroke="#242c36"/>
-<text x="78" y="266.0" font-size="10" fill="#8b96a5" text-anchor="end">9,7</text>
-<polyline fill="none" stroke="#ff5252" stroke-width="2.5" points="512.0,423.0 938.0,283.0"/>
-<text x="86.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-07</text>
-<circle cx="512.0" cy="423.0" r="3.5" fill="#ff5252"/>
-<text x="512.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-20</text>
-<circle cx="938.0" cy="283.0" r="3.5" fill="#ff5252"/>
-<text x="938.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-11-03</text>
+<text x="78" y="266.0" font-size="10" fill="#8b96a5" text-anchor="end">25,1</text>
+<polyline fill="none" stroke="#ff5252" stroke-width="2.5" points="104.9,380.9 123.9,419.5 142.8,284.0 161.7,383.0 180.7,380.6 199.6,409.8 218.5,325.1 237.5,405.9 256.4,375.7 275.3,374.7 294.3,351.7 313.2,380.8 332.1,386.0 351.1,406.5 370.0,335.3 388.9,382.9 407.9,383.0 426.8,411.4 445.7,363.7 464.7,347.2 483.6,382.5 502.5,420.5 521.5,285.5 540.4,380.2 559.3,382.3 578.3,382.1 597.2,417.6 616.1,294.3 635.1,380.2 654.0,380.4 672.9,403.7 691.9,333.1 710.8,380.1 729.7,418.1 748.7,394.4 767.6,283.0 786.5,423.0 805.5,338.4 824.4,388.5 843.3,303.4 862.3,406.9"/>
+<text x="86.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-11-10</text>
+<circle cx="104.9" cy="380.9" r="3.5" fill="#ff5252"/>
+<text x="104.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-11-24</text>
+<circle cx="123.9" cy="419.5" r="3.5" fill="#ff5252"/>
+<text x="123.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-12-06</text>
+<circle cx="142.8" cy="284.0" r="3.5" fill="#ff5252"/>
+<text x="142.8" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-12-08</text>
+<circle cx="161.7" cy="383.0" r="3.5" fill="#ff5252"/>
+<text x="161.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-12-15</text>
+<circle cx="180.7" cy="380.6" r="3.5" fill="#ff5252"/>
+<text x="180.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2025-12-25</text>
+<circle cx="199.6" cy="409.8" r="3.5" fill="#ff5252"/>
+<text x="199.6" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-01-05</text>
+<circle cx="218.5" cy="325.1" r="3.5" fill="#ff5252"/>
+<text x="218.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-01-12</text>
+<circle cx="237.5" cy="405.9" r="3.5" fill="#ff5252"/>
+<text x="237.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-01-19</text>
+<circle cx="256.4" cy="375.7" r="3.5" fill="#ff5252"/>
+<text x="256.4" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-01-24</text>
+<circle cx="275.3" cy="374.7" r="3.5" fill="#ff5252"/>
+<text x="275.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-02-01</text>
+<circle cx="294.3" cy="351.7" r="3.5" fill="#ff5252"/>
+<text x="294.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-02-08</text>
+<circle cx="313.2" cy="380.8" r="3.5" fill="#ff5252"/>
+<text x="313.2" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-02-17</text>
+<circle cx="332.1" cy="386.0" r="3.5" fill="#ff5252"/>
+<text x="332.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-02-23</text>
+<circle cx="351.1" cy="406.5" r="3.5" fill="#ff5252"/>
+<text x="351.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-03-11</text>
+<circle cx="370.0" cy="335.3" r="3.5" fill="#ff5252"/>
+<text x="370.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-03-16</text>
+<circle cx="388.9" cy="382.9" r="3.5" fill="#ff5252"/>
+<text x="388.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-03-29</text>
+<circle cx="407.9" cy="383.0" r="3.5" fill="#ff5252"/>
+<text x="407.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-04-06</text>
+<circle cx="426.8" cy="411.4" r="3.5" fill="#ff5252"/>
+<text x="426.8" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-04-16</text>
+<circle cx="445.7" cy="363.7" r="3.5" fill="#ff5252"/>
+<text x="445.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-04-23</text>
+<circle cx="464.7" cy="347.2" r="3.5" fill="#ff5252"/>
+<text x="464.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-05-01</text>
+<circle cx="483.6" cy="382.5" r="3.5" fill="#ff5252"/>
+<text x="483.6" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-05-05</text>
+<circle cx="502.5" cy="420.5" r="3.5" fill="#ff5252"/>
+<text x="502.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-05-14</text>
+<circle cx="521.5" cy="285.5" r="3.5" fill="#ff5252"/>
+<text x="521.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-05-20</text>
+<circle cx="540.4" cy="380.2" r="3.5" fill="#ff5252"/>
+<text x="540.4" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-05-29</text>
+<circle cx="559.3" cy="382.3" r="3.5" fill="#ff5252"/>
+<text x="559.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-06-07</text>
+<circle cx="578.3" cy="382.1" r="3.5" fill="#ff5252"/>
+<text x="578.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-06-14</text>
+<circle cx="597.2" cy="417.6" r="3.5" fill="#ff5252"/>
+<text x="597.2" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-06-23</text>
+<circle cx="616.1" cy="294.3" r="3.5" fill="#ff5252"/>
+<text x="616.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-06-27</text>
+<circle cx="635.1" cy="380.2" r="3.5" fill="#ff5252"/>
+<text x="635.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-07-07</text>
+<circle cx="654.0" cy="380.4" r="3.5" fill="#ff5252"/>
+<text x="654.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-07-19</text>
+<circle cx="672.9" cy="403.7" r="3.5" fill="#ff5252"/>
+<text x="672.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-07-27</text>
+<circle cx="691.9" cy="333.1" r="3.5" fill="#ff5252"/>
+<text x="691.9" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-08-04</text>
+<circle cx="710.8" cy="380.1" r="3.5" fill="#ff5252"/>
+<text x="710.8" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-08-17</text>
+<circle cx="729.7" cy="418.1" r="3.5" fill="#ff5252"/>
+<text x="729.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-08-27</text>
+<circle cx="748.7" cy="394.4" r="3.5" fill="#ff5252"/>
+<text x="748.7" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-08-30</text>
+<circle cx="767.6" cy="283.0" r="3.5" fill="#ff5252"/>
+<text x="767.6" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-08-31</text>
+<circle cx="786.5" cy="423.0" r="3.5" fill="#ff5252"/>
+<text x="786.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-09-09</text>
+<circle cx="805.5" cy="338.4" r="3.5" fill="#ff5252"/>
+<text x="805.5" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-09-15</text>
+<circle cx="824.4" cy="388.5" r="3.5" fill="#ff5252"/>
+<text x="824.4" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-09-20</text>
+<circle cx="843.3" cy="303.4" r="3.5" fill="#ff5252"/>
+<text x="843.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-09-24</text>
+<circle cx="862.3" cy="406.9" r="3.5" fill="#ff5252"/>
+<text x="862.3" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-06</text>
+<text x="881.2" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-12</text>
+<text x="900.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-18</text>
+<text x="919.1" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-25</text>
+<text x="938.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-11-01</text>
 <rect x="26" y="482" width="928" height="208" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="506" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERLAUF · VOLL-ZU-VOLL</text>
 <text x="42" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="start">Datum</text>
@@ -61,37 +143,510 @@
 <text x="684" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="start">Notiz</text>
 <text x="938" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">✕</text>
 <line x1="42" y1="544" x2="938" y2="544" stroke="#242c36"/>
-<text x="42" y="568" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-07</text>
-<text x="210" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">42.150</text>
+<text x="42" y="568" font-size="13" fill="#e8ecf1" text-anchor="start">2025-11-10</text>
+<text x="210" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">42.553</text>
 <text x="282" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
-<text x="352" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">46,18</text>
-<text x="414" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1,900</text>
-<text x="474" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">87,74</text>
+<text x="352" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">33,76</text>
+<text x="414" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1,920</text>
+<text x="474" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">64,82</text>
 <text x="554" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
 <text x="644" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
 <text x="684" y="568" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
 <text x="938" y="568" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <line x1="42" y1="586" x2="938" y2="586" stroke="#1d242e"/>
-<text x="42" y="596" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-20</text>
-<text x="210" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">42.579</text>
-<text x="282" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">429,4</text>
-<text x="352" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">35,25</text>
-<text x="414" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1,920</text>
-<text x="474" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">67,68</text>
-<text x="554" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">8,21</text>
-<text x="644" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">15,76</text>
+<text x="42" y="596" font-size="13" fill="#e8ecf1" text-anchor="start">2025-11-24</text>
+<text x="210" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">42.942</text>
+<text x="282" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">389,2</text>
+<text x="352" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">34,57</text>
+<text x="414" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1,820</text>
+<text x="474" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">62,92</text>
+<text x="554" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">8,88</text>
+<text x="644" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">16,17</text>
 <text x="684" y="596" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
 <text x="938" y="596" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <line x1="42" y1="614" x2="938" y2="614" stroke="#1d242e"/>
-<text x="42" y="624" font-size="13" fill="#e8ecf1" text-anchor="start">2026-11-03</text>
-<text x="210" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">42.947</text>
-<text x="282" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">367,8</text>
-<text x="352" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">34,98</text>
-<text x="414" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1,920</text>
-<text x="474" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">67,16</text>
-<text x="554" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">9,51</text>
-<text x="644" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">18,26</text>
-<text x="684" y="624" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="42" y="624" font-size="13" fill="#e8ecf1" text-anchor="start">2025-12-06</text>
+<text x="210" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">43.320</text>
+<text x="282" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">378,0</text>
+<text x="352" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">13,67</text>
+<text x="414" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1,890</text>
+<text x="474" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">25,83</text>
+<text x="554" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">3,62</text>
+<text x="644" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">6,83</text>
+<text x="684" y="624" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
 <text x="938" y="624" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="642" x2="938" y2="642" stroke="#1d242e"/>
+<text x="42" y="652" font-size="13" fill="#e8ecf1" text-anchor="start">2025-12-08</text>
+<text x="210" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">43.473</text>
+<text x="282" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">152,6</text>
+<text x="352" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">33,75</text>
+<text x="414" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">1,930</text>
+<text x="474" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">65,14</text>
+<text x="554" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">22,12</text>
+<text x="644" y="652" font-size="13" fill="#e8ecf1" text-anchor="end">42,69</text>
+<text x="684" y="652" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="652" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="670" x2="938" y2="670" stroke="#1d242e"/>
+<text x="42" y="680" font-size="13" fill="#e8ecf1" text-anchor="start">2025-12-15</text>
+<text x="210" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">43.979</text>
+<text x="282" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">505,7</text>
+<text x="352" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">43,48</text>
+<text x="414" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">1,950</text>
+<text x="474" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">84,79</text>
+<text x="554" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">8,60</text>
+<text x="644" y="680" font-size="13" fill="#e8ecf1" text-anchor="end">16,77</text>
+<text x="684" y="680" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="680" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="698" x2="938" y2="698" stroke="#1d242e"/>
+<text x="42" y="708" font-size="13" fill="#e8ecf1" text-anchor="start">2025-12-25</text>
+<text x="210" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">44.360</text>
+<text x="282" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">381,2</text>
+<text x="352" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">34,03</text>
+<text x="414" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">1,810</text>
+<text x="474" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">61,59</text>
+<text x="554" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">8,93</text>
+<text x="644" y="708" font-size="13" fill="#e8ecf1" text-anchor="end">16,16</text>
+<text x="684" y="708" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="708" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="726" x2="938" y2="726" stroke="#1d242e"/>
+<text x="42" y="736" font-size="13" fill="#e8ecf1" text-anchor="start">2026-01-05</text>
+<text x="210" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">44.743</text>
+<text x="282" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">382,7</text>
+<text x="352" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">18,91</text>
+<text x="414" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">1,800</text>
+<text x="474" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">34,03</text>
+<text x="554" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">4,94</text>
+<text x="644" y="736" font-size="13" fill="#e8ecf1" text-anchor="end">8,89</text>
+<text x="684" y="736" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="736" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="754" x2="938" y2="754" stroke="#1d242e"/>
+<text x="42" y="764" font-size="13" fill="#e8ecf1" text-anchor="start">2026-01-12</text>
+<text x="210" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">44.948</text>
+<text x="282" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">204,8</text>
+<text x="352" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">33,80</text>
+<text x="414" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">1,980</text>
+<text x="474" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">66,92</text>
+<text x="554" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">16,50</text>
+<text x="644" y="764" font-size="13" fill="#e8ecf1" text-anchor="end">32,68</text>
+<text x="684" y="764" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="764" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="782" x2="938" y2="782" stroke="#1d242e"/>
+<text x="42" y="792" font-size="13" fill="#e8ecf1" text-anchor="start">2026-01-19</text>
+<text x="210" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">45.461</text>
+<text x="282" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">513,7</text>
+<text x="352" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">28,08</text>
+<text x="414" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">1,850</text>
+<text x="474" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">51,96</text>
+<text x="554" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">5,47</text>
+<text x="644" y="792" font-size="13" fill="#e8ecf1" text-anchor="end">10,11</text>
+<text x="684" y="792" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="792" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="810" x2="938" y2="810" stroke="#1d242e"/>
+<text x="42" y="820" font-size="13" fill="#e8ecf1" text-anchor="start">2026-01-24</text>
+<text x="210" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">45.678</text>
+<text x="282" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">217,3</text>
+<text x="352" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">20,84</text>
+<text x="414" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">1,800</text>
+<text x="474" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">37,52</text>
+<text x="554" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">9,59</text>
+<text x="644" y="820" font-size="13" fill="#e8ecf1" text-anchor="end">17,27</text>
+<text x="684" y="820" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="820" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="838" x2="938" y2="838" stroke="#1d242e"/>
+<text x="42" y="848" font-size="13" fill="#e8ecf1" text-anchor="start">2026-02-01</text>
+<text x="210" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">45.946</text>
+<text x="282" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">267,8</text>
+<text x="352" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">26,05</text>
+<text x="414" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">1,990</text>
+<text x="474" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">51,84</text>
+<text x="554" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">9,73</text>
+<text x="644" y="848" font-size="13" fill="#e8ecf1" text-anchor="end">19,36</text>
+<text x="684" y="848" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="848" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="866" x2="938" y2="866" stroke="#1d242e"/>
+<text x="42" y="876" font-size="13" fill="#e8ecf1" text-anchor="start">2026-02-08</text>
+<text x="210" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">46.234</text>
+<text x="282" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">287,3</text>
+<text x="352" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">36,98</text>
+<text x="414" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">1,830</text>
+<text x="474" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">67,67</text>
+<text x="554" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">12,87</text>
+<text x="644" y="876" font-size="13" fill="#e8ecf1" text-anchor="end">23,55</text>
+<text x="684" y="876" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="876" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="894" x2="938" y2="894" stroke="#1d242e"/>
+<text x="42" y="904" font-size="13" fill="#e8ecf1" text-anchor="start">2026-02-17</text>
+<text x="210" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">46.618</text>
+<text x="282" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">383,9</text>
+<text x="352" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">34,15</text>
+<text x="414" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">1,960</text>
+<text x="474" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">66,93</text>
+<text x="554" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">8,90</text>
+<text x="644" y="904" font-size="13" fill="#e8ecf1" text-anchor="end">17,43</text>
+<text x="684" y="904" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="904" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="922" x2="938" y2="922" stroke="#1d242e"/>
+<text x="42" y="932" font-size="13" fill="#e8ecf1" text-anchor="start">2026-02-23</text>
+<text x="210" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">47.161</text>
+<text x="282" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">543,1</text>
+<text x="352" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">44,50</text>
+<text x="414" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">1,960</text>
+<text x="474" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">87,22</text>
+<text x="554" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">8,19</text>
+<text x="644" y="932" font-size="13" fill="#e8ecf1" text-anchor="end">16,06</text>
+<text x="684" y="932" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="932" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="950" x2="938" y2="950" stroke="#1d242e"/>
+<text x="42" y="960" font-size="13" fill="#e8ecf1" text-anchor="start">2026-03-11</text>
+<text x="210" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">47.541</text>
+<text x="282" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">380,2</text>
+<text x="352" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">20,50</text>
+<text x="414" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">1,850</text>
+<text x="474" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">37,93</text>
+<text x="554" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">5,39</text>
+<text x="644" y="960" font-size="13" fill="#e8ecf1" text-anchor="end">9,98</text>
+<text x="684" y="960" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="960" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="978" x2="938" y2="978" stroke="#1d242e"/>
+<text x="42" y="988" font-size="13" fill="#e8ecf1" text-anchor="start">2026-03-16</text>
+<text x="210" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">47.765</text>
+<text x="282" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">224,1</text>
+<text x="352" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">33,88</text>
+<text x="414" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">1,950</text>
+<text x="474" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">66,06</text>
+<text x="554" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">15,12</text>
+<text x="644" y="988" font-size="13" fill="#e8ecf1" text-anchor="end">29,48</text>
+<text x="684" y="988" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="988" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1006" x2="938" y2="1006" stroke="#1d242e"/>
+<text x="42" y="1016" font-size="13" fill="#e8ecf1" text-anchor="start">2026-03-29</text>
+<text x="210" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">48.273</text>
+<text x="282" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">507,9</text>
+<text x="352" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">43,75</text>
+<text x="414" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">1,850</text>
+<text x="474" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">80,94</text>
+<text x="554" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">8,61</text>
+<text x="644" y="1016" font-size="13" fill="#e8ecf1" text-anchor="end">15,94</text>
+<text x="684" y="1016" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1016" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1034" x2="938" y2="1034" stroke="#1d242e"/>
+<text x="42" y="1044" font-size="13" fill="#e8ecf1" text-anchor="start">2026-04-06</text>
+<text x="210" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">48.671</text>
+<text x="282" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">397,8</text>
+<text x="352" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">34,20</text>
+<text x="414" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">1,930</text>
+<text x="474" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">66,00</text>
+<text x="554" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">8,60</text>
+<text x="644" y="1044" font-size="13" fill="#e8ecf1" text-anchor="end">16,59</text>
+<text x="684" y="1044" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1044" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1062" x2="938" y2="1062" stroke="#1d242e"/>
+<text x="42" y="1072" font-size="13" fill="#e8ecf1" text-anchor="start">2026-04-16</text>
+<text x="210" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">49.056</text>
+<text x="282" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">385,6</text>
+<text x="352" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">18,18</text>
+<text x="414" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">1,900</text>
+<text x="474" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">34,55</text>
+<text x="554" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">4,71</text>
+<text x="644" y="1072" font-size="13" fill="#e8ecf1" text-anchor="end">8,96</text>
+<text x="684" y="1072" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1072" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1090" x2="938" y2="1090" stroke="#1d242e"/>
+<text x="42" y="1100" font-size="13" fill="#e8ecf1" text-anchor="start">2026-04-23</text>
+<text x="210" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">49.259</text>
+<text x="282" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">202,6</text>
+<text x="352" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">22,76</text>
+<text x="414" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">1,790</text>
+<text x="474" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">40,75</text>
+<text x="554" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">11,23</text>
+<text x="644" y="1100" font-size="13" fill="#e8ecf1" text-anchor="end">20,11</text>
+<text x="684" y="1100" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1100" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1118" x2="938" y2="1118" stroke="#1d242e"/>
+<text x="42" y="1128" font-size="13" fill="#e8ecf1" text-anchor="start">2026-05-01</text>
+<text x="210" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">49.510</text>
+<text x="282" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">251,1</text>
+<text x="352" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">33,85</text>
+<text x="414" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">1,870</text>
+<text x="474" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">63,29</text>
+<text x="554" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">13,48</text>
+<text x="644" y="1128" font-size="13" fill="#e8ecf1" text-anchor="end">25,21</text>
+<text x="684" y="1128" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1128" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1146" x2="938" y2="1146" stroke="#1d242e"/>
+<text x="42" y="1156" font-size="13" fill="#e8ecf1" text-anchor="start">2026-05-05</text>
+<text x="210" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">49.906</text>
+<text x="282" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">396,2</text>
+<text x="352" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">34,36</text>
+<text x="414" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">1,780</text>
+<text x="474" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">61,16</text>
+<text x="554" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">8,67</text>
+<text x="644" y="1156" font-size="13" fill="#e8ecf1" text-anchor="end">15,44</text>
+<text x="684" y="1156" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1156" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1174" x2="938" y2="1174" stroke="#1d242e"/>
+<text x="42" y="1184" font-size="13" fill="#e8ecf1" text-anchor="start">2026-05-14</text>
+<text x="210" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">50.287</text>
+<text x="282" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">381,2</text>
+<text x="352" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">13,28</text>
+<text x="414" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">1,870</text>
+<text x="474" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">24,84</text>
+<text x="554" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">3,48</text>
+<text x="644" y="1184" font-size="13" fill="#e8ecf1" text-anchor="end">6,52</text>
+<text x="684" y="1184" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1184" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1202" x2="938" y2="1202" stroke="#1d242e"/>
+<text x="42" y="1212" font-size="13" fill="#e8ecf1" text-anchor="start">2026-05-20</text>
+<text x="210" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">50.446</text>
+<text x="282" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">158,6</text>
+<text x="352" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">34,76</text>
+<text x="414" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">1,980</text>
+<text x="474" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">68,83</text>
+<text x="554" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">21,92</text>
+<text x="644" y="1212" font-size="13" fill="#e8ecf1" text-anchor="end">43,40</text>
+<text x="684" y="1212" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1212" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1230" x2="938" y2="1230" stroke="#1d242e"/>
+<text x="42" y="1240" font-size="13" fill="#e8ecf1" text-anchor="start">2026-05-29</text>
+<text x="210" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">50.825</text>
+<text x="282" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">379,0</text>
+<text x="352" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">34,04</text>
+<text x="414" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">1,870</text>
+<text x="474" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">63,65</text>
+<text x="554" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">8,98</text>
+<text x="644" y="1240" font-size="13" fill="#e8ecf1" text-anchor="end">16,79</text>
+<text x="684" y="1240" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1240" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1258" x2="938" y2="1258" stroke="#1d242e"/>
+<text x="42" y="1268" font-size="13" fill="#e8ecf1" text-anchor="start">2026-06-07</text>
+<text x="210" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">51.240</text>
+<text x="282" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">414,9</text>
+<text x="352" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">36,06</text>
+<text x="414" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">1,830</text>
+<text x="474" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">65,98</text>
+<text x="554" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">8,69</text>
+<text x="644" y="1268" font-size="13" fill="#e8ecf1" text-anchor="end">15,90</text>
+<text x="684" y="1268" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1268" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1286" x2="938" y2="1286" stroke="#1d242e"/>
+<text x="42" y="1296" font-size="13" fill="#e8ecf1" text-anchor="start">2026-06-14</text>
+<text x="210" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">51.639</text>
+<text x="282" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">399,3</text>
+<text x="352" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">34,81</text>
+<text x="414" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">1,970</text>
+<text x="474" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">68,58</text>
+<text x="554" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">8,72</text>
+<text x="644" y="1296" font-size="13" fill="#e8ecf1" text-anchor="end">17,18</text>
+<text x="684" y="1296" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1296" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1314" x2="938" y2="1314" stroke="#1d242e"/>
+<text x="42" y="1324" font-size="13" fill="#e8ecf1" text-anchor="start">2026-06-23</text>
+<text x="210" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">52.024</text>
+<text x="282" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">384,7</text>
+<text x="352" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">14,89</text>
+<text x="414" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">1,930</text>
+<text x="474" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">28,74</text>
+<text x="554" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">3,87</text>
+<text x="644" y="1324" font-size="13" fill="#e8ecf1" text-anchor="end">7,47</text>
+<text x="684" y="1324" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1324" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1342" x2="938" y2="1342" stroke="#1d242e"/>
+<text x="42" y="1352" font-size="13" fill="#e8ecf1" text-anchor="start">2026-06-27</text>
+<text x="210" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">52.186</text>
+<text x="282" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">162,6</text>
+<text x="352" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">33,68</text>
+<text x="414" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">1,900</text>
+<text x="474" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">64,00</text>
+<text x="554" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">20,71</text>
+<text x="644" y="1352" font-size="13" fill="#e8ecf1" text-anchor="end">39,36</text>
+<text x="684" y="1352" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1352" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1370" x2="938" y2="1370" stroke="#1d242e"/>
+<text x="42" y="1380" font-size="13" fill="#e8ecf1" text-anchor="start">2026-07-07</text>
+<text x="210" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">52.573</text>
+<text x="282" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">386,8</text>
+<text x="352" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">34,73</text>
+<text x="414" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">1,890</text>
+<text x="474" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">65,64</text>
+<text x="554" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">8,98</text>
+<text x="644" y="1380" font-size="13" fill="#e8ecf1" text-anchor="end">16,97</text>
+<text x="684" y="1380" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1380" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1398" x2="938" y2="1398" stroke="#1d242e"/>
+<text x="42" y="1408" font-size="13" fill="#e8ecf1" text-anchor="start">2026-07-19</text>
+<text x="210" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">52.955</text>
+<text x="282" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">382,1</text>
+<text x="352" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">34,19</text>
+<text x="414" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">1,850</text>
+<text x="474" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">63,25</text>
+<text x="554" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">8,95</text>
+<text x="644" y="1408" font-size="13" fill="#e8ecf1" text-anchor="end">16,55</text>
+<text x="684" y="1408" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1408" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1426" x2="938" y2="1426" stroke="#1d242e"/>
+<text x="42" y="1436" font-size="13" fill="#e8ecf1" text-anchor="start">2026-07-27</text>
+<text x="210" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">53.449</text>
+<text x="282" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">493,7</text>
+<text x="352" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">28,51</text>
+<text x="414" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">1,840</text>
+<text x="474" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">52,46</text>
+<text x="554" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">5,77</text>
+<text x="644" y="1436" font-size="13" fill="#e8ecf1" text-anchor="end">10,63</text>
+<text x="684" y="1436" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1436" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1454" x2="938" y2="1454" stroke="#1d242e"/>
+<text x="42" y="1464" font-size="13" fill="#e8ecf1" text-anchor="start">2026-08-04</text>
+<text x="210" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">53.671</text>
+<text x="282" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">221,6</text>
+<text x="352" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">34,16</text>
+<text x="414" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">1,990</text>
+<text x="474" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">67,99</text>
+<text x="554" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">15,42</text>
+<text x="644" y="1464" font-size="13" fill="#e8ecf1" text-anchor="end">30,68</text>
+<text x="684" y="1464" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1464" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1482" x2="938" y2="1482" stroke="#1d242e"/>
+<text x="42" y="1492" font-size="13" fill="#e8ecf1" text-anchor="start">2026-08-17</text>
+<text x="210" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">54.044</text>
+<text x="282" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">373,0</text>
+<text x="352" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">33,56</text>
+<text x="414" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">1,880</text>
+<text x="474" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">63,10</text>
+<text x="554" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">9,00</text>
+<text x="644" y="1492" font-size="13" fill="#e8ecf1" text-anchor="end">16,92</text>
+<text x="684" y="1492" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1492" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1510" x2="938" y2="1510" stroke="#1d242e"/>
+<text x="42" y="1520" font-size="13" fill="#e8ecf1" text-anchor="start">2026-08-27</text>
+<text x="210" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">54.430</text>
+<text x="282" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">386,2</text>
+<text x="352" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">14,70</text>
+<text x="414" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">1,790</text>
+<text x="474" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">26,31</text>
+<text x="554" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">3,81</text>
+<text x="644" y="1520" font-size="13" fill="#e8ecf1" text-anchor="end">6,81</text>
+<text x="684" y="1520" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1520" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1538" x2="938" y2="1538" stroke="#1d242e"/>
+<text x="42" y="1548" font-size="13" fill="#e8ecf1" text-anchor="start">2026-08-30</text>
+<text x="210" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">54.670</text>
+<text x="282" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">240,4</text>
+<text x="352" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">16,94</text>
+<text x="414" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">1,960</text>
+<text x="474" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">33,19</text>
+<text x="554" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">7,05</text>
+<text x="644" y="1548" font-size="13" fill="#e8ecf1" text-anchor="end">13,81</text>
+<text x="684" y="1548" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1548" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1566" x2="938" y2="1566" stroke="#1d242e"/>
+<text x="42" y="1576" font-size="13" fill="#e8ecf1" text-anchor="start">2026-08-31</text>
+<text x="210" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">54.833</text>
+<text x="282" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">162,5</text>
+<text x="352" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">36,16</text>
+<text x="414" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">1,980</text>
+<text x="474" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">71,60</text>
+<text x="554" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">22,25</text>
+<text x="644" y="1576" font-size="13" fill="#e8ecf1" text-anchor="end">44,06</text>
+<text x="684" y="1576" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1576" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1594" x2="938" y2="1594" stroke="#1d242e"/>
+<text x="42" y="1604" font-size="13" fill="#e8ecf1" text-anchor="start">2026-09-09</text>
+<text x="210" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">55.216</text>
+<text x="282" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">383,4</text>
+<text x="352" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">12,03</text>
+<text x="414" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">1,780</text>
+<text x="474" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">21,41</text>
+<text x="554" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">3,14</text>
+<text x="644" y="1604" font-size="13" fill="#e8ecf1" text-anchor="end">5,58</text>
+<text x="684" y="1604" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1604" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1622" x2="938" y2="1622" stroke="#1d242e"/>
+<text x="42" y="1632" font-size="13" fill="#e8ecf1" text-anchor="start">2026-09-15</text>
+<text x="210" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">55.340</text>
+<text x="282" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">124,1</text>
+<text x="352" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">18,22</text>
+<text x="414" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">1,830</text>
+<text x="474" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">33,34</text>
+<text x="554" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">14,68</text>
+<text x="644" y="1632" font-size="13" fill="#e8ecf1" text-anchor="end">26,87</text>
+<text x="684" y="1632" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1632" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1650" x2="938" y2="1650" stroke="#1d242e"/>
+<text x="42" y="1660" font-size="13" fill="#e8ecf1" text-anchor="start">2026-09-20</text>
+<text x="210" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">55.590</text>
+<text x="282" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">249,4</text>
+<text x="352" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">19,58</text>
+<text x="414" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">1,980</text>
+<text x="474" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">38,76</text>
+<text x="554" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">7,85</text>
+<text x="644" y="1660" font-size="13" fill="#e8ecf1" text-anchor="end">15,54</text>
+<text x="684" y="1660" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1660" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1678" x2="938" y2="1678" stroke="#1d242e"/>
+<text x="42" y="1688" font-size="13" fill="#e8ecf1" text-anchor="start">2026-09-24</text>
+<text x="210" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">55.763</text>
+<text x="282" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">173,7</text>
+<text x="352" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">33,82</text>
+<text x="414" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">1,980</text>
+<text x="474" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">66,95</text>
+<text x="554" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">19,47</text>
+<text x="644" y="1688" font-size="13" fill="#e8ecf1" text-anchor="end">38,54</text>
+<text x="684" y="1688" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
+<text x="938" y="1688" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1706" x2="938" y2="1706" stroke="#1d242e"/>
+<text x="42" y="1716" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-06</text>
+<text x="210" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">56.146</text>
+<text x="282" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">382,7</text>
+<text x="352" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">20,42</text>
+<text x="414" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">1,990</text>
+<text x="474" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">40,63</text>
+<text x="554" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">5,34</text>
+<text x="644" y="1716" font-size="13" fill="#e8ecf1" text-anchor="end">10,62</text>
+<text x="684" y="1716" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Teilfuellung</text>
+<text x="938" y="1716" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1734" x2="938" y2="1734" stroke="#1d242e"/>
+<text x="42" y="1744" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-12</text>
+<text x="210" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">56.146</text>
+<text x="282" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="352" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">19,65</text>
+<text x="414" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="474" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">0,00</text>
+<text x="554" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="644" y="1744" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="684" y="1744" font-size="13" fill="#8b96a5" text-anchor="start">automatisch erkannt (22→62 % Tankstand) — Preis und km nachtragen</text>
+<text x="938" y="1744" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1762" x2="938" y2="1762" stroke="#1d242e"/>
+<text x="42" y="1772" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-18</text>
+<text x="210" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">56.146</text>
+<text x="282" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="352" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">35,20</text>
+<text x="414" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="474" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">0,00</text>
+<text x="554" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="644" y="1772" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="684" y="1772" font-size="13" fill="#8b96a5" text-anchor="start">automatisch erkannt (22→92 % Tankstand) — Preis und km nachtragen</text>
+<text x="938" y="1772" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1790" x2="938" y2="1790" stroke="#1d242e"/>
+<text x="42" y="1800" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-25</text>
+<text x="210" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">56.146</text>
+<text x="282" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="352" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">33,65</text>
+<text x="414" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="474" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">0,00</text>
+<text x="554" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="644" y="1800" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="684" y="1800" font-size="13" fill="#8b96a5" text-anchor="start">automatisch erkannt (25→92 % Tankstand) — Preis und km nachtragen</text>
+<text x="938" y="1800" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="1818" x2="938" y2="1818" stroke="#1d242e"/>
+<text x="42" y="1828" font-size="13" fill="#e8ecf1" text-anchor="start">2026-11-01</text>
+<text x="210" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">56.146</text>
+<text x="282" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="352" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">36,20</text>
+<text x="414" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="474" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">0,00</text>
+<text x="554" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="644" y="1828" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="684" y="1828" font-size="13" fill="#8b96a5" text-anchor="start">automatisch erkannt (20→92 % Tankstand) — Preis und km nachtragen</text>
+<text x="938" y="1828" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <text x="954" y="708" font-size="10" fill="#4a5563" text-anchor="end">Beispieldaten · Vorschau</text>
 </svg>

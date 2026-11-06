@@ -43,16 +43,19 @@ FUEL_FLOOR_PCT = 3.0
 L100_CITY, L100_ABW, L100_WOT, L100_IDLE = 8.8, 7.6, 16.5, 0.9
 
 HOME = (52.3790, 9.7410)
-WORK = (52.3100, 9.8300)
-MALL = (52.4050, 9.7950)
-LEISURE = (52.4700, 9.3300)
-LONG = (52.2700, 9.2100)   # lange Ausfahrt ~55 km one-way
-ERRAND = (52.3930, 9.6830)
-# Autobahn-Roadtrips (120-160 km one-way -> 240-320 km rund, reicht aus einer Tankung)
-ROADS = [(53.5510, 9.9930),   # Hamburg ~153 km
-         (53.0790, 8.8010),   # Bremen ~119 km
-         (52.8800, 11.5000),  # Baltic/Wendland ~156 km
-         (51.3130, 9.4930)]   # Kassel ~142 km
+def _far(p, f):
+    """Ziel vom HOME aus weiter weg schieben (Faktor f)."""
+    return (HOME[0] + (p[0] - HOME[0]) * f, HOME[1] + (p[1] - HOME[1]) * f)
+WORK = _far((52.3100, 9.8300), 1.40)
+MALL = _far((52.4050, 9.7950), 1.40)
+LEISURE = _far((52.4700, 9.3300), 1.40)
+LONG = _far((52.2700, 9.2100), 1.40)   # lange Ausfahrt ~77 km one-way
+ERRAND = _far((52.3930, 9.6830), 1.40)
+# Autobahn-Roadtrips (140-180 km one-way -> 280-360 km rund, reicht aus einer Tankung)
+ROADS = [_far(p, 1.15) for p in [(53.5510, 9.9930),   # Hamburg ~176 km
+                                  (53.0790, 8.8010),   # Bremen ~137 km
+                                  (52.8800, 11.5000),  # Baltic/Wendland ~180 km
+                                  (51.3130, 9.4930)]]  # Kassel ~163 km
 
 def haversine_km(a, b):
     la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
@@ -194,6 +197,12 @@ def sens(t, kmh, prev, cold_s, ambient, warm, wot=False):
         "throttle": round(throttle, 1), "fuel": round(fuel, 1) if fuel is not None else None,
     }, {"coolant": coolant, "oil_t": oil_t, "gear_t": gear_t, "intake": intake, "fuel": fuel}
 
+# Profil-Durchschnittsgeschwindigkeiten je Fahrttyp (km/h) — das Timing muss die
+# TATSACHELICHE Fahrtdauer nutzen, sonst startet die Rueckfahrt vor dem Ende der
+# Hinfahrt und die GPS-Punkte ping-pong-en zwischen den Zielen (Januar-Fix).
+TYPE_AVG = {"work_to": 58, "work_from": 58, "shopping": 30,
+            "errand": 30, "leisure": 70, "roadtrip": 115}
+
 def gen_year(start_date, days, seed):
     r = random.Random(seed)
     trips, odo = [], ODO_START
@@ -207,7 +216,8 @@ def gen_year(start_date, days, seed):
         def add(hh, mm, ttype, p1, p2):
             nonlocal odo
             km = route_distance(p1, p2)
-            dur = km / (random.uniform(38, 52) / 60.0) * 60  # ~40-52 km/h Schnitt
+            # Tatsaechliche Fahrtdauer aus der Profil-Geschwindigkeit des Typs
+            dur = km / TYPE_AVG[ttype] * 3600.0
             start_local = day.replace(hour=hh, minute=mm, second=0, tzinfo=TZ)
             trips.append({"type": ttype, "start": start_local, "dur": int(dur),
                           "km": km, "p1": p1, "p2": p2, "ambient": ambient,
@@ -235,8 +245,10 @@ def gen_year(start_date, days, seed):
                 last_road_day = d
                 round_trip(r.randint(9, 11), r.randint(0, 59), "leisure", LONG)
         if wd < 5 and d not in homeoffice and r.random() < 0.40:
-            add(19, r.randint(10, 50), "errand", HOME, ERRAND)
-            add(19, r.randint(55, 59), "errand", ERRAND, HOME)
+            # round_trip statt fester Slots: die Rueckfahrt startet erst NACH dem
+            # Ende der Hinfahrt (feste Slots ueberlappten bei spaetem Start ->
+            # GPS-Ping-Pong zwischen Hin- und Rueckroute)
+            round_trip(19, r.randint(10, 40), "errand", ERRAND)
     return trips
 
 def main():
@@ -258,10 +270,43 @@ def main():
     fillups = []          # manuelle Eintraege (nur aelter als PENDING_DAYS)
     pending_count = 0     # juengere Tankungen: Sprung in den OBD-Daten -> detect_fillups()
     fuel_level = 92.0     # Tankstand-Kette (echter Verlauf statt Rechen-Naeherung)
+    waiting_fill = None   # (liters, target, full) — getankt wird vor der naechsten Fahrt
     start_date = datetime.strptime(a.start, "%Y-%m-%d")
     for i, tr in enumerate(trips, 1):
+        # Wartende Tankung vor DIESER Fahrt? -> Tanktag = Tag dieser Fahrt
+        if waiting_fill is not None:
+            liters, target, full = waiting_fill
+            fill_date = tr["start"]
+            older = fill_date.date() < pending_since
+            price = round(random.uniform(1.78, 1.99), 2)
+            if older:
+                fillups.append({"date": fill_date.strftime("%Y-%m-%d"),
+                                "odometer": round(tr["odo_before"], 1),
+                                "liters": round(liters, 2),
+                                "price_per_l": price, "total_price": round(liters * price, 2),
+                                "full": full,
+                                "note": "Sim: Volltankung" if full else "Sim: Teilfuellung"})
+            else:
+                pending_count += 1
+            kind = "voll" if full else "teil (%.0f %%)" % target
+            print(f"  Tankung {fill_date:%d.%m.}: {liters:.1f} l ({kind}, "
+                  f"{'@ %.2f EUR/l' % price if older else '-- PREIS OFFEN (ausstehend)'})")
+            waiting_fill = None
         seed = a.seed * 1000 + i
-        sp = speed_profile(tr["type"], tr["dur"], seed)
+        # dur iterieren, bis das Speed-Profil exakt die geplante Strecke faehrt
+        # (sonst faehrt das Profil schneller als die Route lang ist und Odometer/GPS
+        # weichen vom Tanklog ab)
+        dur = tr["dur"]
+        for _ in range(3):
+            sp = speed_profile(tr["type"], dur, seed)
+            raw = sum(k * STEP_S for _, k, _ in sp) / 3600.0
+            if raw <= 0:
+                break
+            f = tr["km"] / raw
+            if abs(f - 1.0) < 0.02:
+                break
+            dur = max(60, int(dur * f))
+        sp = speed_profile(tr["type"], dur, seed)
         prev = {"coolant": tr["ambient"], "oil_t": tr["ambient"],
                 "gear_t": tr["ambient"], "intake": tr["ambient"], "fuel": fuel_level}
         route = build_route(tr["p1"], tr["p2"], tr["km"], seed)
@@ -293,27 +338,13 @@ def main():
             if t_s > 0 and len(sp) > 1:
                 cum += kmh * STEP_S / 3600.0
         tr["km_actual"] = cum
-        # Tankung faellig? Tank < 25 % -> voll (65 %) oder teilweis (35 %)
+        # Tankung faellig? Tank < 25 % -> voll (65 %) oder teilweis (35 %).
+        # Getankt wird VOR der naechsten Fahrt -> Eintrag mit deren Datum.
         if prev["fuel"] < FUEL_TRIGGER_PCT:
             target = 92.0 if random.random() < 0.65 else random.uniform(45, 70)
             full = 1 if target >= 88 else 0
             liters = (target - prev["fuel"]) / 100.0 * TANK_MAX_L
-            fill_date = tr["start"]
-            older = fill_date.date() < pending_since
-            price = round(random.uniform(1.78, 1.99), 2)
-            if older:
-                fillups.append({"date": fill_date.strftime("%Y-%m-%d"),
-                                "odometer": round(tr["odo_before"] + cum, 1),
-                                "liters": round(liters, 2),
-                                "price_per_l": price, "total_price": round(liters * price, 2),
-                                "full": full,
-                                "note": "Sim: Volltankung" if full else "Sim: Teilfuellung"})
-            else:
-                pending_count += 1  # kein Preis -> detect_fillups() legt ihn ausstehend an
-            kind = "voll" if full else "teil (%.0f %%)" % target
-            print(f"  Tankung {fill_date:%d.%m.}: {liters:.1f} l ({kind}, "
-                  f"{prev['fuel']:.0f}->{target:.0f} %) "
-                  f"{'@ %.2f EUR/l' % price if older else '-- PREIS OFFEN (ausstehend)'}")
+            waiting_fill = (liters, target, full)
             fuel_level = target
         else:
             fuel_level = prev["fuel"]  # Tank-Kette weiterfuehren (sonst startet jeder Tag bei 92 %)

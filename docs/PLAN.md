@@ -1,6 +1,6 @@
 # carlog – Ausbauplan: Pi-Reader im Auto (v4)
 
-Status: **verabschiedet** (Nov 2026), Umsetzung läuft. Stand des Trackers: siehe unten.
+Status: **verabschiedet** (Nov 2026). Umsetzung: **P1+P2 fertig** (E2E getestet, CI grün), P3–P5 offen (Hardware). Release: **v1.0.0** — Docker-Image `ghcr.io/skrockle/carlog`.
 
 ![Architektur](architecture.svg)
 
@@ -120,8 +120,8 @@ Enhanced-PIDs plausibilisieren (Getriebetemp warm ~50–55 °C, +B 12,2 V Zündu
 
 | Phase | Inhalt | Status |
 |---|---|---|
-| P1 | carlog-Batch-Endpunkt `/api/ingest/batch` | in Arbeit |
-| P2 | Pi-Daemon `pilogger.py` + ELM327-Simulator, E2E gegen Simulator | in Arbeit |
+| P1 | carlog-Batch-Endpunkt `/api/ingest/batch` | **fertig** |
+| P2 | Pi-Daemon `pilogger.py` + ELM327-Simulator, E2E gegen Simulator | **fertig** (CI grün) |
 | P3 | Hardware bestellen & aufbauen, systemd-Unit auf dem Pi | offen |
 | P4 | Abholtag-Verifikation (Support-Bitmuster + Enhanced-PIDs) | offen |
 | P5 | Optional: LTE-Modem + IoT-SIM für Live-Sync unterwegs | offen |

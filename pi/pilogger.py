@@ -154,30 +154,60 @@ class ElmOBD:
             pass
 
 
-def parse_pid(pid, data):
-    """Hex-Datenstring -> physikalischer Wert (Formeln: docs/PLAN.md)."""
+def parse_pid(rec, data):
+    """Payload-Hex -> physikalischer Wert (deklarative Tabelle, CANgauge-Muster)."""
     try:
-        if pid == "010C":
-            return round(int(data, 16) / 4.0)
-        if pid == "010D":
-            return round(int(data, 16), 1)
-        if pid in ("0105", "010F"):
-            return int(data, 16) - 40
-        if pid in ("0104", "0111", "012F"):
-            return round(int(data, 16) * 100.0 / 255.0, 1)
-        if pid == "010B":
-            return int(data, 16)
-        if pid == "221074":
-            a, b = int(data[:2], 16), int(data[2:4], 16)
-            return round(((a * 256) + b) / 1280.0, 2)
-        if pid == "221638":
-            a, b = int(data[:2], 16), int(data[2:4], 16)
-            return round(a + b / 256.0 - 40.0, 1)
-        if pid == "221021":
-            return round(int(data[:2], 16) / 10.0, 1)
-    except (ValueError, IndexError):
+        b = bytes.fromhex(data)
+    except (ValueError, TypeError):
         return None
-    return None
+    if len(b) < rec["bytes"]:
+        return None
+    raw = 0
+    for i in range(rec["bytes"]):
+        raw = (raw << 8) | b[i]
+    v = raw * rec["scale"] + rec["offset"]
+    v = round(v, rec["dec"])
+    return int(v) if rec["dec"] == 0 else v
+
+
+SCAN_BASE = [("0100", 0x01), ("0120", 0x21), ("0140", 0x41), ("0160", 0x61)]
+
+
+def scan_pids(obd):
+    """Abholtag-Check: Support-Bitmuster (Mode 01, PIDs 00/20/40/60) lesen und
+    unterstuetzte Standard-PIDs dekodieren (Muster: CANgauge prv_get_available_pids).
+    Plus Probe der Toyota-Enhanced-PIDs (am echten Auto unbestaetigt)."""
+    supported = []
+    log("-- PID-Support-Scan (Abholtag-Check) --")
+    for pid, base in SCAN_BASE:
+        raw = obd.poll(pid)
+        if not raw:
+            log("  %s: keine Antwort" % pid)
+            continue
+        try:
+            b = bytes.fromhex(raw)
+        except ValueError:
+            log("  %s: ungueltig %r" % (pid, raw))
+            continue
+        if len(b) < 4:
+            log("  %s: zu kurz (%s)" % (pid, raw))
+            continue
+        bits = int.from_bytes(b[:4], "big")
+        log("  %s -> %08X" % (pid, bits))
+        for bit in range(32):
+            if bits >> (31 - bit) & 1:
+                code = "01%02X" % (base + bit)
+                rec = BY_PID.get(code)
+                supported.append(code)
+                print("  %s unterstuetzt (%s)" % (code, rec["key"] if rec else "-"))
+    print("  gesamt unterstuetzt: %d" % len(supported))
+    log("-- Enhanced-Probe (am echten Auto unbestaetigt) --")
+    for code in ("221074", "221638", "221021"):
+        raw = obd.poll(code)
+        rec = BY_PID[code]
+        v = parse_pid(rec, raw) if raw else None
+        print("  %s (%s): %s" % (code, rec["key"], v if v is not None else "keine Antwort"))
+    return supported
 
 
 # ------------------------------------------------------------------ GPS ---
@@ -333,9 +363,24 @@ def sync(buf, cfg):
 
 
 # ---------------------------------------------------------------- Main ----
-OBD_PIDS = [("010C", "rpm"), ("0105", "coolant"), ("010D", "speed"),
-            ("010F", "intake"), ("0104", "load"), ("010B", "map"),
-            ("221074", "oil_bar"), ("221638", "gear_c"), ("221021", "bplus")]
+# Deklarative PID-Tabelle (Muster: CANgauge-base can_obd_def.c) —
+# Decode: value = raw(Big-Endian, bytes) * scale + offset, gerundet auf dec.
+# Enhanced-PIDs (221074/221638/221021) sind community-reverse-engineert und am
+# echten Auto NOCH NICHT bestaetigt (Abholtag-Check: --scan-pids).
+PID_TABLE = [
+    {"pid": "0104", "key": "load",      "bytes": 1, "scale": 100/255, "offset": 0,   "dec": 1, "unit": "%"},
+    {"pid": "0105", "key": "coolant",   "bytes": 1, "scale": 1,       "offset": -40, "dec": 0, "unit": "C"},
+    {"pid": "010B", "key": "map",       "bytes": 1, "scale": 1,       "offset": 0,   "dec": 0, "unit": "kPa"},
+    {"pid": "010C", "key": "rpm",       "bytes": 2, "scale": 0.25,    "offset": 0,   "dec": 0, "unit": "rpm"},
+    {"pid": "010D", "key": "speed",     "bytes": 1, "scale": 1,       "offset": 0,   "dec": 1, "unit": "km/h"},
+    {"pid": "010F", "key": "intake",    "bytes": 1, "scale": 1,       "offset": -40, "dec": 0, "unit": "C"},
+    {"pid": "0111", "key": "throttle",  "bytes": 1, "scale": 100/255, "offset": 0,   "dec": 1, "unit": "%"},
+    {"pid": "012F", "key": "fuel",      "bytes": 1, "scale": 100/255, "offset": 0,   "dec": 1, "unit": "%"},
+    {"pid": "221074", "key": "oil_bar", "bytes": 2, "scale": 1/1280,  "offset": 0,   "dec": 2, "unit": "bar"},
+    {"pid": "221638", "key": "gear_c",  "bytes": 2, "scale": 1/256,   "offset": -40, "dec": 1, "unit": "C"},
+    {"pid": "221021", "key": "bplus",   "bytes": 1, "scale": 0.1,     "offset": 0,   "dec": 1, "unit": "V"},
+]
+BY_PID = {rec["pid"]: rec for rec in PID_TABLE}
 
 
 def cycle(obd, gps, buf, cfg, st):
@@ -345,14 +390,14 @@ def cycle(obd, gps, buf, cfg, st):
         rpm = None
         raw = obd.poll("010C")
         if raw:
-            rpm = parse_pid("010C", raw)
+            rpm = parse_pid(BY_PID["010C"], raw)
         if rpm and rpm > 0:
             st["miss"] = 0
-            for pid, key in OBD_PIDS:
-                d = obd.poll(pid)
-                v = parse_pid(pid, d) if d else None
+            for rec in PID_TABLE:
+                d = obd.poll(rec["pid"])
+                v = parse_pid(rec, d) if d else None
                 if v is not None:
-                    data[key] = v
+                    data[rec["key"]] = v
             volt = obd.voltage()
             if volt is not None:
                 data["voltage"] = volt
@@ -393,6 +438,7 @@ def main():
     ap.add_argument("--sync-interval", type=float, default=float(os.environ.get("PILOG_SYNC_INTERVAL", "60")))
     ap.add_argument("--once", action="store_true", help="eine Runde + Sync, dann Ende (Tests)")
     ap.add_argument("--status", action="store_true", help="nur Pufferstand zeigen")
+    ap.add_argument("--scan-pids", action="store_true", help="Abholtag-Check: PID-Support-Bitmuster + Enhanced-Probe")
     ap.add_argument("--verbose", action="store_true")
     cfg = ap.parse_args()
     cfg.gps_interval = float(os.environ.get("PILOG_GPS_INTERVAL", "1"))
@@ -401,6 +447,17 @@ def main():
     if cfg.status:
         g, o = buf.counts()
         print("Puffer: %d GPS, %d OBD (%s)" % (g, o, cfg.db))
+        return
+    if cfg.scan_pids:
+        if not cfg.obd_port or cfg.obd_port == "none":
+            print("--scan-pids braucht --obd-port")
+            return
+        obd = ElmOBD(cfg.obd_port, cfg.verbose)
+        try:
+            obd.connect()
+            scan_pids(obd)
+        finally:
+            obd.close()
         return
 
     obd = None

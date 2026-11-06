@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Syntax-Check
+        run: |
+          python3 -m py_compile server.py pi/pilogger.py test/elm327-sim.py
+          echo "Syntax OK"
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: syntax
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: "E2E: Simulator -> Daemon -> carlog -> DB"
+        run: |
+          set -e
+          python3 test/elm327-sim.py &
+          ELM_SIM_RUNNING=0 ELM_SIM_PORT=35001 python3 test/elm327-sim.py &
+          CARLOG_DB=/tmp/carlog-ci.db CARLOG_PORT=8079 python3 server.py &
+          sleep 3
+
+          echo "--- 1) Motor an: Daemon -> Batch -> Puffer leer"
+          python3 pi/pilogger.py --obd-port tcp://127.0.0.1:35000 --url http://127.0.0.1:8079 --db /tmp/puffer-ci.db --once --verbose
+          python3 - <<'PY'
+          import json, urllib.request
+          h = json.loads(urllib.request.urlopen("http://127.0.0.1:8079/api/health", timeout=5).read())
+          assert h["obd_readings"] == 1, h
+          t = json.loads(urllib.request.urlopen("http://127.0.0.1:8079/api/telemetry?kind=obd", timeout=5).read())
+          d = t["items"][0]["data"]
+          for k in ("rpm", "coolant", "speed", "oil_bar", "gear_c", "bplus", "voltage"):
+              assert k in d and d[k] is not None, (k, d)
+          assert 700 < d["rpm"] < 3000, d
+          assert 0 < d["oil_bar"] < 10, d
+          print("Motor-an-Kette OK:", d)
+          PY
+          python3 - <<'PY'
+          import subprocess
+          out = subprocess.run(["python3", "pi/pilogger.py", "--db", "/tmp/puffer-ci.db", "--status"],
+                               capture_output=True, text=True).stdout
+          assert "0 GPS, 0 OBD" in out, out
+          print("Puffer geleert OK")
+          PY
+
+          echo "--- 2) Zündungs-Erkennung: Motor aus -> kein neuer Eintrag"
+          python3 pi/pilogger.py --obd-port tcp://127.0.0.1:35001 --url http://127.0.0.1:8079 --db /tmp/puffer-ci2.db --once --verbose
+          python3 - <<'PY'
+          import json, urllib.request
+          h = json.loads(urllib.request.urlopen("http://127.0.0.1:8079/api/health", timeout=5).read())
+          assert h["obd_readings"] == 1, h
+          print("Zündungs-Erkennung OK")
+          PY
+
+          echo "--- 3) Batch-Endpunkt: gültige + ungültige Zeilen"
+          curl -s -X POST http://127.0.0.1:8079/api/ingest/batch -H "Content-Type: application/json" \
+            -d '{"gps":[{"lat":52.37,"lon":9.73,"timestamp":1700000000,"speed":40,"altitude":55,"device":"PI"},{"lat":99,"lon":9.99,"timestamp":1700000120}],"obd":[{"time":1700000000000,"device":"PI","data":{"rpm":"1726"}}]}'
+          echo
+          python3 - <<'PY'
+          import json, urllib.request
+          h = json.loads(urllib.request.urlopen("http://127.0.0.1:8079/api/health", timeout=5).read())
+          assert h["gps_points"] == 1, h   # ungültige GPS-Zeile übersprungen
+          assert h["obd_readings"] == 2, h
+          print("Batch-Endpunkt OK:", h)
+          PY
+
+          pkill -f elm327-sim || true
+          pkill -f "python3 server.py" || true
+          echo "E2E vollständig OK"

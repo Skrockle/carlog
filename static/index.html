@@ -114,6 +114,7 @@ svg{width:100%;height:auto;display:block}
     <div class="urlbox"><code id="obd-url"></code><button onclick="cpy('obd-url')">Kopieren</button></div>
   </div>
   <div class="card"><h2>Status Automatik</h2><div id="telemetry-status" class="muted">lädt …</div></div>
+  <div class="card"><h2>Live OBD · letzter Empfang vom Pi</h2><div id="obd-live" class="muted">lädt …</div></div>
 </section>
 
 </main>
@@ -249,6 +250,23 @@ async function loadTelem(){
       'GPS: <b>'+h.gps_points+'</b> Punkte'+(gl?', letzter: '+ts2str(gl.ts)+' ('+gl.lat.toFixed(4)+', '+gl.lon.toFixed(4)+(gl.speed?', '+fmt(gl.speed,0)+' km/h':'')+')':' – noch keine')+'<br>'+
       'OBD2: <b>'+h.obd_readings+'</b> Messungen'+(ol?', letzte: '+ts2str(ol.ts)+' ('+Object.keys(ol.data||{}).length+' PIDs)':' – noch keine');
   }catch(e){document.getElementById('telemetry-status').textContent=e.message}
+  loadObdLive();
+}
+async function loadObdLive(){
+  try{
+    const d=await api('/api/telemetry?kind=obd&limit=5');
+    const el=document.getElementById('obd-live');
+    if(!d.items.length){el.textContent='Noch keine OBD-Daten — der Pi-Daemon meldet sich hier.';return}
+    const now=Date.now()/1000;
+    const lbl={rpm:'Drehzahl 1/min',speed:'km/h',coolant:'Kühlmittel °C',intake:'Ansaugung °C',load:'Last %',map:'MAP kPa',oil_bar:'Öldruck bar',gear_c:'Getriebe °C',bplus:'+B V',voltage:'Batterie V'};
+    let h='<table><tr><th>Zeit</th><th>Alter</th><th>Gerät</th><th>Werte</th></tr>';
+    for(const it of d.items){
+      const age=it.ts!=null?Math.round(now-it.ts):null;
+      const vals=Object.keys(lbl).filter(k=>it.data&&it.data[k]!=null).map(k=>lbl[k]+': '+it.data[k]).join(' · ');
+      h+='<tr><td>'+ts2str(it.ts)+'</td><td>'+(age!=null&&age>=0?age+' s':'–')+'</td><td>'+(it.device||'–')+'</td><td class="muted">'+vals+'</td></tr>';
+    }
+    el.innerHTML=h+'</table>';
+  }catch(e){document.getElementById('obd-live').textContent=e.message}
 }
 function cpy(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{},()=>{})}
 

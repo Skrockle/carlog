@@ -92,6 +92,23 @@ Endpunkte und Ingest-URLs anhängen.
 | `GET /api/telemetry?kind=obd\|gps&limit=N` | letzte Rohwerte |
 | `GET /api/export.csv?kind=fillups\|maintenance\|gps\|obd` | CSV-Export |
 
+## Pi-Daemon (Auto-Seite)
+
+Ein Raspberry Pi im Auto liest OBD + GPS, puffert lokal und synct per Batch mit dem Tower —
+Architektur und Plan: [docs/PLAN.md](docs/PLAN.md).
+
+```sh
+# am Pi (echte Hardware; apt install python3-serial):
+python3 pi/pilogger.py --obd-port /dev/ttyUSB0 --gps-port /dev/ttyACM0 --url http://TOWER-IP:8077 --verbose
+
+# komplett ohne Auto gegen den Simulator:
+python3 test/elm327-sim.py &    # ELM327 + GR Yaris auf 127.0.0.1:35000
+python3 pi/pilogger.py --obd-port tcp://127.0.0.1:35000 --url http://127.0.0.1:8079 --once --verbose
+```
+
+Als Dienst: `pi/carlog-pilogger.service` nach `/etc/systemd/system/`, dann `systemctl enable --now carlog-pilogger`.
+Optional IoT-SIM: USB-LTE-Modem anstecken, APN eintragen — der Daemon synct transportunabhängig (WLAN oder LTE).
+
 ## Entwicklung
 
 Lokal ohne Docker:

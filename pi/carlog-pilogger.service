@@ -1,0 +1,14 @@
+[Unit]
+Description=carlog Pi logger (OBD + GPS -> Batch-Sync zum Tower)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/carlog/pi/pilogger.py --obd-port /dev/ttyUSB0 --gps-port /dev/ttyACM0 --url http://192.168.1.210:8077 --verbose
+Restart=always
+RestartSec=10
+User=pi
+# Serielle Ports + Netz; kein Root nötig, wenn der User in dialout ist.
+
+[Install]
+WantedBy=multi-user.target

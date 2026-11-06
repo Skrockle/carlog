@@ -277,6 +277,76 @@ def insert_maintenance(body):
         c.close()
 
 
+def batch_ingest(body):
+    """Bulk-Ingest fuer den Pi-Daemon: N GPS-Punkte + M OBD-Messungen in einem Request.
+
+    Erwartet {"gps": [{lat, lon, timestamp, speed, altitude, device}, ...],
+              "obd": [{time, session, device, data}, ...]}. Ungueltige Zeilen werden
+    uebersprungen und gezaehlt (der Daemon loescht sie trotzdem aus seinem Puffer).
+    """
+    gps_items = body.get("gps") or []
+    obd_items = body.get("obd") or []
+    if not isinstance(gps_items, list) or not isinstance(obd_items, list):
+        raise ValueError("gps/obd muessen Listen sein")
+    if len(gps_items) > 5000 or len(obd_items) > 5000:
+        raise ValueError("zu viele Eintraege (max 5000 je Liste)")
+
+    def _fnum(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+
+    def _now():
+        return int(datetime.now(tz=timezone.utc).timestamp())
+
+    gps_rows, obd_rows = [], []
+    for it in gps_items:
+        if not isinstance(it, dict):
+            continue
+        try:
+            lat, lon = float(it["lat"]), float(it["lon"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+            continue
+        ts = norm_ts(it.get("timestamp", it.get("time")))
+        if ts is None:
+            ts = _now()
+        gps_rows.append((ts, lat, lon, _fnum(it.get("speed")),
+                         _fnum(it.get("altitude")), str(it.get("device", "-"))[:60]))
+    for it in obd_items:
+        if not isinstance(it, dict):
+            continue
+        ts = norm_ts(it.get("time", it.get("timestamp")))
+        if ts is None:
+            ts = _now()
+        data = it.get("data")
+        if isinstance(data, dict):
+            data = json.dumps(data, ensure_ascii=False)
+        else:
+            data = str(data if data is not None else "{}")
+        obd_rows.append((ts, it.get("session"), str(it.get("device", "-"))[:60], data))
+
+    c = db()
+    try:
+        c.executemany(
+            "INSERT INTO gps_points (ts, lat, lon, speed, altitude, device) VALUES (?,?,?,?,?,?)",
+            gps_rows)
+        c.executemany(
+            "INSERT INTO obd_readings (ts, session, device, data) VALUES (?,?,?,?)",
+            obd_rows)
+        c.commit()
+        return {
+            "ok": True,
+            "gps": len(gps_rows),
+            "obd": len(obd_rows),
+            "skipped": (len(gps_items) - len(gps_rows)) + (len(obd_items) - len(obd_rows)),
+        }
+    finally:
+        c.close()
+
+
 def list_maintenance():
     c = db()
     try:
@@ -547,6 +617,8 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(insert_fillup(body))
             elif path == "/api/maintenance":
                 self._json(insert_maintenance(body))
+            elif path == "/api/ingest/batch":
+                self._json(batch_ingest(body))
             else:
                 self._json({"error": "unbekannter Endpunkt"}, 404)
         except Exception as exc:

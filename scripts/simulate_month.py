@@ -1,19 +1,33 @@
 #!/usr/bin/env python3
-"""simulate_month.py — erzeugt 1 Monat realistischer Fahrdaten und schickt sie
-an die carlog-API. Fahrprofil nach deutschen Mittelwerten:
+"""simulate_month.py — erzeugt realistische Fahrdaten (Standard: 1 Jahr) und schickt
+sie an die carlog-API. Fahrprofil nach deutschen Mittelwerten:
 
-  DAT Report 2025/2026: 13.140 km/Jahr (= ~1.095 km/Monat); Arbeitsweg 36 %,
-  privat 59 %, geschaeftlich 5 %.
-  infas MiD 2023: werktags 1,8 Fahrten/Pkw (27,8 km/Tag), Wochenende 23 km/Tag,
-  60 % Nutzung werk-, 44 % wochentags.
+  DAT Report 2025/2026: 13.140-15.000 km/Jahr; Arbeitsweg 36 %, privat 59 %.
+  infas MiD 2023: werktags 1,8 Fahrten/Pkw (27,8 km/Tag), Wochenende 23 km/Tag.
   Fahrzeug: Toyota GR Yaris 1.6T — WLTP 8,2 l/100 km, 50-l-Tank, Super Plus.
+  plus ~1 Roadtrip/Monat (Autobahn, Hamburg/Bremen/Baltic/Kassel, 240-320 km rund)
+  -> Ziel ~15.000 km/Jahr.
+
+Autobahn + Vollgas:
+  Roadtrips: Stadt -> Autobahn-Cruise 118-142 km/h -> Stadt. Alle ~90-150 s ein
+  Vollgas-Burst (8-16 s, Beschleunigung 9-14 km/h pro 2-s-Schritt auf 165-185).
+  WOT in sens(): Runterziehen -> rpm bis ~6200, throttle 95-100 %, load 95-100,
+  MAP 180-220 kPa. Verbrauch je Fahrmodus: Stadt 8,8 / Autobahn 7,6 /
+  Vollgas 16,5 l/100km, Leerlauf 0,9 l/h -> der Tankstands-Verlauf zeigt
+  Vollgas-Passagen (die Karten-Metrik "Verbrauch" faerbt sie rot).
+
+Tanken:
+  Trigger: Tank < 25 % -> 65 % voll (bis 92 %), 35 % teilweis (bis 45-70 %).
+  Tankfuellungen der letzten PENDING_DAYS (28) Tage bekommen KEINEN Preis in der
+  fillups-Tabelle -> detect_fillups() erkennt die Spruenge und legt sie als
+  ausstehend an (Preis-Nachtrag im WebUI). Aeltere Tankungen: manuelle Eintraege
+  mit Preis (Voll-zu-Voll-Verbrauch fuellbar).
 
 Sensorik-Modell:
   - Kaltstart: Kuehlmittel = Aussentemp, Drehzahl 1100-1350 fuer 60-90 s,
-    Oel kalt -> hoeherer Druck (dickes Oel), Getriebe waermt langsam auf ~52 C.
+    Oel kalt -> hoeherer Druck, Getriebe waermt auf ~52 C.
   - Warm: Leerlauf 750-880 rpm, cruise rpm ~ speed*23 (6. Gang),
-    Oeldruck warm Leerlauf 0,9-1,2 bar, skaliert mit Drehzahl, Turbo-MAP-Spitzen
-    beim Beschleunigen bis ~190 kPa, Lade-/Bordspannung 14,0-14,4 V laufend.
+    Oeldruck warm Leerlauf 0,9-1,2 bar skaliert mit Drehzahl, MAP-Spitzen bis ~220 kPa.
 """
 import argparse, json, math, random, urllib.request
 from datetime import datetime, timedelta, timezone
@@ -22,15 +36,23 @@ TZ = timezone(timedelta(hours=1))  # CET
 DEVICE = "GRYaris"
 STEP_S = 2.0  # Abtastrate OBD/GPS (Torque ~1 Hz, Pi-Daemon 5 s via PILOG_INTERVAL)
 TANK_MAX_L = 50.0
-BASE_CONSUMPTION = 8.2  # l/100 km WLTP
 ODO_START = 42150.0
+PENDING_DAYS = 28     # Tankungen juenger -> kein Preis (ausstehend, Nachtrag im WebUI)
+FUEL_TRIGGER_PCT = 25.0
+FUEL_FLOOR_PCT = 3.0
+L100_CITY, L100_ABW, L100_WOT, L100_IDLE = 8.8, 7.6, 16.5, 0.9
 
 HOME = (52.3790, 9.7410)
 WORK = (52.3100, 9.8300)
 MALL = (52.4050, 9.7950)
 LEISURE = (52.4700, 9.3300)
-LONG = (52.2700, 9.2100)  # lange Ausfahrt ~55 km one-way
+LONG = (52.2700, 9.2100)   # lange Ausfahrt ~55 km one-way
 ERRAND = (52.3930, 9.6830)
+# Autobahn-Roadtrips (120-160 km one-way -> 240-320 km rund, reicht aus einer Tankung)
+ROADS = [(53.5510, 9.9930),   # Hamburg ~153 km
+         (53.0790, 8.8010),   # Bremen ~119 km
+         (52.8800, 11.5000),  # Baltic/Wendland ~156 km
+         (51.3130, 9.4930)]   # Kassel ~142 km
 
 def haversine_km(a, b):
     la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
@@ -56,9 +78,17 @@ def build_route(p1, p2, total_km, seed):
     return pts
 
 def speed_profile(trip_type, dur_s, seed):
-    """[(t_s, kmh)] alle STEP_S; Stops (0 km/h) in Stadt-Phasen."""
+    """[(t_s, kmh, wot)] alle STEP_S; Stops (0 km/h) in Stadt-Phasen,
+    wot=True fuer Vollgas-Schritte (Autobahn-Bursts)."""
     r = random.Random(seed)
-    out, t, cur, stop_left = [], 0.0, 0.0, 0
+    out, t, cur = [], 0.0, 0.0
+    stop_left, wot_left = 0, 0
+
+    def push(wot=False):
+        nonlocal t
+        out.append((t, round(cur), wot))
+        t += STEP_S
+
     def seg(f0, f1, lo, hi, stops):
         nonlocal t, cur, stop_left
         t1 = dur_s * f1
@@ -73,8 +103,7 @@ def speed_profile(trip_type, dur_s, seed):
             else:
                 target = r.uniform(lo, hi)
                 cur = max(0.0, min(cur + r.uniform(-6, 8), target))
-            out.append((t, round(cur)))
-            t += STEP_S
+            push()
     if trip_type in ("work_to", "work_from"):
         seg(0.00, 0.20, 28, 48, 2)      # Stadt (Start/Stopp)
         seg(0.20, 0.80, 62, 95, 0)      # Landstrasse
@@ -85,17 +114,38 @@ def speed_profile(trip_type, dur_s, seed):
         seg(0.00, 0.15, 25, 45, 2)
         seg(0.15, 0.85, 68, 100, 0)
         seg(0.85, 1.01, 25, 48, 1)
+    elif trip_type == "roadtrip":
+        seg(0.00, 0.08, 25, 48, 1)      # Stadt raus
+        t1 = dur_s * 0.90
+        while t < t1:                    # Autobahn mit Vollgas-Bursts
+            if wot_left > 0:
+                cur = min(185.0, cur + r.uniform(9, 14))  # ~1.4-2 m/s^2
+                wot_left -= 1
+                push(wot=True)
+            elif cur > 150.0:            # Ausrollen nach Vollgas
+                cur = max(115.0, cur - r.uniform(6, 10))
+                push()
+            else:
+                if wot_left == 0 and t > 40 and r.random() < 0.010:
+                    wot_left = r.randint(4, 8)  # 8-16 s Vollgas
+                target = r.uniform(118, 142)
+                cur = max(80.0, min(cur + r.uniform(-4, 5), target))
+                push()
+        seg(0.90, 1.01, 25, 50, 1)      # Stadt rein
     else:  # errand
         seg(0.00, 1.01, 22, 45, 3)
-    out.append((t, round(cur)))
+    out.append((t, round(cur), False))
     return out
 
-def sens(t, kmh, prev, cold_s, ambient, warm):
+def sens(t, kmh, prev, cold_s, ambient, warm, wot=False):
     """Eine OBD-Messung; prev = dict mit coolant/oil_t/gear_t/intake."""
     rpm_idle_cold, rpm_idle = 1200, 810
     if kmh <= 0:
-        rpm = r_idle = (rpm_idle_cold if cold_s < 75 else rpm_idle) + random.uniform(-40, 70)
+        rpm = (rpm_idle_cold if cold_s < 75 else rpm_idle) + random.uniform(-40, 70)
         load = random.uniform(18, 28)
+    elif wot:
+        rpm = min(6200, kmh * 23 * random.uniform(1.70, 1.95))  # Runterziehen
+        load = random.uniform(95, 100)
     else:
         rpm = kmh * 23 * random.uniform(0.97, 1.09)
         if cold_s < 75: rpm += random.uniform(150, 400)
@@ -123,12 +173,15 @@ def sens(t, kmh, prev, cold_s, ambient, warm):
     cold_extra = max(0.0, (32.0 - oil_t) / 32.0) * 2.2
     oil_bar = max(0.4, base + cold_extra + random.uniform(-0.06, 0.06))
     # MAP/Ladedruck
-    if load < 30: map_kpa = random.uniform(28, 36)
+    if wot: map_kpa = random.uniform(180, 220)
+    elif load < 30: map_kpa = random.uniform(28, 36)
     elif load < 65: map_kpa = random.uniform(52, 88)
     else: map_kpa = random.uniform(95, 190)
     volt = random.uniform(14.02, 14.36) if cold_s > 3 else random.uniform(12.2, 12.6)
     if kmh <= 0:
         throttle = random.uniform(3, 9)
+    elif wot:
+        throttle = random.uniform(95, 100)
     else:
         throttle = min(100, max(3, load * random.uniform(0.65, 1.0)))
     fuel = prev.get("fuel")
@@ -141,12 +194,12 @@ def sens(t, kmh, prev, cold_s, ambient, warm):
         "throttle": round(throttle, 1), "fuel": round(fuel, 1) if fuel is not None else None,
     }, {"coolant": coolant, "oil_t": oil_t, "gear_t": gear_t, "intake": intake, "fuel": fuel}
 
-def gen_month(start_date, days, seed):
+def gen_year(start_date, days, seed):
     r = random.Random(seed)
     trips, odo = [], ODO_START
     start = datetime.strptime(start_date, "%Y-%m-%d")
-    homeoffice = set(r.sample(range(days), 2))
-    long_done = False
+    homeoffice = set(r.sample(range(days), int(days * 0.06)))
+    last_road_day = -99
     for d in range(days):
         day = start + timedelta(days=d)
         wd = day.weekday()
@@ -169,15 +222,19 @@ def gen_month(start_date, days, seed):
         if wd < 5 and d not in homeoffice:
             add(7, r.randint(22, 36), "work_to", HOME, WORK)
             add(17, r.randint(5, 35), "work_from", WORK, HOME)
-        if wd == 5 and r.random() < 0.75:
+        if wd == 5 and r.random() < 0.78:
             round_trip(r.randint(10, 11), r.randint(0, 55), "shopping", MALL)
         if wd == 6:
-            if not long_done and d > 12 and r.random() < 0.4:
-                long_done = True
-                round_trip(r.randint(9, 11), r.randint(0, 59), "leisure", LONG)
-            elif r.random() < 0.7:
+            if d - last_road_day >= 35 and r.random() < 0.8:
+                # Roadtrip: Autobahn, Hamburg/Bremen/Baltic/Kassel
+                last_road_day = d
+                round_trip(r.randint(8, 10), r.randint(0, 59), "roadtrip", r.choice(ROADS))
+            elif r.random() < 0.58:
                 round_trip(r.randint(10, 14), r.randint(0, 59), "leisure", LEISURE)
-        if wd < 5 and d not in homeoffice and r.random() < 0.35:
+            elif d - last_road_day >= 12 and r.random() < 0.20:
+                last_road_day = d
+                round_trip(r.randint(9, 11), r.randint(0, 59), "leisure", LONG)
+        if wd < 5 and d not in homeoffice and r.random() < 0.40:
             add(19, r.randint(10, 50), "errand", HOME, ERRAND)
             add(19, r.randint(55, 59), "errand", ERRAND, HOME)
     return trips
@@ -185,33 +242,44 @@ def gen_month(start_date, days, seed):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="http://127.0.0.1:8077")
-    ap.add_argument("--start", default="2026-10-07")
-    ap.add_argument("--days", type=int, default=31)
+    ap.add_argument("--start", default="2025-11-07")
+    ap.add_argument("--days", type=int, default=365)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     random.seed(a.seed)
-    trips = gen_month(a.start, a.days, a.seed)
+    trips = gen_year(a.start, a.days, a.seed)
+
+    today = datetime.now(TZ).date()
+    pending_since = today - timedelta(days=PENDING_DAYS)
 
     gps_all, obd_all = [], []
     odo = ODO_START
-    fillups, km_since_fill, last_fill_km = [], 0.0, ODO_START
+    fillups = []          # manuelle Eintraege (nur aelter als PENDING_DAYS)
+    pending_count = 0     # juengere Tankungen: Sprung in den OBD-Daten -> detect_fillups()
+    fuel_level = 92.0     # Tankstand-Kette (echter Verlauf statt Rechen-Naeherung)
     start_date = datetime.strptime(a.start, "%Y-%m-%d")
     for i, tr in enumerate(trips, 1):
         seed = a.seed * 1000 + i
         sp = speed_profile(tr["type"], tr["dur"], seed)
-        fuel = max(6.0, 92.0 - km_since_fill * (BASE_CONSUMPTION / 100.0) / TANK_MAX_L * 100.0)
-        fuel_step = tr["km"] * (BASE_CONSUMPTION / 100.0) / TANK_MAX_L * 100.0 / max(1, len(sp) - 1)
         prev = {"coolant": tr["ambient"], "oil_t": tr["ambient"],
-                "gear_t": tr["ambient"], "intake": tr["ambient"], "fuel": fuel}
+                "gear_t": tr["ambient"], "intake": tr["ambient"], "fuel": fuel_level}
         route = build_route(tr["p1"], tr["p2"], tr["km"], seed)
-        total_pts = len(sp)
         cum = 0.0
         cold = 0
-        for t_s, kmh in sp:
+        for t_s, kmh, wot in sp:
             cold += STEP_S
-            s, prev = sens(t_s, kmh, prev, cold, tr["ambient"], kmh > 0 or cold > 90)
-            prev["fuel"] = max(4.0, prev["fuel"] - fuel_step)
+            s, prev = sens(t_s, kmh, prev, cold, tr["ambient"], kmh > 0 or cold > 90, wot)
+            # Verbrauch je Fahrmodus (l/100km -> % Tank pro Schritt)
+            if wot: l100 = L100_WOT
+            elif kmh >= 100: l100 = L100_ABW
+            elif kmh > 0: l100 = L100_CITY
+            else: l100 = L100_IDLE
+            if kmh > 0:
+                drop = l100 / 100.0 / TANK_MAX_L * 100.0 * (kmh * STEP_S / 3600.0)
+            else:
+                drop = L100_IDLE / 3600.0 * STEP_S / TANK_MAX_L * 100.0
+            prev["fuel"] = max(FUEL_FLOOR_PCT, prev["fuel"] - drop)
             ts = int(tr["start"].timestamp()) + int(t_s)
             f = min(1.0, (t_s / sp[-1][0]) if sp[-1][0] else 0)
             idx = min(len(route) - 1, int(f * (len(route) - 1)))
@@ -225,53 +293,68 @@ def main():
             if t_s > 0 and len(sp) > 1:
                 cum += kmh * STEP_S / 3600.0
         tr["km_actual"] = cum
-        km_since_fill += cum
-        # Tankung faellig? (rechnerisch leer bei ~480 km pro ~45 l)
-        if (len(fillups) == 0 and tr is trips[0]) or km_since_fill >= 420:
-            if len(fillups) == 0:
-                liters = random.uniform(45.5, 47.5)  # Baseline: volles Tanken
-            else:
-                liters = km_since_fill * random.uniform(7.9, 8.6) / 100.0
-            liters = min(TANK_MAX_L - 3.0, max(32.0, liters))
-            price = round(random.uniform(1.83, 1.94), 2)
+        # Tankung faellig? Tank < 25 % -> voll (65 %) oder teilweis (35 %)
+        if prev["fuel"] < FUEL_TRIGGER_PCT:
+            target = 92.0 if random.random() < 0.65 else random.uniform(45, 70)
+            full = 1 if target >= 88 else 0
+            liters = (target - prev["fuel"]) / 100.0 * TANK_MAX_L
             fill_date = tr["start"]
-            fillups.append({"date": fill_date.strftime("%Y-%m-%d"),
-                            "odometer": round(odo, 1), "liters": round(liters, 2),
-                            "price_per_l": price, "total_price": round(liters * price, 2),
-                            "full": 1, "note": "Sim: Volltankung"})
-            if len(fillups) > 1:
-                print(f"  Tankung {fill_date:%d.%m.}: {liters:.1f} l / "
-                      f"{km_since_fill:.0f} km = {liters/km_since_fill*100:.2f} l/100km "
-                      f"@ {price} EUR/l")
-            km_since_fill = 0.0
+            older = fill_date.date() < pending_since
+            price = round(random.uniform(1.78, 1.99), 2)
+            if older:
+                fillups.append({"date": fill_date.strftime("%Y-%m-%d"),
+                                "odometer": round(tr["odo_before"] + cum, 1),
+                                "liters": round(liters, 2),
+                                "price_per_l": price, "total_price": round(liters * price, 2),
+                                "full": full,
+                                "note": "Sim: Volltankung" if full else "Sim: Teilfuellung"})
+            else:
+                pending_count += 1  # kein Preis -> detect_fillups() legt ihn ausstehend an
+            kind = "voll" if full else "teil (%.0f %%)" % target
+            print(f"  Tankung {fill_date:%d.%m.}: {liters:.1f} l ({kind}, "
+                  f"{prev['fuel']:.0f}->{target:.0f} %) "
+                  f"{'@ %.2f EUR/l' % price if older else '-- PREIS OFFEN (ausstehend)'}")
+            fuel_level = target
+        else:
+            fuel_level = prev["fuel"]  # Tank-Kette weiterfuehren (sonst startet jeder Tag bei 92 %)
         odo = tr["odo_before"] + tr["km_actual"]
 
     total_km = sum(t["km_actual"] for t in trips)
     print(f"Fahrten: {len(trips)} | km: {total_km:.0f} | GPS: {len(gps_all)} | "
-          f"OBD: {len(obd_all)} | Tankungen: {len(fillups)}")
+          f"OBD: {len(obd_all)} | Tankungen: {len(fillups)} manuell + "
+          f"{pending_count} ausstehend (Preis offen)")
     if a.dry_run:
         return
 
     def post(path, payload):
         req = urllib.request.Request(a.url + path, data=json.dumps(payload).encode(),
                                      headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with urllib.request.urlopen(req, timeout=300) as resp:
             return json.load(resp)
 
-    # Batch in 400er-Chunks
-    for i in range(0, len(gps_all), 400):
-        r = post("/api/ingest/batch", {"gps": gps_all[i:i+400], "obd": []})
-        assert r.get("ok")
-    for i in range(0, len(obd_all), 400):
-        r = post("/api/ingest/batch", {"gps": [], "obd": obd_all[i:i+400]})
-        assert r.get("ok")
+    # Batch in 2000er-Chunks (Endpunkt max 5000/Liste)
+    for i in range(0, len(gps_all), 2000):
+        r = post("/api/ingest/batch", {"gps": gps_all[i:i+2000], "obd": []})
+        assert r.get("ok"), f"GPS-Chunk {i} fehlgeschlagen"
+        if (i // 2000) % 20 == 0:
+            print(f"  GPS {i}/{len(gps_all)}")
+    for i in range(0, len(obd_all), 2000):
+        r = post("/api/ingest/batch", {"gps": [], "obd": obd_all[i:i+2000]})
+        assert r.get("ok"), f"OBD-Chunk {i} fehlgeschlagen"
+        if (i // 2000) % 20 == 0:
+            print(f"  OBD {i}/{len(obd_all)}")
     for f in fillups:
         post("/api/fillups", f)
-    post("/api/maintenance", {"date": (start_date + timedelta(days=12)).strftime("%Y-%m-%d"),
-                              "odometer": ODO_START + 320, "kind": "Oelwechsel + Filter",
-                              "cost": 89.90, "note": "Sim: 10.000er-Service"})
-    with urllib.request.urlopen(a.url + "/api/health", timeout=30) as resp:
+    post("/api/maintenance", {"date": (start_date + timedelta(days=140)).strftime("%Y-%m-%d"),
+                              "odometer": ODO_START + 8000, "kind": "Inspektion",
+                              "cost": 349.90, "note": "Sim: Jaehrliche-Inspektion"})
+    post("/api/maintenance", {"date": (start_date + timedelta(days=40)).strftime("%Y-%m-%d"),
+                              "odometer": ODO_START + 2300, "kind": "Oelwechsel + Filter",
+                              "cost": 89.90, "note": "Sim: Oelwechsel"})
+    with urllib.request.urlopen(a.url + "/api/health", timeout=60) as resp:
         print("Ingest fertig:", json.load(resp))
+    print(f"WICHTIG: Server neu starten (frischer _FUEL_SCAN), dann health() -> "
+          f"{pending_count} Tankungen werden als ausstehend erkannt.")
 
 if __name__ == "__main__":
     main()

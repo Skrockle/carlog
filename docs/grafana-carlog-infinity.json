@@ -59,7 +59,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=rpm",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -134,7 +138,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=oil_bar",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -194,7 +202,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=gear_c",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -254,7 +266,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=coolant",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -317,7 +333,11 @@
           "source": "url",
           "url": "/api/series.csv?kind=bplus",
           "refId": "A",
-          "alias": "+B (ELM ATRV)"
+          "alias": "+B (ELM ATRV)",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         },
         {
           "datasource": {
@@ -329,7 +349,11 @@
           "source": "url",
           "url": "/api/series.csv?kind=voltage",
           "refId": "B",
-          "alias": "Adapter"
+          "alias": "Adapter",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -389,7 +413,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=speed",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -449,7 +477,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=gps_speed",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -509,7 +541,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=map",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -569,7 +605,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=intake",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -631,7 +671,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=load",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [
@@ -691,7 +735,11 @@
           "format": "timeseries",
           "source": "url",
           "url": "/api/series.csv?kind=fillup_cost",
-          "refId": "A"
+          "refId": "A",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
         }
       ],
       "transformations": [

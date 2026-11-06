@@ -3,7 +3,7 @@
 <rect x="0.5" y="0.5" width="979" height="719" rx="13.5" fill="none" stroke="#242c36"/>
 <text x="26" y="42" font-size="20" font-weight="700" fill="#e8ecf1">🚗 carlog</text>
 <text x="136" y="42" font-size="13" fill="#8b96a5">Toyota GR Yaris</text>
-<text x="954" y="42" font-size="12" fill="#8b96a5" text-anchor="end">· 3 Tankungen · 7664 GPS-Punkte · 7664 OBD-Messungen</text>
+<text x="954" y="42" font-size="12" fill="#8b96a5" text-anchor="end">· 3 Tankungen · 37866 GPS-Punkte · 37866 OBD-Messungen</text>
 <rect x="26" y="60" width="72" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
 <text x="62.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Tanken</text>
 <rect x="106" y="60" width="80" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
@@ -14,40 +14,40 @@
 <text x="335.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Automatik</text>
 <rect x="26" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="126" font-size="11" fill="#8b96a5">km gesamt (Tanklog)</text>
-<text x="42" y="148" font-size="19" font-weight="700" fill="#e8ecf1">887</text>
+<text x="42" y="148" font-size="19" font-weight="700" fill="#e8ecf1">797</text>
 <rect x="354" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="370" y="126" font-size="11" fill="#8b96a5">Ø l/100 km</text>
-<text x="370" y="148" font-size="19" font-weight="700" fill="#e8ecf1">7,91</text>
+<text x="370" y="148" font-size="19" font-weight="700" fill="#e8ecf1">8,86</text>
 <rect x="682" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="698" y="126" font-size="11" fill="#8b96a5">Ø €/100 km</text>
-<text x="698" y="148" font-size="19" font-weight="700" fill="#e8ecf1">14,51</text>
+<text x="698" y="148" font-size="19" font-weight="700" fill="#e8ecf1">17,01</text>
 <rect x="26" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="188" font-size="11" fill="#8b96a5">Kosten gesamt</text>
-<text x="42" y="210" font-size="19" font-weight="700" fill="#e8ecf1">215,22 €</text>
+<text x="42" y="210" font-size="19" font-weight="700" fill="#e8ecf1">222,58 €</text>
 <rect x="354" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="370" y="188" font-size="11" fill="#8b96a5">km gesamt (GPS)</text>
 <text x="370" y="210" font-size="19" font-weight="700" fill="#e8ecf1">825</text>
 <rect x="682" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="698" y="188" font-size="11" fill="#8b96a5">GPS-Punkte</text>
-<text x="698" y="210" font-size="19" font-weight="700" fill="#e8ecf1">7.664</text>
+<text x="698" y="210" font-size="19" font-weight="700" fill="#e8ecf1">37.866</text>
 <rect x="26" y="236" width="928" height="230" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="260" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERBRAUCH L/100 KM (VOLL-ZU-VOLL)</text>
 <rect x="858" y="251" width="10" height="10" rx="2" fill="#ff5252"/>
 <text x="874" y="260" font-size="11" fill="#8b96a5">l/100 km</text>
 <line x1="86" y1="444.0" x2="938" y2="444.0" stroke="#242c36"/>
-<text x="78" y="448.0" font-size="10" fill="#8b96a5" text-anchor="end">7,7</text>
+<text x="78" y="448.0" font-size="10" fill="#8b96a5" text-anchor="end">8,0</text>
 <line x1="86" y1="383.3" x2="938" y2="383.3" stroke="#242c36"/>
-<text x="78" y="387.3" font-size="10" fill="#8b96a5" text-anchor="end">7,9</text>
+<text x="78" y="387.3" font-size="10" fill="#8b96a5" text-anchor="end">8,6</text>
 <line x1="86" y1="322.7" x2="938" y2="322.7" stroke="#242c36"/>
-<text x="78" y="326.7" font-size="10" fill="#8b96a5" text-anchor="end">8,0</text>
+<text x="78" y="326.7" font-size="10" fill="#8b96a5" text-anchor="end">9,1</text>
 <line x1="86" y1="262.0" x2="938" y2="262.0" stroke="#242c36"/>
-<text x="78" y="266.0" font-size="10" fill="#8b96a5" text-anchor="end">8,1</text>
+<text x="78" y="266.0" font-size="10" fill="#8b96a5" text-anchor="end">9,7</text>
 <polyline fill="none" stroke="#ff5252" stroke-width="2.5" points="512.0,423.0 938.0,283.0"/>
 <text x="86.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-07</text>
 <circle cx="512.0" cy="423.0" r="3.5" fill="#ff5252"/>
-<text x="512.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-22</text>
+<text x="512.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-20</text>
 <circle cx="938.0" cy="283.0" r="3.5" fill="#ff5252"/>
-<text x="938.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-11-06</text>
+<text x="938.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-11-03</text>
 <rect x="26" y="482" width="928" height="208" rx="12" fill="#171c23" stroke="#242c36"/>
 <text x="42" y="506" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERLAUF · VOLL-ZU-VOLL</text>
 <text x="42" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="start">Datum</text>
@@ -64,33 +64,33 @@
 <text x="42" y="568" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-07</text>
 <text x="210" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">42.150</text>
 <text x="282" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
-<text x="352" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">46,59</text>
-<text x="414" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1,860</text>
-<text x="474" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">86,65</text>
+<text x="352" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">46,18</text>
+<text x="414" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1,900</text>
+<text x="474" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">87,74</text>
 <text x="554" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
 <text x="644" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
 <text x="684" y="568" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
 <text x="938" y="568" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <line x1="42" y1="586" x2="938" y2="586" stroke="#1d242e"/>
-<text x="42" y="596" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-22</text>
-<text x="210" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">42.615</text>
-<text x="282" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">465,3</text>
-<text x="352" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">36,17</text>
-<text x="414" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1,830</text>
-<text x="474" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">66,19</text>
-<text x="554" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">7,77</text>
-<text x="644" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">14,23</text>
+<text x="42" y="596" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-20</text>
+<text x="210" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">42.579</text>
+<text x="282" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">429,4</text>
+<text x="352" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">35,25</text>
+<text x="414" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1,920</text>
+<text x="474" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">67,68</text>
+<text x="554" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">8,21</text>
+<text x="644" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">15,76</text>
 <text x="684" y="596" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
 <text x="938" y="596" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <line x1="42" y1="614" x2="938" y2="614" stroke="#1d242e"/>
-<text x="42" y="624" font-size="13" fill="#e8ecf1" text-anchor="start">2026-11-06</text>
-<text x="210" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">43.037</text>
-<text x="282" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">421,4</text>
-<text x="352" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">33,90</text>
-<text x="414" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1,840</text>
-<text x="474" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">62,38</text>
-<text x="554" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">8,04</text>
-<text x="644" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">14,80</text>
+<text x="42" y="624" font-size="13" fill="#e8ecf1" text-anchor="start">2026-11-03</text>
+<text x="210" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">42.947</text>
+<text x="282" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">367,8</text>
+<text x="352" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">34,98</text>
+<text x="414" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1,920</text>
+<text x="474" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">67,16</text>
+<text x="554" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">9,51</text>
+<text x="644" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">18,26</text>
 <text x="684" y="624" font-size="13" fill="#8b96a5" text-anchor="start">Sim: Volltankung</text>
 <text x="938" y="624" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
 <text x="954" y="708" font-size="10" fill="#4a5563" text-anchor="end">Beispieldaten · Vorschau</text>

@@ -20,6 +20,7 @@ from datetime import datetime, timedelta, timezone
 
 TZ = timezone(timedelta(hours=1))  # CET
 DEVICE = "GRYaris"
+STEP_S = 2.0  # Abtastrate OBD/GPS (Torque ~1 Hz, Pi-Daemon 5 s via PILOG_INTERVAL)
 TANK_MAX_L = 50.0
 BASE_CONSUMPTION = 8.2  # l/100 km WLTP
 ODO_START = 42150.0
@@ -55,24 +56,25 @@ def build_route(p1, p2, total_km, seed):
     return pts
 
 def speed_profile(trip_type, dur_s, seed):
-    """[(t_s, kmh)] alle 10 s; Stops (0 km/h) in Stadt-Phasen."""
+    """[(t_s, kmh)] alle STEP_S; Stops (0 km/h) in Stadt-Phasen."""
     r = random.Random(seed)
-    out, t, cur = [], 0.0, 0.0
+    out, t, cur, stop_left = [], 0.0, 0.0, 0
     def seg(f0, f1, lo, hi, stops):
-        nonlocal t, cur
+        nonlocal t, cur, stop_left
         t1 = dur_s * f1
         while t < t1:
-            step = 10.0
-            if stops and r.random() < 0.045 and cur > 0:
-                cur = 0.0  # Ampel
+            if stops and cur > 0 and stop_left == 0 and r.random() < 0.009:
+                stop_left = r.randint(4, 20)  # Ampel: 8-40 s stehen
+            if stop_left > 0:
+                cur = 0.0
+                stop_left -= 1
             elif cur == 0 and t > 2:
                 cur = r.uniform(lo, hi) * 0.5
             else:
                 target = r.uniform(lo, hi)
-                cur = max(0.0, min(cur + r.uniform(-14, 18), target))
-                if cur > target: cur = target
+                cur = max(0.0, min(cur + r.uniform(-6, 8), target))
             out.append((t, round(cur)))
-            t += step
+            t += STEP_S
     if trip_type in ("work_to", "work_from"):
         seg(0.00, 0.20, 28, 48, 2)      # Stadt (Start/Stopp)
         seg(0.20, 0.80, 62, 95, 0)      # Landstrasse
@@ -99,22 +101,22 @@ def sens(t, kmh, prev, cold_s, ambient, warm):
         if cold_s < 75: rpm += random.uniform(150, 400)
         rpm = min(max(rpm, 1100), 3400)
         load = min(100, 32 + kmh * 0.28 + random.uniform(-6, 26))
-        if random.random() < 0.08:  # Beschleunigungsphase
+        if random.random() < 0.016:  # Beschleunigungsphase
             rpm = min(3400, rpm + random.uniform(500, 1000))
             load = min(100, load + random.uniform(20, 45))
     # Temperaturen
     coolant = prev["coolant"]
     if coolant < 90 and warm:
-        coolant = min(90.5, coolant + random.uniform(1.1, 1.7))  # ~7-10 C/min bei 10 s
+        coolant = min(90.5, coolant + random.uniform(0.22, 0.34))  # ~7-10 C/min
     elif coolant < 88:
-        coolant = min(88.5, coolant + random.uniform(0.9, 1.4))
+        coolant = min(88.5, coolant + random.uniform(0.18, 0.28))
     else:
         # Thermostat haelt 88-92: mean reversion statt Random-Walk-Drift
-        coolant = max(88.8, min(91.5, coolant + random.uniform(-0.25, 0.25)))
-    coolant += random.uniform(-0.05, 0.05)
-    oil_t = min(prev["oil_t"] + random.uniform(0.22, 0.40), max(coolant - 4, 20))
-    gear_t = min(prev["gear_t"] + random.uniform(0.18, 0.32), 52.0 + random.uniform(0, 2))
-    intake = min(prev["intake"] + random.uniform(0.12, 0.22), ambient + random.uniform(9, 15))
+        coolant = max(88.8, min(91.5, coolant + random.uniform(-0.05, 0.05)))
+    coolant += random.uniform(-0.01, 0.01)
+    oil_t = min(prev["oil_t"] + random.uniform(0.044, 0.080), max(coolant - 4, 20))
+    gear_t = min(prev["gear_t"] + random.uniform(0.036, 0.064), 52.0 + random.uniform(0, 2))
+    intake = min(prev["intake"] + random.uniform(0.024, 0.044), ambient + random.uniform(9, 15))
     # Oeldruck: warm Leerlauf 0,9-1,2; mit Drehzahl; kalt deutlich hoeher
     base = 0.95 + rpm / 1400.0 * (0.85 if rpm > 1000 else 0.0)
     if rpm <= 1000: base = 0.95 + random.uniform(-0.08, 0.25)
@@ -199,7 +201,7 @@ def main():
         cum = 0.0
         cold = 0
         for t_s, kmh in sp:
-            cold += 10
+            cold += STEP_S
             s, prev = sens(t_s, kmh, prev, cold, tr["ambient"], kmh > 0 or cold > 90)
             ts = int(tr["start"].timestamp()) + int(t_s)
             f = min(1.0, (t_s / sp[-1][0]) if sp[-1][0] else 0)
@@ -212,7 +214,7 @@ def main():
             obd_all.append({"time": ts * 1000, "session": f"sim-{i:03d}-{tr['type']}",
                             "device": DEVICE, "data": s})
             if t_s > 0 and len(sp) > 1:
-                cum += kmh * 10 / 3600.0
+                cum += kmh * STEP_S / 3600.0
         tr["km_actual"] = cum
         km_since_fill += cum
         # Tankung faellig? (rechnerisch leer bei ~480 km pro ~45 l)

@@ -7,14 +7,17 @@ automatische Ingest-Endpunkte fuer GPS-Logger-Apps (OsmAnd-Protokoll) und
 OBD2-Apps (Torque-Webserver-Format). Nur Python-Stdlib + SQLite, kein
 Cloud-Bezug - alle Daten liegen in einer einzigen Datei.
 """
+import bisect
 import json
 import math
 import os
+import random
 import re
 import sqlite3
 import time
 from datetime import datetime, timezone, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from collections import deque
 from urllib.parse import urlparse, parse_qs, unquote
 
 DB_PATH = os.environ.get("CARLOG_DB", "/data/carlog.db")
@@ -403,7 +406,147 @@ def series_rows(kind, t_from, t_to):
     return out
 
 
+TRACK_METRICS = {
+    "throttle": ("Gaspedal", "%"),
+    "rpm": ("Drehzahl", "1/min"),
+    "speed": ("Tempo", "km/h"),
+    "consumption": ("Verbrauch", "l/100km"),
+}
+TRACK_TANK_L = 50.0  # GR Yaris Tankinhalt (Verbrauchs-Schaetzung aus Tankstands-Gefaelle)
+
+
+def track_data(qs):
+    """GPS-Track mit Farbwert je Punkt fuer die WebUI-Karte.
+
+    metric: throttle/rpm/speed (OBD/GPS am naechsten Timestamp) oder consumption
+    (l/100km aus Tankstands-Gefaelle pro GPS-Segment, gleitend geglaettet).
+    privacy: Radius in Metern — Punkte werden per seeded Random-Walk innerhalb
+    des Radius verschoben (Form bleibt, exakte Lage nicht); Seed stabil pro
+    Fenster+Radius, damit der Track beim Metrik-Wechsel nicht springt.
+    """
+    t_from = norm_ts(qs.get("from", [None])[0]) or int(time.time()) - 30 * 86400
+    t_to = norm_ts(qs.get("to", [None])[0]) or int(time.time())
+    metric = (qs.get("metric", ["throttle"])[0] or "throttle").lower()
+    if metric not in TRACK_METRICS:
+        metric = "throttle"
+    try:
+        privacy = max(0, int(float(qs.get("privacy", ["0"])[0] or 0)))
+    except ValueError:
+        privacy = 0
+    c = db()
+    try:
+        gpts = c.execute(
+            "SELECT ts, lat, lon, speed FROM gps_points WHERE ts BETWEEN ? AND ? ORDER BY ts",
+            (t_from, t_to)).fetchall()
+        obd = c.execute(
+            "SELECT ts, data FROM obd_readings WHERE ts BETWEEN ? AND ? ORDER BY ts",
+            (t_from, t_to)).fetchall()
+    finally:
+        c.close()
+    obd_ts = [r["ts"] for r in obd]
+    obd_data = []
+    for r in obd:
+        try:
+            obd_data.append(json.loads(r["data"]))
+        except ValueError:
+            obd_data.append({})
+
+    def obd_at(ts, win=10):
+        """naechstes OBD-Reading innerhalb +/- win Sekunden, sonst None."""
+        if not obd_ts:
+            return None
+        i = bisect.bisect_left(obd_ts, ts)
+        cand = [j for j in (i - 1, i)
+                if 0 <= j < len(obd_ts) and abs(obd_ts[j] - ts) <= win]
+        if not cand:
+            return None
+        return obd_data[min(cand, key=lambda j: abs(obd_ts[j] - ts))]
+
+    def hav_km(a, b):
+        la1, lo1, la2, lo2 = map(math.radians, (a["lat"], a["lon"], b["lat"], b["lon"]))
+        h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+        return 2 * 6371.0 * math.asin(math.sqrt(h))
+
+    n = len(gpts)
+    if metric == "speed":
+        vals = [p["speed"] for p in gpts]
+    elif metric == "consumption":
+        # l/100km aus der Tankstands-Steigung (kleinste Quadrate im 300-s-Fenster,
+        # robust gegen die 0,1-%-Rundung der OBD-Werte) und dem km/h-Schnitt im
+        # selben Fenster. Rolling Sums -> O(n).
+        fuel = []
+        for p in gpts:
+            d = obd_at(p["ts"])
+            fuel.append(d.get("fuel") if d else None)
+        seg_km = [hav_km(gpts[i], gpts[i + 1]) for i in range(n - 1)] + [0.0]
+        vals = []
+        q = deque()     # (ts, fuel) im Fenster
+        km_q = deque()  # (ts, segment-km) im Fenster
+        st = sf = stf = st2 = 0.0
+        km_sum = 0.0
+        win = 300.0
+        for i, p in enumerate(gpts):
+            f = fuel[i]
+            if f is not None:
+                q.append((p["ts"], f))
+                st += p["ts"]; sf += f; stf += p["ts"] * f; st2 += p["ts"] * p["ts"]
+            km_q.append((p["ts"], seg_km[i]))
+            km_sum += seg_km[i]
+            t0 = p["ts"] - win
+            while q and q[0][0] < t0:
+                t_, f_ = q.popleft()
+                st -= t_; sf -= f_; stf -= t_ * f_; st2 -= t_ * t_
+            while km_q and km_q[0][0] < t0:
+                km_sum -= km_q.popleft()[1]
+            cnt = len(q)
+            span = (p["ts"] - q[0][0]) if q else 0.0
+            den = cnt * st2 - st * st
+            if cnt >= 20 and km_sum > 0.02 and span > 60 and den != 0:
+                slope = (cnt * stf - st * sf) / den  # % pro Sekunde (negativ = Verbrauch)
+                kmh = km_sum / span * 3600.0
+                if slope < 0 and kmh > 2.0:
+                    v = (-slope) * 3600.0 * (TRACK_TANK_L / 100.0) / kmh * 100.0
+                    vals.append(v if 0.0 <= v <= 40.0 else None)
+                else:
+                    vals.append(None)
+            else:
+                vals.append(None)
+    else:
+        vals = []
+        for p in gpts:
+            d = obd_at(p["ts"])
+            vals.append(d.get(metric) if d else None)
+
+    pts = [[p["ts"], p["lat"], p["lon"], vals[i]] for i, p in enumerate(gpts)]
+
+    if privacy > 0 and pts:
+        rnd = random.Random((int(t_from) * 7919) ^ (privacy * 104729))
+        ox = rnd.uniform(-privacy, privacy)
+        oy = rnd.uniform(-privacy, privacy)
+        m = math.hypot(ox, oy)
+        if m > privacy:
+            ox, oy = ox / m * privacy, oy / m * privacy
+        step = privacy * 0.15
+        for p in pts:
+            ox += rnd.uniform(-step, step)
+            oy += rnd.uniform(-step, step)
+            m = math.hypot(ox, oy)
+            if m > privacy:
+                ox, oy = ox / m * privacy, oy / m * privacy
+            p[1] += oy / 111320.0
+            p[2] += ox / (111320.0 * math.cos(math.radians(p[1])))
+
+    max_pts = 20000
+    if len(pts) > max_pts:
+        k = math.ceil(len(pts) / max_pts)
+        pts = pts[::k]
+    name, unit = TRACK_METRICS[metric]
+    return {"metric": metric, "label": name, "unit": unit,
+            "privacy_m": privacy, "points": pts}
+
+
 TRIP_GAP_S = 600  # Abstand ab dem eine neue Fahrt beginnt (10 min)
+SERIES_GAP_S = 300  # Luecke in Sekunden, ab der die Grafana-Linie gebrochen wird (Nullen-Injection)
 
 
 def trip_summary(t_from, t_to):
@@ -652,9 +795,14 @@ class Handler(BaseHTTPRequestHandler):
         rows = series_rows(kind, t_from, t_to)
         if path.endswith(".csv"):
             lines = ["time,value"]
+            prev = None
             for ts, v in rows:
+                if prev is not None and ts - prev > SERIES_GAP_S:
+                    iso_g = datetime.fromtimestamp(prev + SERIES_GAP_S, tz=timezone.utc).isoformat().replace("+00:00", "Z")
+                    lines.append("%s,NaN" % iso_g)
                 iso = datetime.fromtimestamp(ts, tz=timezone.utc).isoformat().replace("+00:00", "Z")
                 lines.append("%s,%s" % (iso, v))
+                prev = ts
             body = ("\n".join(lines) + "\n").encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/csv; charset=utf-8")
@@ -663,7 +811,14 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
         else:
-            self._json([{"time": ts * 1000, "value": v} for ts, v in rows])
+            out = []
+            prev = None
+            for ts, v in rows:
+                if prev is not None and ts - prev > SERIES_GAP_S:
+                    out.append({"time": (prev + SERIES_GAP_S) * 1000, "value": None})
+                out.append({"time": ts * 1000, "value": v})
+                prev = ts
+            self._json(out)
 
     def health(self):
         c = db()
@@ -718,6 +873,8 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(self.telemetry(qs))
             elif path in ("/api/series", "/api/series.csv"):
                 self.series(qs, path)
+            elif path == "/api/track":
+                self._json(track_data(qs))
             elif path == "/api/trip":
                 self._json(trip_summary(norm_ts(qs.get("from", [None])[0]) or time.time() - 30 * 86400,
                                         norm_ts(qs.get("to", [None])[0]) or time.time()))

@@ -38,6 +38,9 @@ td .del:hover{color:var(--acc)}
 .ranges{display:flex;gap:6px;flex-wrap:wrap}
 .ranges button{background:var(--card);border:1px solid var(--line);color:var(--mut);padding:8px 14px;border-radius:9px;cursor:pointer;font-size:13.5px}
 .ranges button.on{color:var(--txt);border-color:var(--acc)}
+canvas#map-canvas{width:100%;height:440px;display:block;background:#0d1117;border:1px solid var(--line);border-radius:8px}
+.maplegend{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--mut)}
+.gradbar{flex:1;max-width:260px;height:10px;border-radius:5px;background:linear-gradient(to right,#4ec9a8,#ffd166,#ff5252)}
 .muted{color:var(--mut);font-size:12.5px}
 .urlbox{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .urlbox code{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;word-break:break-all;flex:1;min-width:240px}
@@ -54,6 +57,7 @@ svg{width:100%;height:auto;display:block}
 <button data-tab="tanken" class="on">Tanken</button>
 <button data-tab="wartung">Wartung</button>
 <button data-tab="fahrten">Fahrten</button>
+<button data-tab="karte">Karte</button>
 <button data-tab="stats">Statistik</button>
 <button data-tab="auto">Automatik</button>
 </nav>
@@ -107,6 +111,31 @@ svg{width:100%;height:auto;display:block}
   <div class="cards" id="trip-cards"></div>
   <p class="hint">Fahrten werden per Lückenerkennung zusammengefasst (Abstand &ge; 10 min = neue Fahrt). Strecke aus GPS-Punkten (Haversine), Höchstgeschwindigkeit aus OBD.</p>
 </section>
+<section class="tab" id="tab-karte">
+  <div class="card"><h2>Ansicht</h2>
+    <div class="ranges" id="map-days">
+      <button data-days="7">7 Tage</button>
+      <button data-days="30" class="on">30 Tage</button>
+      <button data-days="90">90 Tage</button>
+    </div>
+    <div class="ranges" id="map-metric">
+      <button data-metric="throttle" class="on">Gaspedal</button>
+      <button data-metric="consumption">Verbrauch</button>
+      <button data-metric="rpm">Drehzahl</button>
+      <button data-metric="speed">Tempo</button>
+    </div>
+    <div class="ranges" id="map-priv">
+      <button data-priv="0" class="on">Genau</button>
+      <button data-priv="300">±300 m</button>
+      <button data-priv="1000">±1 km</button>
+    </div>
+    <p class="hint">Farbe der Linie: gr&uuml;n = niedrig &rarr; gelb &rarr; rot = hoch (Skala nach Perzentilen des gew&auml;hlten Werts). Datenschutz-Modus verschiebt die GPS-Punkte per Zufallswalk innerhalb des Radius &mdash; die Form der Strecke bleibt, die exakte Lage nicht.</p>
+  </div>
+  <div class="card"><h2 id="map-title">Strecke</h2>
+    <canvas id="map-canvas"></canvas>
+    <div class="maplegend"><span id="map-lo"></span><div class="gradbar"></div><span id="map-hi"></span></div>
+  </div>
+</section>
 <section class="tab" id="tab-stats">
   <div class="cards" id="stat-cards"></div>
   <div class="card"><h2>Verbrauch l/100 km (Voll-zu-Voll)</h2><div id="chart-l100"></div></div>
@@ -146,7 +175,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   b.classList.add('on');document.getElementById('tab-'+b.dataset.tab).classList.add('on');
   refreshTab(b.dataset.tab);
 });
-function refreshTab(t){if(t==='tanken')loadFill();else if(t==='wartung')loadMaint();else if(t==='fahrten')loadTrips();else if(t==='stats')loadStats();else if(t==='auto')loadTelem()}
+function refreshTab(t){if(t==='tanken')loadFill();else if(t==='wartung')loadMaint();else if(t==='fahrten')loadTrips();else if(t==='karte')loadMap();else if(t==='stats')loadStats();else if(t==='auto')loadTelem()}
 
 /* Datum-Default */
 for(const f of ['fill-form','maint-form']){const el=document.forms[f];if(el)el.date.value=new Date().toISOString().slice(0,10)}
@@ -217,6 +246,66 @@ async function loadTrips(){
     el.innerHTML=cards.map(c=>'<div class="stat"><span>'+c[0]+'</span><b>'+c[1]+'</b></div>').join('');
   }catch(e){el.innerHTML='<p class="muted">'+e.message+'</p>'}
 }
+
+/* Karte */
+const MAP_METRICS={throttle:'Gaspedal (%)',consumption:'Verbrauch (l/100km)',rpm:'Drehzahl (1/min)',speed:'Tempo (km/h)'};
+let mapDays=30,mapMetric='throttle',mapPriv=0,mapData=null;
+function wireMap(id,cb){document.querySelectorAll('#'+id+' button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cb(b.dataset);});}
+wireMap('map-days',d=>{mapDays=+d.days;loadMap();});
+wireMap('map-metric',d=>{mapMetric=d.metric;loadMap();});
+wireMap('map-priv',d=>{mapPriv=+d.priv;loadMap();});
+async function loadMap(){
+  const el=document.getElementById('map-title');
+  try{
+    const now=Math.floor(Date.now()/1000);
+    el.textContent=MAP_METRICS[mapMetric]+' · lädt …';
+    mapData=await api('/api/track?from='+(now-mapDays*86400)+'&to='+now+'&metric='+mapMetric+'&privacy='+mapPriv);
+    el.textContent=MAP_METRICS[mapMetric]+' · '+mapData.points.length+' Punkte';
+    drawMap();
+  }catch(e){el.textContent='Karte: '+e.message}
+}
+function mapColor(t){
+  const mix=(a,b,u)=>[Math.round(a[0]+(b[0]-a[0])*u),Math.round(a[1]+(b[1]-a[1])*u),Math.round(a[2]+(b[2]-a[2])*u)];
+  const c=t<=.5?mix([78,201,168],[255,209,102],t*2):mix([255,209,102],[255,82,82],(t-.5)*2);
+  return 'rgb('+c[0]+','+c[1]+','+c[2]+')';
+}
+function drawMap(){
+  const cv=document.getElementById('map-canvas');
+  const W=cv.clientWidth||900,H=440,dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  const pts=mapData?mapData.points:[];
+  if(pts.length<2)return;
+  const lats=pts.map(p=>p[1]),lons=pts.map(p=>p[2]);
+  const lat0=(Math.min(...lats)+Math.max(...lats))/2,lon0=(Math.min(...lons)+Math.max(...lons))/2;
+  const P=pts.map(p=>[(p[2]-lon0)*Math.cos(lat0*Math.PI/180)*111320,-(p[1]-lat0)*110540]);
+  const minX=Math.min(...P.map(q=>q[0])),maxX=Math.max(...P.map(q=>q[0]));
+  const minY=Math.min(...P.map(q=>q[1])),maxY=Math.max(...P.map(q=>q[1]));
+  const pad=16,sc=Math.min((W-2*pad)/Math.max(maxX-minX,1),(H-2*pad)/Math.max(maxY-minY,1));
+  const X=q=>pad+(q[0]-minX)*sc,Y=q=>pad+(q[1]-minY)*sc;
+  const vs=pts.map(p=>p[3]).filter(v=>v!=null).sort((a,b)=>a-b);
+  if(!vs.length)return;
+  const lo=vs[Math.floor(vs.length*.05)],hi=vs[Math.min(vs.length-1,Math.ceil(vs.length*.95)-1)];
+  document.getElementById('map-lo').textContent=fmt(lo,lo<10?2:1)+' '+(mapData.unit||'');
+  document.getElementById('map-hi').textContent=fmt(hi,hi<10?2:1)+' '+(mapData.unit||'');
+  const step=Math.max(1,Math.ceil(pts.length/8000));
+  ctx.lineWidth=2;ctx.lineCap='round';
+  for(let i=0;i<pts.length-1;i+=step){
+    const j=Math.min(i+step,pts.length-1);
+    if(pts[i][3]==null||pts[j][3]==null)continue;
+    const t=((pts[i][3]+pts[j][3])/2-lo)/(hi-lo||1);
+    ctx.strokeStyle=mapColor(Math.max(0,Math.min(1,t)));
+    ctx.beginPath();ctx.moveTo(X(P[i]),Y(P[i]));ctx.lineTo(X(P[j]),Y(P[j]));ctx.stroke();
+  }
+  const barMax=W*0.3;let barM=1000;
+  if(barM*sc>barMax)barM=500;if(barM*sc>barMax)barM=200;if(barM*sc>barMax)barM=100;
+  const bx=W-pad-barM*sc,by=H-14;
+  ctx.strokeStyle='#8b96a5';ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+barM*sc,by);ctx.stroke();
+  ctx.fillStyle='#8b96a5';ctx.font='11px system-ui';ctx.textAlign='right';
+  ctx.fillText(barM>=1000?(barM/1000)+' km':barM+' m',bx+barM*sc,by-5);
+}
+window.addEventListener('resize',()=>{if(mapData&&document.getElementById('tab-karte').classList.contains('on'))drawMap()});
 
 /* Statistik + Charts */
 function chart(el,kind,labels,series,unit){

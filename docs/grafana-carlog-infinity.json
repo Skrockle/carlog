@@ -95,8 +95,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=rpm&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=rpm&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -104,23 +104,7 @@
         }
       ],
       "title": "Drehzahl",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -176,8 +160,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=oil_bar&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=oil_bar&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -185,23 +169,7 @@
         }
       ],
       "title": "Öldruck",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -242,8 +210,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=gear_c&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=gear_c&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -251,23 +219,7 @@
         }
       ],
       "title": "Getriebeöltemperatur",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -308,8 +260,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=coolant&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=coolant&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -317,23 +269,7 @@
         }
       ],
       "title": "Kühlmitteltemperatur",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -376,8 +312,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=bplus&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=bplus&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -393,8 +329,8 @@
           "parser": "backend",
           "refId": "B",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=voltage&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=voltage&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -402,23 +338,7 @@
         }
       ],
       "title": "Bordspannung (+B / Adapter)",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -459,8 +379,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=speed&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=speed&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -468,23 +388,7 @@
         }
       ],
       "title": "Geschwindigkeit (OBD)",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -525,8 +429,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=gps_speed&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=gps_speed&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -534,23 +438,7 @@
         }
       ],
       "title": "GPS-Geschwindigkeit",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -591,8 +479,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=map&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=map&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -600,23 +488,7 @@
         }
       ],
       "title": "Ladedruck (MAP)",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -657,8 +529,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=intake&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=intake&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -666,23 +538,7 @@
         }
       ],
       "title": "Ansaugtemperatur",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -725,8 +581,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=load&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=load&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -734,23 +590,7 @@
         }
       ],
       "title": "Motorlast",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -760,6 +600,10 @@
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "pointSize": 5,
+            "showPoints": "always"
+          },
           "unit": "currencyEUR"
         },
         "overrides": []
@@ -791,8 +635,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=fillup_cost&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=fillup_cost&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -800,23 +644,7 @@
         }
       ],
       "title": "Tankkosten je Tankung",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -859,8 +687,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=throttle&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=throttle&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -868,23 +696,7 @@
         }
       ],
       "title": "Gaspedal",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     },
     {
@@ -927,8 +739,8 @@
           "parser": "backend",
           "refId": "A",
           "source": "url",
-          "type": "csv",
-          "url": "/api/series.csv?kind=fuel&from=${__from}&to=${__to}",
+          "type": "json",
+          "url": "/api/series?kind=fuel&from=${__from}&to=${__to}",
           "url_options": {
             "data": "",
             "method": "GET"
@@ -936,23 +748,7 @@
         }
       ],
       "title": "Tankfüllstand",
-      "transformations": [
-        {
-          "id": "convertFieldType",
-          "options": {
-            "conversions": [
-              {
-                "destinationType": "time",
-                "targetField": "time"
-              },
-              {
-                "destinationType": "number",
-                "targetField": "value"
-              }
-            ]
-          }
-        }
-      ],
+      "transformations": [],
       "type": "timeseries"
     }
   ],
@@ -971,5 +767,5 @@
   "timezone": "browser",
   "title": "carlog",
   "uid": "carlog-infinity",
-  "version": 8
+  "version": 9
 }

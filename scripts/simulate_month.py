@@ -127,13 +127,19 @@ def sens(t, kmh, prev, cold_s, ambient, warm):
     elif load < 65: map_kpa = random.uniform(52, 88)
     else: map_kpa = random.uniform(95, 190)
     volt = random.uniform(14.02, 14.36) if cold_s > 3 else random.uniform(12.2, 12.6)
+    if kmh <= 0:
+        throttle = random.uniform(3, 9)
+    else:
+        throttle = min(100, max(3, load * random.uniform(0.65, 1.0)))
+    fuel = prev.get("fuel")
     return {
         "rpm": round(rpm), "speed": round(kmh), "coolant": round(coolant, 1),
         "oil_bar": round(oil_bar, 2), "gear_c": round(gear_t, 1),
         "intake": round(intake, 1), "load": round(load),
         "map": round(map_kpa), "voltage": round(volt, 2),
         "bplus": round(volt - random.uniform(0.0, 0.15), 2),
-    }, {"coolant": coolant, "oil_t": oil_t, "gear_t": gear_t, "intake": intake}
+        "throttle": round(throttle, 1), "fuel": round(fuel, 1) if fuel is not None else None,
+    }, {"coolant": coolant, "oil_t": oil_t, "gear_t": gear_t, "intake": intake, "fuel": fuel}
 
 def gen_month(start_date, days, seed):
     r = random.Random(seed)
@@ -194,8 +200,10 @@ def main():
     for i, tr in enumerate(trips, 1):
         seed = a.seed * 1000 + i
         sp = speed_profile(tr["type"], tr["dur"], seed)
+        fuel = max(6.0, 92.0 - km_since_fill * (BASE_CONSUMPTION / 100.0) / TANK_MAX_L * 100.0)
+        fuel_step = tr["km"] * (BASE_CONSUMPTION / 100.0) / TANK_MAX_L * 100.0 / max(1, len(sp) - 1)
         prev = {"coolant": tr["ambient"], "oil_t": tr["ambient"],
-                "gear_t": tr["ambient"], "intake": tr["ambient"]}
+                "gear_t": tr["ambient"], "intake": tr["ambient"], "fuel": fuel}
         route = build_route(tr["p1"], tr["p2"], tr["km"], seed)
         total_pts = len(sp)
         cum = 0.0
@@ -203,6 +211,7 @@ def main():
         for t_s, kmh in sp:
             cold += STEP_S
             s, prev = sens(t_s, kmh, prev, cold, tr["ambient"], kmh > 0 or cold > 90)
+            prev["fuel"] = max(4.0, prev["fuel"] - fuel_step)
             ts = int(tr["start"].timestamp()) + int(t_s)
             f = min(1.0, (t_s / sp[-1][0]) if sp[-1][0] else 0)
             idx = min(len(route) - 1, int(f * (len(route) - 1)))

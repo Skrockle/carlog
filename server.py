@@ -369,6 +369,8 @@ SERIES_KINDS = {
     "speed": ("obd_readings", "CAST(json_extract(data, '$.speed') AS REAL)"),
     "bplus": ("obd_readings", "CAST(json_extract(data, '$.bplus') AS REAL)"),
     "voltage": ("obd_readings", "CAST(json_extract(data, '$.voltage') AS REAL)"),
+    "throttle": ("obd_readings", "CAST(json_extract(data, '$.throttle') AS REAL)"),
+    "fuel": ("obd_readings", "CAST(json_extract(data, '$.fuel') AS REAL)"),
     "gps_speed": ("gps_points", "speed"),
 }
 

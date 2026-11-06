@@ -15,7 +15,7 @@ import random
 import re
 import sqlite3
 import time
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, date, timezone, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from collections import deque
 from urllib.parse import urlparse, parse_qs, unquote
@@ -113,7 +113,7 @@ def fill_cost(row):
     if row["total_price"] is not None:
         return float(row["total_price"])
     if row["price_per_l"] is not None:
-        return float(row["price_per_l"]) * float(row["liters"])
+        return float(row["price_per_l"]) * float(row["liters"] or 0)
     return 0.0
 
 
@@ -133,16 +133,23 @@ def fillups_with_stats():
         it["e_100"] = None
         it["km"] = None
         it["cost"] = round(fill_cost(it), 2)
+        it["pending"] = it["total_price"] is None and it["price_per_l"] is None
         total_cost += it["cost"]
-        if prev_any is not None and it["odometer"] > prev_any["odometer"]:
+        if it["pending"]:
+            continue  # ausstehend: kein Preis/km -> nicht in der Verbrauchs-Kette
+        if (prev_any is not None and it["odometer"] is not None
+                and prev_any["odometer"] is not None
+                and it["odometer"] > prev_any["odometer"]):
             it["km"] = round(it["odometer"] - prev_any["odometer"], 1)
         if it["full"]:
-            if prev_full is not None:
+            if (prev_full is not None and it["odometer"] is not None
+                    and prev_full["odometer"] is not None):
                 delta = it["odometer"] - prev_full["odometer"]
                 if delta > 0:
                     it["l_100"] = round(it["liters"] * 100.0 / delta, 2)
                     it["e_100"] = round(it["cost"] * 100.0 / delta, 2)
-            prev_full = it
+            if it["odometer"] is not None:
+                prev_full = it
         prev_any = it
 
     overall = {
@@ -156,9 +163,12 @@ def fillups_with_stats():
         "last_date": items[-1]["date"] if items else None,
         "last_odometer": items[-1]["odometer"] if items else None,
     }
-    if len(items) >= 2:
-        overall["total_km"] = round(items[-1]["odometer"] - items[0]["odometer"], 1)
-    fulls = [it for it in items if it["full"]]
+    odo = [it["odometer"] for it in items if it["odometer"] is not None]
+    if len(odo) >= 2:
+        overall["total_km"] = round(odo[-1] - odo[0], 1)
+    overall["last_odometer"] = odo[-1] if odo else None
+    fulls = [it for it in items if it["full"] and it["odometer"] is not None
+             and not it.get("pending")]
     if len(fulls) >= 2:
         km = fulls[-1]["odometer"] - fulls[0]["odometer"]
         liters = sum(it["liters"] for it in fulls[1:])
@@ -545,6 +555,75 @@ def track_data(qs):
             "privacy_m": privacy, "points": pts}
 
 
+FILLUP_JUMP_PCT = 15.0   # Mindestanstieg des Tankstands (Fuel sinkt im Betrieb nie)
+FILLUP_DEDUPE_DAYS = 2   # bestehender Eintrag in dem Fenster -> Sprung ist schon geloggt
+_FUEL_SCAN = {"ts": 0}   # letzter Scan-Stand (Modul-Cache, erstmalig volle Historie)
+
+
+def detect_fillups():
+    """Tankfuellungen automatisch aus Tankstands-Anstiegen erkennen.
+
+    Fuel sinkt im Betrieb physikalisch nie — ein Anstieg von >= FILLUP_JUMP_PCT
+    zwischen zwei Readings ist ein Tankstopp, auch ueber Nacht-Luecken (im Sim
+    vor dem Losfahren getankt: Luecke 10-14 h). Legt Eintraege OHNE Preis an
+    (ausstehend; Nutzer traegt Preis + km im WebUI nach). Dedupe: bestehender
+    Eintrag innerhalb +/- FILLUP_DEDUPE_DAYS Tage. Datums-Attribution: Tag des
+    ersten Post-Sprung-Readings (VM-Lokalzeit = Nutzer-TZ). Idempotent via
+    _FUEL_SCAN-Cache. Rueckgabe: Liste der NEU angelegten (date, liters, f_vor, f_nach).
+    """
+    frm = 0 if _FUEL_SCAN["ts"] == 0 else _FUEL_SCAN["ts"] - 86400
+    c = db()
+    try:
+        rows = c.execute(
+            "SELECT ts, CAST(json_extract(data, '$.fuel') AS REAL) AS f FROM obd_readings "
+            "WHERE json_extract(data, '$.fuel') IS NOT NULL AND ts >= ? ORDER BY ts",
+            (frm,)).fetchall()
+        existing = [r["date"] for r in c.execute("SELECT date FROM fillups")]
+    finally:
+        c.close()
+    ex_days = set()
+    for d in existing:
+        try:
+            ex_days.add(date.fromisoformat(d))
+        except ValueError:
+            pass
+    last_odo = 0.0
+    c2 = db()
+    try:
+        row = c2.execute("SELECT MAX(odometer) o FROM fillups").fetchone()
+        last_odo = float(row["o"] or 0.0)
+    finally:
+        c2.close()
+    new = []
+    prev_f = None
+    for r in rows:
+        ts, f = r["ts"], r["f"]
+        if prev_f is not None and f - prev_f >= FILLUP_JUMP_PCT:
+            day = datetime.fromtimestamp(ts).date()
+            if not any(abs((day - d).days) <= FILLUP_DEDUPE_DAYS for d in ex_days):
+                liters = round((f - prev_f) / 100.0 * TRACK_TANK_L, 2)
+                new.append((day.isoformat(), liters, prev_f, f))
+                ex_days.add(day)
+            prev_f = f  # Reset, damit der Rest des Anstiegs nicht doppelzaehlt
+        prev_f = f
+    if new:
+        c = db()
+        try:
+            for dstr, liters, fb, fa in new:
+                c.execute(
+                    "INSERT INTO fillups (date, odometer, liters, full, note, created) "
+                    "VALUES (?, ?, ?, 1, ?, ?)",
+                    (dstr, last_odo, liters,
+                     "automatisch erkannt (%.0f→%.0f %% Tankstand) — Preis und km nachtragen" % (fb, fa),
+                     time.time()))
+            c.commit()
+        finally:
+            c.close()
+    if rows:
+        _FUEL_SCAN["ts"] = rows[-1]["ts"]
+    return new
+
+
 TRIP_GAP_S = 600  # Abstand ab dem eine neue Fahrt beginnt (10 min)
 SERIES_GAP_S = 300  # Luecke in Sekunden, ab der die Grafana-Linie gebrochen wird (Nullen-Injection)
 
@@ -590,6 +669,32 @@ def trip_summary(t_from, t_to):
         "Schnitt (km/h)": round(avg, 1),
         "Tankstand (%)": round(float(tank[-1]["f"]), 1) if tank else None,
     }]
+
+
+def update_fillup(row_id, body):
+    """Felder eines Tank-Eintrags nachziehen (automatisch erkannte: Preis + km)."""
+    fields = {}
+    for key in ("date", "odometer", "liters", "total_price", "price_per_l", "full", "note"):
+        if key in body:
+            v = body[key]
+            if key in ("odometer", "liters", "total_price", "price_per_l") and v is not None:
+                v = float(v)
+            if key == "full":
+                v = 1 if v else 0
+            fields[key] = v
+    if not fields:
+        raise ValueError("keine Felder angegeben")
+    c = db()
+    try:
+        sets = ", ".join("%s = ?" % k for k in fields)
+        cur = c.execute("UPDATE fillups SET %s WHERE id = ?" % sets,
+                        list(fields.values()) + [row_id])
+        c.commit()
+        if cur.rowcount == 0:
+            raise ValueError("unbekannte id %d" % row_id)
+        return {"ok": True, "id": row_id, "updated": sorted(fields)}
+    finally:
+        c.close()
 
 
 def delete_row(table, row_id):
@@ -821,6 +926,10 @@ class Handler(BaseHTTPRequestHandler):
             self._json(out)
 
     def health(self):
+        try:
+            detect_fillups()
+        except Exception:
+            pass
         c = db()
         try:
             return {
@@ -833,6 +942,9 @@ class Handler(BaseHTTPRequestHandler):
                     "SELECT COUNT(*) n FROM gps_points").fetchone()["n"],
                 "obd_readings": c.execute(
                     "SELECT COUNT(*) n FROM obd_readings").fetchone()["n"],
+                "pending_fillups": c.execute(
+                    "SELECT COUNT(*) n FROM fillups "
+                    "WHERE total_price IS NULL AND price_per_l IS NULL").fetchone()["n"],
             }
         finally:
             c.close()
@@ -923,6 +1035,25 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(delete_row("fillups", row_id))
             elif path == "/api/maintenance" and row_id:
                 self._json(delete_row("maintenance", row_id))
+            else:
+                self._json({"error": "id fehlt oder unbekannter Endpunkt"}, 404)
+        except Exception as exc:
+            self._json({"error": str(exc)}, 400)
+
+    def do_PUT(self):
+        u = urlparse(self.path)
+        path = unquote(u.path)
+        qs = parse_qs(u.query)
+        try:
+            if not self._auth(qs):
+                self._json({"error": "unauthorized"}, 401)
+                return
+            try:
+                row_id = int(qs.get("id", ["0"])[0])
+            except ValueError:
+                row_id = 0
+            if path == "/api/fillups" and row_id:
+                self._json(update_fillup(row_id, self._read_body()))
             else:
                 self._json({"error": "id fehlt oder unbekannter Endpunkt"}, 404)
         except Exception as exc:

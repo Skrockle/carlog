@@ -41,6 +41,9 @@ td .del:hover{color:var(--acc)}
 canvas#map-canvas{width:100%;height:440px;display:block;background:#0d1117;border:1px solid var(--line);border-radius:8px}
 .maplegend{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--mut)}
 .gradbar{flex:1;max-width:260px;height:10px;border-radius:5px;background:linear-gradient(to right,#4ec9a8,#ffd166,#ff5252)}
+.pendrow{display:flex;flex-wrap:wrap;gap:8px;align-items:end;padding:10px 0;border-top:1px solid var(--line)}
+.pendrow:first-child{border-top:none;padding-top:0}
+.pendrow label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut)}
 .muted{color:var(--mut);font-size:12.5px}
 .urlbox{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .urlbox code{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;word-break:break-all;flex:1;min-width:240px}
@@ -64,6 +67,10 @@ svg{width:100%;height:auto;display:block}
 <main>
 
 <section class="tab on" id="tab-tanken">
+  <div class="card" id="pending-card" style="display:none"><h2>Ausstehende Tankungen</h2>
+    <p class="hint">Automatisch erkannt (Tankstands-Sprung). Preis und km-Stand nachtragen — erst dann z&auml;hlt die Tankung in die Verbrauchs-Statistik.</p>
+    <div id="pending-list"></div>
+  </div>
   <div class="card"><h2>Tanken</h2>
     <form id="fill-form">
       <label>Datum<input type="date" name="date" required></label>
@@ -188,9 +195,10 @@ async function loadFill(){
     document.getElementById('fill-last').textContent=o.last_odometer?('Letzter km-Stand: '+o.last_odometer.toLocaleString('de-DE')):'Noch keine Einträge';
     let h='<table><tr><th>Datum</th><th class="num">km</th><th class="num">Δ km</th><th class="num">Liter</th><th class="num">€/l</th><th class="num">€</th><th class="num">l/100km</th><th class="num">€/100km</th><th>Notiz</th><th></th></tr>';
     for(const it of [...d.items].reverse()){
-      h+='<tr><td>'+it.date+'</td><td class="num">'+it.odometer.toLocaleString('de-DE')+'</td><td class="num">'+fmt(it.km,1)+'</td><td class="num">'+fmt(it.liters)+'</td><td class="num">'+fmt(it.price_per_l,3)+'</td><td class="num">'+fmt(it.cost)+'</td><td class="num"'+(it.full?'':' style="color:var(--mut)"')+'>'+fmt(it.l_100)+(it.full?'':' *')+'</td><td class="num">'+fmt(it.e_100)+'</td><td class="muted">'+(it.note||'')+'</td><td><button class="del" onclick="delFill('+it.id+')">✕</button></td></tr>';
+      h+='<tr><td>'+it.date+'</td><td class="num">'+(it.odometer!=null?it.odometer.toLocaleString('de-DE'):'–')+'</td><td class="num">'+fmt(it.km,1)+'</td><td class="num">'+fmt(it.liters)+'</td><td class="num">'+fmt(it.price_per_l,3)+'</td><td class="num">'+fmt(it.cost)+'</td><td class="num"'+(it.full?'':' style="color:var(--mut)"')+'>'+fmt(it.l_100)+(it.full?'':' *')+'</td><td class="num">'+fmt(it.e_100)+'</td><td class="muted">'+(it.note||'')+'</td><td><button class="del" onclick="delFill('+it.id+')">✕</button></td></tr>';
     }
     document.getElementById('fill-table').innerHTML=h+'</table>'+(d.items.some(i=>!i.full)?'<p class="hint">* Teilfüllung: erst beim nächsten Volltanken gerechnet.</p>':'');
+    renderPending(d.items.filter(it=>it.total_price==null&&it.price_per_l==null));
   }catch(e){document.getElementById('fill-table').innerHTML='<p class="muted">'+e.message+'</p>'}
 }
 document.getElementById('fill-form').onsubmit=async ev=>{
@@ -201,6 +209,34 @@ document.getElementById('fill-form').onsubmit=async ev=>{
   catch(e){m.textContent='✗ '+e.message}
 };
 async function delFill(id){if(!confirm('Tank-Eintrag löschen?'))return;await api('/api/fillups?id='+id,{method:'DELETE'});loadFill()}
+function renderPending(pend){
+  const pc=document.getElementById('pending-card');
+  if(!pend.length){pc.style.display='none';return}
+  pc.style.display='';
+  let h='';
+  for(const it of pend){
+    h+='<div class="pendrow"><b>'+it.date+'</b><span>~'+fmt(it.liters,1)+' l geschätzt</span>'+
+       '<label>km<input type="number" class="pk" step="1" placeholder="km-Stand"></label>'+
+       '<label>Liter<input type="number" class="pl" step="0.01" value="'+(it.liters||'')+'"></label>'+
+       '<label>Preis als<select class="pm"><option value="per_l">€ / Liter</option><option value="total">Gesamt €</option></select></label>'+
+       '<label>Preis<input type="number" class="pp" step="0.001" placeholder="z.B. 1.749"></label>'+
+       '<button class="act" onclick="completeFill('+it.id+',this)">Übernehmen</button>'+
+       '<span class="muted">'+(it.note||'')+'</span></div>';
+  }
+  document.getElementById('pending-list').innerHTML=h;
+}
+async function completeFill(id,btn){
+  const row=btn.closest('.pendrow');
+  const km=row.querySelector('.pk').value,li=row.querySelector('.pl').value,
+        pm=row.querySelector('.pm').value,pr=row.querySelector('.pp').value;
+  if(!pr){alert('Bitte Preis eintragen');return}
+  const body={};
+  if(km)body.odometer=+km;
+  if(li)body.liters=+li;
+  if(pm==='per_l')body.price_per_l=+pr;else body.total_price=+pr;
+  try{await api('/api/fillups?id='+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});loadFill()}
+  catch(e){alert('✗ '+e.message)}
+}
 
 /* Wartung */
 async function loadMaint(){
@@ -401,7 +437,7 @@ function cpy(id){navigator.clipboard.writeText(document.getElementById(id).textC
 
 /* Header + Start */
 api('/api/health').then(h=>{document.getElementById('veh').textContent=h.vehicle;
-  document.getElementById('healthline').textContent='· '+h.fillups+' Tankungen · '+h.gps_points+' GPS-Punkte · '+h.obd_readings+' OBD-Messungen'}).catch(()=>{});
+  document.getElementById('healthline').textContent='· '+h.fillups+' Tankungen'+(h.pending_fillups?' (⚠ '+h.pending_fillups+' ohne Preis)':'')+' · '+h.gps_points+' GPS-Punkte · '+h.obd_readings+' OBD-Messungen'}).catch(()=>{});
 loadFill();
 </script>
 </body>

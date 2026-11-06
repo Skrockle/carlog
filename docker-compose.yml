@@ -16,3 +16,13 @@ services:
       - TZ=Europe/Berlin
       - CARLOG_VEHICLE=Toyota GR Yaris
       # - CARLOG_TOKEN=geheimtoken   # optional: POST/DELETE/Ingest absichern
+
+# Grafana (optional) — SQLite-Datenquelle, Dashboard siehe docs/grafana-dashboard.json:
+#   grafana:
+#     image: grafana/grafana
+#     ports: ["3000:3000"]
+#     volumes:
+#       - /mnt/user/appdata/grafana:/var/lib/grafana
+#       - /mnt/user/appdata/carlog:/data
+#     environment:
+#       - GF_INSTALL_PLUGINS=frser-sqlite-datasource

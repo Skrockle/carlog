@@ -73,6 +73,8 @@ def db():
         os.makedirs(d, exist_ok=True)
     c = sqlite3.connect(DB_PATH)
     c.row_factory = sqlite3.Row
+    # WAL: parallele Lesezugriffe (z. B. Grafana) blockieren die Schreibseite nicht
+    c.execute("PRAGMA journal_mode=WAL")
     return c
 
 

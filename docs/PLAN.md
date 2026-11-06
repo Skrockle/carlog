@@ -114,6 +114,9 @@ Enhanced-PIDs plausibilisieren (Getriebetemp warm ~50–55 °C, +B 12,2 V Zündu
   60-Ah-Batterie. Bei täglichem Fahren unkritisch (Lichtmaschine lädt 14 Wh/Tag locker nach); für
   mehrwöchiges Parken den Y-Splitter-Schalter nutzen. Falls Energie später doch zum Thema wird: ESP32
   als „Wächter" v2 (aufwachen, ATRV prüfen, Sync-Versuch, weiterschlafen).
+- **Grafana-Anbindung**: die SQLite-DB ist die Grafana-Datenquelle (Plugin `frser-sqlite-datasource`,
+  Path `/data/carlog.db`); `server.py` schaltet WAL für parallele Lesezugriffe; fertiges Dashboard mit
+  9 Panels liegt bei (`docs/grafana-dashboard.json`), OBD-Rohwerte per `json_extract()`.
 - **Vgate entfallen:** USB-ELM327 am Pi deckt alles ab.
 
 ## Phasen

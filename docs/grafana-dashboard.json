@@ -1,0 +1,443 @@
+{
+  "title": "carlog",
+  "uid": "carlog",
+  "tags": [
+    "carlog"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "refresh": "1m",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Drehzahl",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, 'rpm') AS rpm FROM obd_readings WHERE json_extract(data, 'rpm') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, 'rpm') AS rpm FROM obd_readings WHERE json_extract(data, 'rpm') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Öldruck",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurebar"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, 'oil_bar') AS \"Öldruck bar\" FROM obd_readings WHERE json_extract(data, 'oil_bar') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, 'oil_bar') AS \"Öldruck bar\" FROM obd_readings WHERE json_extract(data, 'oil_bar') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Getriebetemperatur",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, 'gear_c') AS \"Getriebe °C\" FROM obd_readings WHERE json_extract(data, 'gear_c') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, 'gear_c') AS \"Getriebe °C\" FROM obd_readings WHERE json_extract(data, 'gear_c') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Kühlmitteltemperatur",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, 'coolant') AS \"Kühlmittel °C\" FROM obd_readings WHERE json_extract(data, 'coolant') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, 'coolant') AS \"Kühlmittel °C\" FROM obd_readings WHERE json_extract(data, 'coolant') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Bordspannung",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "volt",
+          "min": 11,
+          "max": 15
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, '$KEY$') AS \"+B V\" FROM obd_readings WHERE json_extract(data, 'bplus') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, '$KEY$') AS \"+B V\" FROM obd_readings WHERE json_extract(data, 'bplus') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, '$KEY$') AS \"Adapter V\" FROM obd_readings WHERE json_extract(data, 'voltage') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, '$KEY$') AS \"Adapter V\" FROM obd_readings WHERE json_extract(data, 'voltage') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Geschwindigkeit",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, json_extract(data, 'speed') AS \"km/h\" FROM obd_readings WHERE json_extract(data, 'speed') IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, json_extract(data, 'speed') AS \"km/h\" FROM obd_readings WHERE json_extract(data, 'speed') IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Tankkosten je Tankung",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT CAST(strftime('%s', date || ' 12:00:00') AS INTEGER) AS time, cost AS \"Kosten €\" FROM fillups ORDER BY date",
+          "queryText": "SELECT CAST(strftime('%s', date || ' 12:00:00') AS INTEGER) AS time, cost AS \"Kosten €\" FROM fillups ORDER BY date",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "GPS-Geschwindigkeit",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT ts AS time, speed AS \"km/h\" FROM gps_points WHERE speed IS NOT NULL AND ts >= $__from / 1000 AND ts < $__to / 1000 ORDER BY ts",
+          "queryText": "SELECT ts AS time, speed AS \"km/h\" FROM gps_points WHERE speed IS NOT NULL AND ts >= 0 AND ts < 9999999999 ORDER BY ts",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "timeseries",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Letzte OBD-Messungen",
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "carlog-sqlite"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "carlog-sqlite"
+          },
+          "editorMode": "code",
+          "rawQueryText": "SELECT datetime(ts, 'unixepoch', 'localtime') AS \"Zeit\", device AS \"Gerät\", json_extract(data, '$.rpm') AS \"rpm\", json_extract(data, '$.oil_bar') AS \"Öldruck bar\", json_extract(data, '$.gear_c') AS \"Getriebe °C\", json_extract(data, '$.coolant') AS \"Kühlmittel °C\", json_extract(data, '$.voltage') AS \"Adapter V\" FROM obd_readings ORDER BY ts DESC LIMIT 25",
+          "queryText": "SELECT datetime(ts, 'unixepoch', 'localtime') AS \"Zeit\", device AS \"Gerät\", json_extract(data, '$.rpm') AS \"rpm\", json_extract(data, '$.oil_bar') AS \"Öldruck bar\", json_extract(data, '$.gear_c') AS \"Getriebe °C\", json_extract(data, '$.coolant') AS \"Kühlmittel °C\", json_extract(data, '$.voltage') AS \"Adapter V\" FROM obd_readings ORDER BY ts DESC LIMIT 25",
+          "timeColumns": [
+            "time"
+          ],
+          "queryType": "table",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    }
+  ]
+}

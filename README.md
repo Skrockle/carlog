@@ -108,6 +108,37 @@ python3 test/elm327-sim.py &    # ELM327 + GR Yaris auf 127.0.0.1:35000
 python3 pi/pilogger.py --obd-port tcp://127.0.0.1:35000 --url http://127.0.0.1:8079 --once --verbose
 ```
 
+## Grafana
+
+Die Daten liegen in **einer** SQLite-Datei — Grafana kann sie direkt als Datenquelle lesen:
+
+1. **Grafana auf Unraid** (Container, carlog-Volume mitmounten):
+   ```sh
+   docker run -d --name grafana -p 3000:3000 \
+     -v /mnt/user/appdata/grafana:/var/lib/grafana \
+     -v /mnt/user/appdata/carlog:/data \
+     -e GF_INSTALL_PLUGINS=frser-sqlite-datasource \
+     --restart unless-stopped grafana/grafana
+   ```
+2. **Datenquelle anlegen**: Typ `frser-sqlite-datasource`, Path `/data/carlog.db`
+3. **Dashboard importieren**: `docs/grafana-dashboard.json` (beim Import die SQLite-Datenquelle auswählen)
+   — Panels: Drehzahl, Öldruck, Getriebetemperatur, Kühlmitteltemperatur, Bordspannung, Geschwindigkeit,
+   Tankkosten, GPS-Geschwindigkeit + Tabelle der letzten Messungen.
+
+- `server.py` schaltet die DB in den **WAL-Modus** — Grafanas Lesezugriffe blockieren die Schreibseite nicht
+  (getestet: paralleler Lese-/Schreibzugriff).
+- Volume read-write mounten (SQLite-WAL braucht Zugriff auf die `-shm`-Datei); die Dashboard-Queries sind reine SELECTs.
+- OBD-Rohwerte liegen als JSON im Feld `data` — die Queries lesen sie per `json_extract()`.
+
+Beispiel-Query (kopierbar in jedes Panel):
+```sql
+SELECT ts AS time, json_extract(data, '$.rpm') AS rpm
+FROM obd_readings
+WHERE json_extract(data, '$.rpm') IS NOT NULL
+  AND ts >= $__from / 1000 AND ts < $__to / 1000
+ORDER BY ts
+```
+
 ## CI/CD
 
 - **CI** (`.github/workflows/ci.yml`): bei jedem Push — Syntax-Check + E2E-Kette (Simulator → Daemon → carlog → DB)

@@ -692,6 +692,7 @@ def detect_fillups():
 
 TRIP_GAP_S = 600  # Abstand ab dem eine neue Fahrt beginnt (10 min)
 SERIES_GAP_S = 300  # Luecke in Sekunden, ab der die Grafana-Linie gebrochen wird (Nullen-Injection)
+SERIES_MAX_PTS = 30000  # serverseitige Dezimierung — 622k Punkte pro Panel bringen das Grafana-Frontend zum Stehen
 
 
 def trip_summary(t_from, t_to):
@@ -964,6 +965,9 @@ class Handler(BaseHTTPRequestHandler):
         if t_to is None:
             t_to = int(time.time())
         rows = series_rows(kind, t_from, t_to)
+        if len(rows) > SERIES_MAX_PTS:
+            k = math.ceil(len(rows) / SERIES_MAX_PTS)
+            rows = rows[::k]
         if path.endswith(".csv"):
             lines = ["time,value"]
             prev = None

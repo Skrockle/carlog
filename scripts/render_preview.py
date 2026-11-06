@@ -31,29 +31,47 @@ for a, b in zip(gpts, gpts[1:]):
     gps_km += 2 * 6371.0 * math.asin(math.sqrt(h))
 c.close()
 
-# Voll-zu-Voll-Statistik (wie server.py)
+# Voll-zu-Voll-Statistik (wie server.py: Teilfuellungs-Liter akkumulieren,
+# km vom vorherigen VOLL-Tanken — sonst kippen die Werte auf 3-22 l/100km)
 rows = []
-prev = None
+prev_full = None
+liters_acc = cost_acc = 0.0
+span_lit = span_cost = 0.0
+first_full_odo = last_full_odo = None
 for f in fills:
     lit, odo = f["liters"], f["odometer"]
-    cost = f["total_price"] if f["total_price"] is not None else (f["price_per_l"] or 0) * lit
-    if prev is not None and odo > prev["odometer"] and lit > 0:
-        km = odo - prev["odometer"]
-        l_100 = lit / km * 100
-        e_100 = cost / km * 100
-    else:
-        km, l_100, e_100 = None, None, None
+    cost = f["total_price"] if f["total_price"] is not None else (f["price_per_l"] or 0) * (lit or 0)
+    pending = f["total_price"] is None and f["price_per_l"] is None
+    km = l_100 = e_100 = None
+    if not pending and odo is not None and prev_full is not None and odo > prev_full["odometer"]:
+        km = odo - prev_full["odometer"]
+        l_100 = (liters_acc + lit) / km * 100
+        e_100 = (cost_acc + cost) / km * 100
     rows.append({"date": f["date"], "odometer": odo, "delta": km, "liters": lit,
                  "eul": f["price_per_l"], "cost": cost, "l_100": l_100,
                  "e_100": e_100, "note": f["note"] or ""})
-    prev = {"odometer": odo}
-total_km = sum(r["l_100"] is not None and r["odometer"] - rows[i-1]["odometer"] or 0
-               for i, r in enumerate(rows) if i > 0)
+    if pending or odo is None:
+        continue
+    is_first_full = f["full"] and first_full_odo is None
+    if not is_first_full and first_full_odo is not None:
+        span_lit += lit
+        span_cost += cost
+    if f["full"]:
+        if is_first_full:
+            first_full_odo = odo
+        else:
+            last_full_odo = odo
+        prev_full = {"odometer": odo}
+        liters_acc = cost_acc = 0.0
+    else:
+        liters_acc += lit
+        cost_acc += cost
+total_km = (last_full_odo - first_full_odo) if first_full_odo is not None and last_full_odo is not None else 0
 total_lit = sum(r["liters"] for r in rows)
 total_cost = sum(r["cost"] for r in rows)
+avg_l = span_lit / total_km * 100 if total_km > 0 else 0
+avg_e = span_cost / total_km * 100 if total_km > 0 else 0
 valid = [r for r in rows if r["l_100"] is not None]
-avg_l = sum(r["l_100"] for r in valid) / max(1, len(valid))
-avg_e = sum(r["e_100"] for r in valid) / max(1, len(valid))
 
 def esc(s):
     return s.replace("&", "&amp;").replace("<", "&lt;")
@@ -70,7 +88,8 @@ def cx(i):
 
 grid = [lo_s + (hi_s - lo_s) * k / 3 for k in range(4)]
 S = []
-S.append('<svg xmlns="http://www.w3.org/2000/svg" width="980" height="720" viewBox="0 0 980 720" font-family="-apple-system, \'Segoe UI\', system-ui, sans-serif">')
+H = 568 + len(rows) * 28 + 44
+S.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="980" height="{H}" viewBox="0 0 980 {H}" font-family="-apple-system, \'Segoe UI\', system-ui, sans-serif">')
 S.append('<rect width="980" height="720" rx="14" fill="#0f1216"/>')
 S.append('<rect x="0.5" y="0.5" width="979" height="719" rx="13.5" fill="none" stroke="#242c36"/>')
 S.append('<text x="26" y="42" font-size="20" font-weight="700" fill="#e8ecf1">🚗 carlog</text>')
@@ -121,7 +140,7 @@ for i, r in enumerate(rows):
         col = "#e8ecf1" if anc == "start" or anc == "end" and x in (210, 352, 474, 554) else "#8b96a5"
         col = "#e8ecf1" if x in (42, 210, 282, 352, 414, 474, 554, 644) else "#8b96a5"
         S.append(f'<text x="{x}" y="{y}" font-size="13" fill="{col}" text-anchor="{anc}">{esc(v)}</text>')
-S.append('<text x="954" y="708" font-size="10" fill="#4a5563" text-anchor="end">Beispieldaten · Vorschau</text>')
+S.append(f'<text x="954" y="{H - 12}" font-size="10" fill="#4a5563" text-anchor="end">Beispieldaten · Vorschau</text>')
 S.append('</svg>')
 open(OUT, "w").write("\n".join(S) + "\n")
 print(f"preview.svg geschrieben: {len(fills)} Tankungen, {avg_l:.2f} l/100km, {total_km:.0f} km")

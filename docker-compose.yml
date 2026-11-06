@@ -1,0 +1,18 @@
+# carlog auf dem Tower – 100 % lokal, keine Cloud.
+# Unraid >= 7: Ordner nach /mnt/user/appdata/... legen, dann
+#   docker compose up -d
+# Aeltere Unraid-Versionen: CA "Add Container" (Details siehe README).
+services:
+  carlog:
+    build: .
+    image: carlog:latest
+    container_name: carlog
+    restart: unless-stopped
+    ports:
+      - "8077:8077"
+    volumes:
+      - /mnt/user/appdata/carlog:/data
+    environment:
+      - TZ=Europe/Berlin
+      - CARLOG_VEHICLE=Toyota GR Yaris
+      # - CARLOG_TOKEN=geheimtoken   # optional: POST/DELETE/Ingest absichern

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f1216">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>carlog</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%97%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#0f1216;--card:#171c23;--line:#242c36;--txt:#e8ecf1;--mut:#8b96a5;--acc:#ff5252;--ok:#4ec9a8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;align-items:baseline;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+header h1{font-size:19px;margin:0}header .veh{color:var(--mut);font-size:13px}
+nav{display:flex;gap:6px;padding:10px 18px 0;flex-wrap:wrap}
+nav button{background:var(--card);border:1px solid var(--line);color:var(--mut);padding:8px 14px;border-radius:9px;cursor:pointer;font-size:14px}
+nav button.on{color:var(--txt);border-color:var(--acc)}
+main{padding:14px 18px 40px;max-width:980px}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:14px;margin:0 0 10px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+form{display:flex;flex-wrap:wrap;gap:8px;align-items:end}
+form label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut)}
+input,select,textarea{background:#0d1117;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:8px 9px;font-size:14px}
+input:focus,select:focus{outline:none;border-color:var(--acc)}
+button.act{background:var(--acc);border:none;color:#fff;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600}
+button.act:active{transform:scale(.97)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:10px}
+th{color:var(--mut);text-align:left;font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid #1d242e;white-space:nowrap}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td .del{background:none;border:none;color:var(--mut);cursor:pointer;font-size:15px}
+td .del:hover{color:var(--acc)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:20px;margin-top:3px}
+.stat span{font-size:12px;color:var(--mut)}
+.muted{color:var(--mut);font-size:12.5px}
+.urlbox{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
+.urlbox code{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;word-break:break-all;flex:1;min-width:240px}
+.urlbox button{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12.5px}
+svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.hint{font-size:12.5px;color:var(--mut);margin:6px 0 0}
+</style>
+</head>
+<body>
+<header><h1>🚗 carlog</h1><span class="veh" id="veh"></span><span class="muted" id="healthline"></span></header>
+<nav>
+<button data-tab="tanken" class="on">Tanken</button>
+<button data-tab="wartung">Wartung</button>
+<button data-tab="stats">Statistik</button>
+<button data-tab="auto">Automatik</button>
+</nav>
+<main>
+
+<section class="tab on" id="tab-tanken">
+  <div class="card"><h2>Tanken</h2>
+    <form id="fill-form">
+      <label>Datum<input type="date" name="date" required></label>
+      <label>km-Stand<input type="number" name="odometer" step="1" min="1" required placeholder="z.B. 12500"></label>
+      <label>Liter<input type="number" name="liters" step="0.01" min="0.01" required placeholder="z.B. 40.5"></label>
+      <label>Preis als
+        <select name="pmode"><option value="per_l">€ / Liter</option><option value="total">Gesamt €</option></select></label>
+      <label>Preis<input type="number" name="price" step="0.001" min="0.001" required placeholder="z.B. 1.749"></label>
+      <label style="flex-direction:row;align-items:center;gap:6px"><input type="checkbox" name="full" checked style="width:16px">Vollgetankt</label>
+      <label style="flex:1;min-width:140px">Notiz<input type="text" name="note" placeholder="z.B. Trackday, erste Fahrt"></label>
+      <button class="act" type="submit">Speichern</button>
+    </form>
+    <div id="fill-msg" class="hint"></div>
+    <div class="hint" id="fill-last"></div>
+  </div>
+  <div class="card"><h2>Verlauf · Voll-zu-Voll</h2><div id="fill-table"></div></div>
+</section>
+
+<section class="tab" id="tab-wartung">
+  <div class="card"><h2>Wartung</h2>
+    <form id="maint-form">
+      <label>Datum<input type="date" name="date" required></label>
+      <label>km-Stand<input type="number" name="odometer" step="1"></label>
+      <label>Art<select name="kind">
+        <option>Ölwechsel</option><option>Ölwechsel + Filter</option><option>Bremsen</option>
+        <option>Reifen</option><option>Inspektion</option><option>Sonstiges</option></select></label>
+      <label>Kosten €<input type="number" name="cost" step="0.01"></label>
+      <label style="flex:1;min-width:140px">Notiz<input type="text" name="note"></label>
+      <button class="act" type="submit">Speichern</button>
+    </form>
+    <div id="maint-msg" class="hint"></div>
+  </div>
+  <div class="card"><h2>Historie</h2><div id="maint-table"></div></div>
+</section>
+
+<section class="tab" id="tab-stats">
+  <div class="cards" id="stat-cards"></div>
+  <div class="card"><h2>Verbrauch l/100 km (Voll-zu-Voll)</h2><div id="chart-l100"></div></div>
+  <div class="card"><h2>Kosten € / Monat</h2><div id="chart-cost"></div></div>
+  <div class="card"><h2>km / Monat (GPS vs. Tanklog)</h2><div id="chart-km"></div>
+    <p class="hint">Tanklog-km sind Richtwerte (Füllstandsgrenzen), GPS-km sind die automatisch erfassten Werte.</p></div>
+  <div class="card"><h2>Export</h2>
+    <p><a href="/api/export.csv?kind=fillups" style="color:var(--acc)">Tanken CSV</a> ·
+       <a href="/api/export.csv?kind=maintenance" style="color:var(--acc)">Wartung CSV</a> ·
+       <a href="/api/export.csv?kind=gps" style="color:var(--acc)">GPS CSV</a> ·
+       <a href="/api/export.csv?kind=obd" style="color:var(--acc)">OBD CSV</a></p></div>
+</section>
+
+<section class="tab" id="tab-auto">
+  <div class="card"><h2>km &amp; Strecken automatisch – GPSLogger (Android, FOSS)</h2>
+    <p class="hint">App „GPSLogger“ installieren → Logging-Details → „An benutzerdefiniertes HTTP-Endpunkt protokollieren“ → diese URL eintragen. Autostart aktivieren. Dadurch landen km/Monat + Fahrten automatisch hier.</p>
+    <div class="urlbox"><code id="gps-url"></code><button onclick="cpy('gps-url')">Kopieren</button></div>
+  </div>
+  <div class="card"><h2>OBD2 automatisch – Torque Pro / Car Scanner</h2>
+    <p class="hint">OBD2-Bluetooth-Dongle (~20 €) + Torque Pro → Einstellungen → Datenlogging → „Auf Webserver loggen“ → diese URL eintragen. Erfasst: Drehzahl, Kühlmittel-/Ansaugtemperatur, Bordspannung (12V-Frühwarnung!), Geschwindigkeit.</p>
+    <div class="urlbox"><code id="obd-url"></code><button onclick="cpy('obd-url')">Kopieren</button></div>
+  </div>
+  <div class="card"><h2>Status Automatik</h2><div id="telemetry-status" class="muted">lädt …</div></div>
+</section>
+
+</main>
+<script>
+const fmt=(n,d=2)=>n==null?'–':n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+const eur=n=>n==null?'–':fmt(n,2)+' €';
+const ts2str=ts=>ts?new Date(ts*1000).toLocaleString('de-DE',{dateStyle:'short',timeStyle:'short'}):'–';
+async function api(p,o){const r=await fetch(p,o);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||r.status);return j}
+
+/* Tabs */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button,.tab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');document.getElementById('tab-'+b.dataset.tab).classList.add('on');
+  refreshTab(b.dataset.tab);
+});
+function refreshTab(t){if(t==='tanken')loadFill();else if(t==='wartung')loadMaint();else if(t==='stats')loadStats();else if(t==='auto')loadTelem()}
+
+/* Datum-Default */
+for(const f of ['fill-form','maint-form']){const el=document.forms[f];if(el)el.date.value=new Date().toISOString().slice(0,10)}
+
+/* Tanken */
+async function loadFill(){
+  try{
+    const d=await api('/api/fillups');
+    const o=d.overall;
+    document.getElementById('fill-last').textContent=o.last_odometer?('Letzter km-Stand: '+o.last_odometer.toLocaleString('de-DE')):'Noch keine Einträge';
+    let h='<table><tr><th>Datum</th><th class="num">km</th><th class="num">Δ km</th><th class="num">Liter</th><th class="num">€/l</th><th class="num">€</th><th class="num">l/100km</th><th class="num">€/100km</th><th>Notiz</th><th></th></tr>';
+    for(const it of [...d.items].reverse()){
+      h+='<tr><td>'+it.date+'</td><td class="num">'+it.odometer.toLocaleString('de-DE')+'</td><td class="num">'+fmt(it.km,1)+'</td><td class="num">'+fmt(it.liters)+'</td><td class="num">'+fmt(it.price_per_l,3)+'</td><td class="num">'+fmt(it.cost)+'</td><td class="num"'+(it.full?'':' style="color:var(--mut)"')+'>'+fmt(it.l_100)+(it.full?'':' *')+'</td><td class="num">'+fmt(it.e_100)+'</td><td class="muted">'+(it.note||'')+'</td><td><button class="del" onclick="delFill('+it.id+')">✕</button></td></tr>';
+    }
+    document.getElementById('fill-table').innerHTML=h+'</table>'+(d.items.some(i=>!i.full)?'<p class="hint">* Teilfüllung: erst beim nächsten Volltanken gerechnet.</p>':'');
+  }catch(e){document.getElementById('fill-table').innerHTML='<p class="muted">'+e.message+'</p>'}
+}
+document.getElementById('fill-form').onsubmit=async ev=>{
+  ev.preventDefault();const f=ev.target,m=document.getElementById('fill-msg');
+  const body={date:f.date.value,odometer:+f.odometer.value,liters:+f.liters.value,full:f.full.checked,note:f.note.value};
+  if(f.pmode.value==='per_l')body.price_per_l=+f.price.value;else body.total_price=+f.price.value;
+  try{await api('/api/fillups',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});m.textContent='✓ gespeichert';f.note.value='';loadFill()}
+  catch(e){m.textContent='✗ '+e.message}
+};
+async function delFill(id){if(!confirm('Tank-Eintrag löschen?'))return;await api('/api/fillups?id='+id,{method:'DELETE'});loadFill()}
+
+/* Wartung */
+async function loadMaint(){
+  try{
+    const d=await api('/api/maintenance');
+    let h='<table><tr><th>Datum</th><th class="num">km</th><th>Art</th><th class="num">€</th><th>Notiz</th><th></th></tr>';
+    for(const it of [...d.items].reverse()){
+      h+='<tr><td>'+it.date+'</td><td class="num">'+(it.odometer!=null?it.odometer.toLocaleString('de-DE'):'–')+'</td><td>'+it.kind+'</td><td class="num">'+(it.cost!=null?fmt(it.cost):'–')+'</td><td class="muted">'+(it.note||'')+'</td><td><button class="del" onclick="delMaint('+it.id+')">✕</button></td></tr>';
+    }
+    document.getElementById('maint-table').innerHTML=h+(d.items.length?'</table>':'<p class="muted">Noch keine Einträge.</p>');
+  }catch(e){document.getElementById('maint-table').innerHTML='<p class="muted">'+e.message+'</p>'}
+}
+document.getElementById('maint-form').onsubmit=async ev=>{
+  ev.preventDefault();const f=ev.target,m=document.getElementById('maint-msg');
+  const body={date:f.date.value,kind:f.kind.value,note:f.note.value};
+  if(f.odometer.value)body.odometer=+f.odometer.value;
+  if(f.cost.value)body.cost=+f.cost.value;
+  try{await api('/api/maintenance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});m.textContent='✓ gespeichert';loadMaint()}
+  catch(e){m.textContent='✗ '+e.message}
+};
+async function delMaint(id){if(!confirm('Wartungs-Eintrag löschen?'))return;await api('/api/maintenance?id='+id,{method:'DELETE'});loadMaint()}
+
+/* Statistik + Charts */
+function chart(el,kind,labels,series,unit){
+  const all=series.flatMap(s=>s.values.filter(v=>v!=null));
+  if(!all.length){el.innerHTML='<p class="muted">Noch keine Daten.</p>';return}
+  const W=640,H=210,P={l:46,r:12,t:12,b:26};
+  let min=Math.min(...all),max=Math.max(...all);
+  if(kind==='bars'){min=Math.min(0,min);max=max===0?1:max}
+  if(min===max){min-=1;max+=1}
+  const pad=(max-min)*0.08;min-=pad;max+=pad;
+  const iw=W-P.l-P.r,ih=H-P.t-P.b,n=labels.length;
+  const y=v=>P.t+ih-(v-min)*ih/(max-min);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  for(let g=0;g<=3;g++){const gv=min+(max-min)*g/3,gy=y(gv);
+    s+='<line x1="'+P.l+'" y1="'+gy+'" x2="'+(W-P.r)+'" y2="'+gy+'" stroke="#242c36"/>';
+    s+='<text x="'+(P.l-6)+'" y="'+(gy+4)+'" fill="#8b96a5" font-size="10" text-anchor="end">'+fmt(gv,gv<10?1:0)+(unit||'')+'</text>'}
+  if(kind==='line'){
+    const X=i=>P.l+(n===1?iw/2:i*iw/(n-1));
+    for(const ser of series){
+      const pts=[];ser.values.forEach((v,i)=>{if(v!=null)pts.push(X(i)+','+y(v))});
+      if(pts.length>1)s+='<polyline fill="none" stroke="'+ser.color+'" stroke-width="2.5" points="'+pts.join(' ')+'"/>';
+      ser.values.forEach((v,i)=>{if(v!=null)s+='<circle cx="'+X(i)+'" cy="'+y(v)+'" r="3" fill="'+ser.color+'"/>'});
+    }
+  }else{
+    const gw=iw/n,bw=Math.min(28,gw*0.8/series.length);
+    series.forEach((ser,si)=>{
+      ser.values.forEach((v,i)=>{if(v==null)return;
+        const bx=P.l+i*gw+gw/2-series.length*bw/2+si*bw;
+        s+='<rect x="'+bx+'" y="'+y(v)+'" width="'+(bw-2)+'" height="'+(P.t+ih-y(v))+'" fill="'+ser.color+'" rx="2"/>'});
+    });
+  }
+  const step=Math.max(1,Math.ceil(n/6));
+  labels.forEach((lb,i)=>{if(i%step===0||i===n-1)s+='<text x="'+(kind==='line'?P.l+(n===1?iw/2:i*iw/(n-1)):P.l+i*(iw/n)+(iw/n)/2)+'" y="'+(H-8)+'" fill="#8b96a5" font-size="10" text-anchor="middle">'+lb+'</text>'});
+  s+='</svg>';
+  let lg='<div class="legend">';for(const ser of series)lg+='<span><i style="background:'+ser.color+'"></i>'+ser.name+'</span>';lg+='</div>';
+  el.innerHTML=s+lg;
+}
+async function loadStats(){
+  try{
+    const d=await api('/api/stats'),o=d.fillups,g=d.gps;
+    const cards=[
+      ['km gesamt (Tanklog)',o.total_km!=null?fmt(o.total_km,0):'–'],
+      ['Ø l/100 km',fmt(o.avg_l_100)],
+      ['Ø €/100 km',fmt(o.avg_e_100)],
+      ['Kosten gesamt',eur(o.total_cost)],
+      ['km gesamt (GPS)',fmt(g.total_km,0)],
+      ['GPS-Punkte',String(g.points)],
+    ];
+    document.getElementById('stat-cards').innerHTML=cards.map(c=>'<div class="stat"><span>'+c[0]+'</span><b>'+c[1]+'</b></div>').join('');
+    const items=await api('/api/fillups');
+    const fl=items.items.filter(i=>i.l_100!=null);
+    chart(document.getElementById('chart-l100'),'line',fl.map(i=>i.date),[{name:'l/100 km',values:fl.map(i=>i.l_100),color:'#ff5252'}]);
+    const mf=d.monthly_fillups;
+    chart(document.getElementById('chart-cost'),'bars',mf.map(m=>m.month),[{name:'€/Monat',values:mf.map(m=>m.cost),color:'#ffb347'}]);
+    const gm=d.gps.monthly_km,months=[...new Set([...gm.map(m=>m.month),...mf.map(m=>m.month)])].sort();
+    chart(document.getElementById('chart-km'),'bars',months,[
+      {name:'GPS',values:months.map(m=>{const x=gm.find(v=>v.month===m);return x?x.km:null}),color:'#4ec9a8'},
+      {name:'Tanklog',values:months.map(m=>{const x=mf.find(v=>v.month===m);return x?x.km:null}),color:'#5b8def'}]);
+  }catch(e){document.getElementById('stat-cards').innerHTML='<p class="muted">'+e.message+'</p>'}
+}
+
+/* Automatik */
+async function loadTelem(){
+  const o=location.origin;
+  document.getElementById('gps-url').textContent=o+'/api/gps?lat=%LAT&lon=%LON&timestamp=%TIMESTAMP&s=%SPD&alt=%ALT&id=GRYaris&battery=%BATT';
+  document.getElementById('obd-url').textContent=o+'/api/obd?id=GRYaris';
+  try{
+    const h=await api('/api/health'),g=await api('/api/telemetry?kind=gps&limit=1'),ob=await api('/api/telemetry?kind=obd&limit=1');
+    const gl=g.items[0],ol=ob.items[0];
+    document.getElementById('telemetry-status').innerHTML=
+      'GPS: <b>'+h.gps_points+'</b> Punkte'+(gl?', letzter: '+ts2str(gl.ts)+' ('+gl.lat.toFixed(4)+', '+gl.lon.toFixed(4)+(gl.speed?', '+fmt(gl.speed,0)+' km/h':'')+')':' – noch keine')+'<br>'+
+      'OBD2: <b>'+h.obd_readings+'</b> Messungen'+(ol?', letzte: '+ts2str(ol.ts)+' ('+Object.keys(ol.data||{}).length+' PIDs)':' – noch keine');
+  }catch(e){document.getElementById('telemetry-status').textContent=e.message}
+}
+function cpy(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{},()=>{})}
+
+/* Header + Start */
+api('/api/health').then(h=>{document.getElementById('veh').textContent=h.vehicle;
+  document.getElementById('healthline').textContent='· '+h.fillups+' Tankungen · '+h.gps_points+' GPS-Punkte · '+h.obd_readings+' OBD-Messungen'}).catch(()=>{});
+loadFill();
+</script>
+</body>
+</html>

@@ -358,6 +358,49 @@ def list_maintenance():
         c.close()
 
 
+SERIES_KINDS = {
+    "rpm": ("obd_readings", "CAST(json_extract(data, '$.rpm') AS REAL)"),
+    "oil_bar": ("obd_readings", "CAST(json_extract(data, '$.oil_bar') AS REAL)"),
+    "gear_c": ("obd_readings", "CAST(json_extract(data, '$.gear_c') AS REAL)"),
+    "coolant": ("obd_readings", "CAST(json_extract(data, '$.coolant') AS REAL)"),
+    "intake": ("obd_readings", "CAST(json_extract(data, '$.intake') AS REAL)"),
+    "load": ("obd_readings", "CAST(json_extract(data, '$.load') AS REAL)"),
+    "map": ("obd_readings", "CAST(json_extract(data, '$.map') AS REAL)"),
+    "speed": ("obd_readings", "CAST(json_extract(data, '$.speed') AS REAL)"),
+    "bplus": ("obd_readings", "CAST(json_extract(data, '$.bplus') AS REAL)"),
+    "voltage": ("obd_readings", "CAST(json_extract(data, '$.voltage') AS REAL)"),
+    "gps_speed": ("gps_points", "speed"),
+}
+
+
+def series_rows(kind, t_from, t_to):
+    """Zeitreihe [(epoch_s, wert)] fuer Grafana (Infinity/JSON-Datenquelle)."""
+    c = db()
+    try:
+        if kind == "fillup_cost":
+            rows = c.execute(
+                "SELECT CAST(strftime('%s', date || ' 12:00:00') AS INTEGER) AS ts, "
+                "COALESCE(total_price, ROUND(price_per_l * liters, 2)) AS v "
+                "FROM fillups WHERE (total_price IS NOT NULL OR price_per_l IS NOT NULL) "
+                "AND date >= date(?, 'unixepoch') AND date <= date(?, 'unixepoch') ORDER BY date",
+                (t_from, t_to)).fetchall()
+        else:
+            table, expr = SERIES_KINDS[kind]
+            rows = c.execute(
+                "SELECT ts, %s AS v FROM %s WHERE ts BETWEEN ? AND ? AND %s IS NOT NULL ORDER BY ts"
+                % (expr, table, expr), (t_from, t_to)).fetchall()
+    finally:
+        c.close()
+    out = []
+    for r in rows:
+        try:
+            v = float(r["v"])
+        except (TypeError, ValueError):
+            continue
+        out.append((int(r["ts"]), v))
+    return out
+
+
 def delete_row(table, row_id):
     if table not in ("fillups", "maintenance"):
         raise ValueError("ungueltige Tabelle")
@@ -546,6 +589,34 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             c.close()
 
+    def series(self, qs, path):
+        kind = (qs.get("kind", ["rpm"])[0] or "rpm").lower()
+        if kind not in SERIES_KINDS and kind != "fillup_cost":
+            self._json({"error": "unbekanntes kind; gueltig: %s"
+                        % ", ".join(sorted(SERIES_KINDS) + ["fillup_cost"])}, 400)
+            return
+        t_from = norm_ts(qs.get("from", [None])[0])
+        t_to = norm_ts(qs.get("to", [None])[0])
+        if t_from is None:
+            t_from = int(time.time()) - 7 * 86400
+        if t_to is None:
+            t_to = int(time.time())
+        rows = series_rows(kind, t_from, t_to)
+        if path.endswith(".csv"):
+            lines = ["time,value"]
+            for ts, v in rows:
+                iso = datetime.fromtimestamp(ts, tz=timezone.utc).isoformat().replace("+00:00", "Z")
+                lines.append("%s,%s" % (iso, v))
+            body = ("\n".join(lines) + "\n").encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/csv; charset=utf-8")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        else:
+            self._json([{"time": ts * 1000, "value": v} for ts, v in rows])
+
     def health(self):
         c = db()
         try:
@@ -597,6 +668,8 @@ class Handler(BaseHTTPRequestHandler):
                     self.obd_ingest(qs)
             elif path == "/api/telemetry":
                 self._json(self.telemetry(qs))
+            elif path in ("/api/series", "/api/series.csv"):
+                self.series(qs, path)
             elif path.startswith("/api/"):
                 self._json({"error": "unbekannter Endpunkt"}, 404)
             else:

@@ -110,27 +110,38 @@ python3 pi/pilogger.py --obd-port tcp://127.0.0.1:35000 --url http://127.0.0.1:8
 
 ## Grafana
 
-Die Daten liegen in **einer** SQLite-Datei — Grafana kann sie direkt als Datenquelle lesen:
+Zwei Wege — beide ohne Cloud. **Voraussetzung für beide:** carlog läuft auf dem Tower
+(`docker compose up -d`) — der Pi ist dafür nicht nötig.
 
-1. **Grafana auf Unraid** (Container, carlog-Volume mitmounten):
-   ```sh
-   docker run -d --name grafana -p 3000:3000 \
-     -v /mnt/user/appdata/grafana:/var/lib/grafana \
-     -v /mnt/user/appdata/carlog:/data \
-     -e GF_INSTALL_PLUGINS=frser-sqlite-datasource \
-     --restart unless-stopped grafana/grafana
-   ```
-2. **Datenquelle anlegen**: Typ `frser-sqlite-datasource`, Path `/data/carlog.db`
-3. **Dashboard importieren**: `docs/grafana-dashboard.json` (beim Import die SQLite-Datenquelle auswählen)
-   — Panels: Drehzahl, Öldruck, Getriebetemperatur, Kühlmitteltemperatur, Bordspannung, Geschwindigkeit,
-   Tankkosten, GPS-Geschwindigkeit + Tabelle der letzten Messungen.
+### Option A: Infinity-Plugin über die API (kein Volume-Mapping nötig)
 
-- `server.py` schaltet die DB in den **WAL-Modus** — Grafanas Lesezugriffe blockieren die Schreibseite nicht
-  (getestet: paralleler Lese-/Schreibzugriff).
-- Volume read-write mounten (SQLite-WAL braucht Zugriff auf die `-shm`-Datei); die Dashboard-Queries sind reine SELECTs.
-- OBD-Rohwerte liegen als JSON im Feld `data` — die Queries lesen sie per `json_extract()`.
+Grafana fragt die carlog-API direkt ab — die Quelle ist über das Netz erreichbar:
 
-Beispiel-Query (kopierbar in jedes Panel):
+1. **Plugin** (im Grafana-Container): `-e GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource`
+   oder `docker exec grafana grafana-cli plugins install yesoreyeram-infinity-datasource && docker restart grafana`
+2. **Datenquelle**: Typ `Infinity` (keine fixe URL nötig, pro Panel)
+3. **Panel-Query**: Typ `CSV`, URL `http://TOWER-IP:8077/api/series.csv?kind=rpm`
+   — Zeitspalte `time` (ISO 8601 UTC), Wertespalte `value`, Typ `Timeseries`.
+
+Verfügbare `kind=`-Werte:
+
+| kind | Quelle |
+|---|---|
+| `rpm`, `oil_bar`, `gear_c`, `coolant`, `intake`, `load`, `map`, `speed`, `bplus`, `voltage` | OBD-Rohwerte (`json_extract` aus `data`) |
+| `gps_speed` | GPS-Punkte |
+| `fillup_cost` | Tankkosten je Tankung |
+
+Zeitraum optional: `&from=<epoch_s>&to=<epoch_s>` (Standard: letzte 7 Tage). JSON-Variante: `/api/series?kind=...`
+liefert `[{time (ms), value}]`.
+
+### Option B: SQLite-Datenquelle (mit Volume-Mapping)
+
+Wenn das carlog-Volume in den Grafana-Container gemappt werden kann: Plugin `frser-sqlite-datasource`,
+Datenquelle mit Path `/data/carlog.db`, fertiges Dashboard `docs/grafana-dashboard.json` importieren
+(9 Panels). `server.py` schaltet die DB in den WAL-Modus — parallele Lesezugriffe (Grafana) blockieren
+die Schreibseite nicht (getestet). Volume read-write mounten (WAL braucht Zugriff auf die `-shm`-Datei).
+
+OBD-Rohwerte liegen als JSON im Feld `data` — Beispiel-Query für ein SQLite-Panel:
 ```sql
 SELECT ts AS time, json_extract(data, '$.rpm') AS rpm
 FROM obd_readings
@@ -139,7 +150,7 @@ WHERE json_extract(data, '$.rpm') IS NOT NULL
 ORDER BY ts
 ```
 
-## CI/CD
+## CI/CD## CI/CD
 
 - **CI** (`.github/workflows/ci.yml`): bei jedem Push — Syntax-Check + E2E-Kette (Simulator → Daemon → carlog → DB)
 - **Release** (`.github/workflows/release.yml`): bei Tag `v*` — Docker-Image → GHCR (`ghcr.io/skrockle/carlog`) + GitHub Release

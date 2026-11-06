@@ -1,0 +1,529 @@
+{
+  "title": "carlog",
+  "uid": "carlog-infinity",
+  "tags": [
+    "carlog"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": true,
+  "refresh": "1m",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Drehzahl",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=rpm",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Öldruck",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurebar",
+          "min": 0,
+          "max": 7,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0.6
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=oil_bar",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Getriebeöltemperatur",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=gear_c",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Kühlmitteltemperatur",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=coolant",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Bordspannung (+B / Adapter)",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "volt",
+          "min": 11,
+          "max": 15
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=bplus",
+          "refId": "A",
+          "alias": "+B (ELM ATRV)"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=voltage",
+          "refId": "B",
+          "alias": "Adapter"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Geschwindigkeit (OBD)",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=speed",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "GPS-Geschwindigkeit",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocitykmh"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=gps_speed",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Ladedruck (MAP)",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurebar"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=map",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Ansaugtemperatur",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=intake",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Motorlast",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=load",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Tankkosten je Tankung",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "carlog-infinity"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyEUR"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "carlog-infinity"
+          },
+          "type": "csv",
+          "format": "timeseries",
+          "source": "url",
+          "url": "/api/series.csv?kind=fillup_cost",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

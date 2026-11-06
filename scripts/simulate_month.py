@@ -194,7 +194,9 @@ def sens(t, kmh, prev, cold_s, ambient, warm, wot=False):
         "intake": round(intake, 1), "load": round(load),
         "map": round(map_kpa), "voltage": round(volt, 2),
         "bplus": round(volt - random.uniform(0.0, 0.15), 2),
-        "throttle": round(throttle, 1), "fuel": round(fuel, 1) if fuel is not None else None,
+        # Sensor-Wobble: der Tankstand schwankt +-0.8 % (Hang, Temperatur) — die
+        # Tank-Kette selbst bleibt sauber, nur das Signal rauscht.
+        "throttle": round(throttle, 1), "fuel": round(fuel + random.uniform(-0.8, 0.8), 1) if fuel is not None else None,
     }, {"coolant": coolant, "oil_t": oil_t, "gear_t": gear_t, "intake": intake, "fuel": fuel}
 
 # Profil-Durchschnittsgeschwindigkeiten je Fahrttyp (km/h) — das Timing muss die

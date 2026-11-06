@@ -68,7 +68,7 @@ svg{width:100%;height:auto;display:block}
 
 <section class="tab on" id="tab-tanken">
   <div class="card" id="pending-card" style="display:none"><h2>Ausstehende Tankungen</h2>
-    <p class="hint">Automatisch erkannt (Tankstands-Sprung). Preis und km-Stand nachtragen — erst dann z&auml;hlt die Tankung in die Verbrauchs-Statistik.</p>
+    <p class="hint">Automatisch erkannt (Tankstands-Sprung). <b>Nur der Preis ist Pflicht</b> &mdash; km und Liter sind Sch&auml;tzwerte und lassen sich korrigieren (die Liter vom Beleg verbessern die Verbrauchsberechnung).</p>
     <div id="pending-list"></div>
   </div>
   <div class="card"><h2>Tanken</h2>
@@ -216,7 +216,7 @@ function renderPending(pend){
   let h='';
   for(const it of pend){
     h+='<div class="pendrow"><b>'+it.date+'</b><span>~'+fmt(it.liters,1)+' l geschätzt</span>'+
-       '<label>km<input type="number" class="pk" step="1" placeholder="km-Stand"></label>'+
+       '<label>km<input type="number" class="pk" step="1" value="'+(it.odometer!=null?Math.round(it.odometer):'')+'"></label>'+
        '<label>Liter<input type="number" class="pl" step="0.01" value="'+(it.liters||'')+'"></label>'+
        '<label>Preis als<select class="pm"><option value="per_l">€ / Liter</option><option value="total">Gesamt €</option></select></label>'+
        '<label>Preis<input type="number" class="pp" step="0.001" placeholder="z.B. 1.749"></label>'+

@@ -21,6 +21,22 @@ Pflicht-Teil** mehr (nur optional als Browser-Anzeige).
 | **Optional:** LTE-Modem (USB) + IoT-SIM (z. B. 1NCE) | ~20–30 € + ~10 €/Jahr | optional – Live-Sync unterwegs |
 | **Optional:** kleines Display (SPI) für den Pi | ~15 € | später |
 
+### Bestellliste (Links)
+
+| # | Teil | Link | ca. |
+|---|---|---|---|
+| 1 | Raspberry Pi Zero 2 W | <https://www.amazon.de/dp/B09KLVX4RT> | 20–25 € |
+| 2 | microSD 16–32 GB (falls nicht da) | beliebige Class-10 | ~6 € |
+| 3 | USB-ELM327 (USB, nicht Bluetooth!) | <https://www.amazon.de/s?k=obd2+usb+adapter+elm327> | 10–15 € |
+| 4 | USB-GPS u-blox VK-162 — [Stemedu 10 Hz](https://www.amazon.de/dp/B07LBWF1P7) oder [DIYmalls](https://www.amazon.de/dp/B07GS8T3HJ) | wird am Pi als /dev/ttyACM0 erkannt | 15–22 € |
+| 5 | OBD2 Y-Splitter (mit Schalter: [Duttek](https://www.amazon.de/dp/B0CGJ9Y3WH), Alternativen ab 8 €) | teilt OBD-Port zwischen ELM327 + Strom | 8–15 € |
+| 6 | OBD2 → 5V-USB Stromadapter (Dauerplus, Pin 16) | <https://www.amazon.de/s?k=obd2+stromadapter+usb+12v+5v> | 15–25 € |
+| 7 | *Optional:* IoT-SIM 1NCE (10 € einmalig, 10 Jahre, 500 MB) | <https://www.1nce.com/en-us/1nce-connect/pricing> | 10 € |
+| 8 | *Optional:* USB-LTE-Modem (z. B. Huawei E3372) | <https://www.amazon.de/s?k=huawei+e3372> | 25–35 € |
+
+Splitter + Stromadapter zusammen = Pi bleibt im geparkten Auto an Dauerplus; der Daemon schläft per
+ATRV-Wache selbst und synct, sobald das Heim-WLAN reicht.
+
 Entfallene Teile: **Vgate iCar Pro** (war nur für die iPhone-Route nötig — der USB-ELM327 am Pi macht dasselbe)
 und **Handy-Apps** (GPSLogger/Traccar/Car Scanner) als Pflichtkomponente.
 

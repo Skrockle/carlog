@@ -95,6 +95,12 @@ Enhanced-PIDs plausibilisieren (Getriebetemp warm ~50–55 °C, +B 12,2 V Zündu
   (EU-Duty-Cycle < 1 %), ~40–60 € Zusatzhardware, nur brauchbar wenn der Parkplatz in Meshweite liegt.
 - **IoT-SIM als Option aufgenommen:** LTE-Modem + 1NCE (~10 €/Jahr) direkt am Pi — der Daemon sync't
   transportunabhängig, kein Code-Unterschied zu WLAN.
+- **ESP32 verworfen (für v1):** kein USB-Host — der USB-ELM327 passt nicht (TTL-Modul + Umlötung nötig),
+  der getestete Python-Daemon müsste in C++ neu gebaut werden, kein echtes SQLite (SPIFFS-Wear im 5-s-Takt).
+  Dafür wäre er im Tiefschlaf ~100x sparsamer: Pi-Zero-Standby ~14 Wh/Tag = 432 Wh/Monat = 60 % einer
+  60-Ah-Batterie. Bei täglichem Fahren unkritisch (Lichtmaschine lädt 14 Wh/Tag locker nach); für
+  mehrwöchiges Parken den Y-Splitter-Schalter nutzen. Falls Energie später doch zum Thema wird: ESP32
+  als „Wächter" v2 (aufwachen, ATRV prüfen, Sync-Versuch, weiterschlafen).
 - **Vgate entfallen:** USB-ELM327 am Pi deckt alles ab.
 
 ## Phasen

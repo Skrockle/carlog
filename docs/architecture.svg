@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="830" viewBox="0 0 1160 830" font-family="ui-monospace, 'Cascadia Code', 'JetBrains Mono', Menlo, monospace">
+<defs>
+<marker id="arr-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#22d3ee"/></marker>
+<marker id="arr-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fb923c"/></marker>
+<marker id="arr-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+<marker id="arr-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+<marker id="arr-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+</defs>
+<rect width="1160" height="830" fill="#020617"/>
+<rect width="1160" height="830" fill="url(#grid)"/>
+<text x="40" y="42" font-size="18" font-weight="700" fill="#e2e8f0">carlog · Architektur</text>
+<text x="40" y="62" font-size="11" fill="#94a3b8">Pi im Auto liest OBD + GPS, puffert lokal in SQLite, synct per Batch mit dem Tower zu Hause</text>
+<rect x="40" y="96" width="520" height="560" rx="12" fill="#22d3ee" fill-opacity="0.04" stroke="#22d3ee" stroke-width="1.2" stroke-dasharray="8,4"/>
+<text x="56" y="120" font-size="11" font-weight="700" fill="#22d3ee" letter-spacing="2">AUTO</text>
+<rect x="640" y="96" width="480" height="560" rx="12" fill="#34d399" fill-opacity="0.04" stroke="#34d399" stroke-width="1.2" stroke-dasharray="8,4"/>
+<text x="656" y="120" font-size="11" font-weight="700" fill="#34d399" letter-spacing="2">TOWER / HEIMNETZ</text>
+<polyline points="290,182 326,182" fill="none" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+<text x="286" y="172" font-size="9" fill="#94a3b8">CAN 500 kbit/s</text>
+<polyline points="430,214 430,296" fill="none" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+<text x="440" y="262" font-size="9" fill="#94a3b8">USB · AT/PID</text>
+<polyline points="290,332 326,332" fill="none" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+<text x="252" y="322" font-size="9" fill="#94a3b8">USB · NMEA 1 Hz</text>
+<polyline points="530,330 598,330 598,182 666,182" fill="none" stroke="#fb923c" stroke-width="1.6" marker-end="url(#arr-orange)"/>
+<text x="540" y="310" font-size="9" fill="#94a3b8">Batch-POST</text>
+<polyline points="770,214 770,296" fill="none" stroke="#fb923c" stroke-width="1.6" marker-end="url(#arr-orange)"/>
+<text x="780" y="262" font-size="9" fill="#94a3b8">HTTP :8077</text>
+<polyline points="890,338 916,338" fill="none" stroke="#a78bfa" stroke-width="1.6" marker-end="url(#arr-violet)"/>
+<polyline points="890,448 916,448" fill="none" stroke="#22d3ee" stroke-width="1.6" marker-end="url(#arr-cyan)"/>
+<polyline points="770,540 770,572" fill="none" stroke="#94a3b8" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arr-slate)"/>
+<text x="778" y="562" font-size="9" fill="#94a3b8">optional</text>
+<polyline points="430,540 430,572" fill="none" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arr-amber)"/>
+<text x="438" y="562" font-size="9" fill="#94a3b8">optional</text>
+<polyline points="530,588 600,588 600,520 666,520" fill="none" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arr-amber)"/>
+<text x="560" y="578" font-size="9" fill="#94a3b8">Live-Sync</text>
+<rect x="70" y="150" width="220" height="64" rx="6" fill="#0f172a"/>
+<rect x="70" y="150" width="220" height="64" rx="6" fill="#22d3ee" fill-opacity="0.4" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="84" y="172" font-size="12" font-weight="700" fill="#e2e8f0">OBD2-Port · CAN</text>
+<text x="84" y="188" font-size="9" fill="#94a3b8">GR Yaris, 500 kbit/s</text>
+<rect x="330" y="150" width="200" height="64" rx="6" fill="#0f172a"/>
+<rect x="330" y="150" width="200" height="64" rx="6" fill="#22d3ee" fill-opacity="0.4" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="344" y="172" font-size="12" font-weight="700" fill="#e2e8f0">USB-ELM327</text>
+<text x="344" y="188" font-size="9" fill="#94a3b8">Adapter im OBD-Port</text>
+<rect x="70" y="300" width="220" height="64" rx="6" fill="#0f172a"/>
+<rect x="70" y="300" width="220" height="64" rx="6" fill="#22d3ee" fill-opacity="0.4" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="84" y="322" font-size="12" font-weight="700" fill="#e2e8f0">USB-GPS-Stick</text>
+<text x="84" y="338" font-size="9" fill="#94a3b8">u-blox, NMEA 9600 Baud</text>
+<rect x="330" y="300" width="200" height="240" rx="6" fill="#0f172a"/>
+<rect x="330" y="300" width="200" height="240" rx="6" fill="#34d399" fill-opacity="0.4" stroke="#34d399" stroke-width="1.5"/>
+<text x="344" y="322" font-size="12" font-weight="700" fill="#e2e8f0">Pi Zero 2 W</text>
+<text x="344" y="338" font-size="9" fill="#94a3b8">pilogger.py · systemd</text>
+<text x="344" y="354" font-size="9" fill="#94a3b8">· OBD-Modul (PID-Poller)</text>
+<text x="344" y="368" font-size="9" fill="#94a3b8">· GPS-Modul (NMEA)</text>
+<text x="344" y="382" font-size="9" fill="#94a3b8">· Sync-Modul (Batch)</text>
+<rect x="345" y="428" width="170" height="56" rx="6" fill="#0f172a"/>
+<rect x="345" y="428" width="170" height="56" rx="6" fill="#a78bfa" fill-opacity="0.4" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="357" y="450" font-size="10" font-weight="700" fill="#e2e8f0">SQLite-Puffer</text>
+<text x="357" y="466" font-size="9" fill="#94a3b8">puffer.db · nichts verloren</text>
+<rect x="70" y="576" width="460" height="52" rx="6" fill="#0f172a"/>
+<rect x="70" y="576" width="460" height="52" rx="6" fill="#fbbf24" fill-opacity="0.4" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="84" y="598" font-size="12" font-weight="700" fill="#e2e8f0">OPTIONAL: LTE-Modem + IoT-SIM</text>
+<text x="84" y="614" font-size="9" fill="#94a3b8">z. B. 1NCE, ~10 €/Jahr — Live-Sync unterwegs</text>
+<rect x="670" y="150" width="200" height="64" rx="6" fill="#0f172a"/>
+<rect x="670" y="150" width="200" height="64" rx="6" fill="#fb923c" fill-opacity="0.4" stroke="#fb923c" stroke-width="1.5"/>
+<text x="684" y="172" font-size="12" font-weight="700" fill="#e2e8f0">WLAN / Heimnetz</text>
+<text x="684" y="188" font-size="9" fill="#94a3b8">Access Point · synct hier</text>
+<rect x="670" y="300" width="220" height="240" rx="6" fill="#0f172a"/>
+<rect x="670" y="300" width="220" height="240" rx="6" fill="#34d399" fill-opacity="0.4" stroke="#34d399" stroke-width="1.5"/>
+<text x="684" y="322" font-size="12" font-weight="700" fill="#e2e8f0">carlog (Docker)</text>
+<text x="684" y="338" font-size="9" fill="#94a3b8">server.py · Port 8077</text>
+<text x="684" y="354" font-size="9" fill="#94a3b8">· /api/ingest/batch</text>
+<text x="684" y="368" font-size="9" fill="#94a3b8">· /api/stats · /api/gps</text>
+<text x="684" y="382" font-size="9" fill="#94a3b8">· /api/telemetry</text>
+<text x="684" y="396" font-size="9" fill="#94a3b8">· /api/export.csv</text>
+<text x="684" y="410" font-size="9" fill="#94a3b8">· Web-UI (statisch)</text>
+<rect x="920" y="310" width="170" height="56" rx="6" fill="#0f172a"/>
+<rect x="920" y="310" width="170" height="56" rx="6" fill="#a78bfa" fill-opacity="0.4" stroke="#a78bfa" stroke-width="1.5"/>
+<text x="934" y="332" font-size="12" font-weight="700" fill="#e2e8f0">SQLite</text>
+<text x="934" y="348" font-size="9" fill="#94a3b8">carlog.db · /data</text>
+<rect x="920" y="420" width="170" height="56" rx="6" fill="#0f172a"/>
+<rect x="920" y="420" width="170" height="56" rx="6" fill="#22d3ee" fill-opacity="0.4" stroke="#22d3ee" stroke-width="1.5"/>
+<text x="934" y="442" font-size="12" font-weight="700" fill="#e2e8f0">Web-UI</text>
+<text x="934" y="458" font-size="9" fill="#94a3b8">Dashboard · Live-OBD</text>
+<rect x="670" y="576" width="200" height="52" rx="6" fill="#0f172a"/>
+<rect x="670" y="576" width="200" height="52" rx="6" fill="#94a3b8" fill-opacity="0.4" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+<text x="684" y="598" font-size="12" font-weight="700" fill="#e2e8f0">Handy (optional)</text>
+<text x="684" y="614" font-size="9" fill="#94a3b8">Browser → :8077</text>
+<text x="40" y="700" font-size="10" font-weight="700" fill="#e2e8f0">LEGENDE</text>
+<rect x="40" y="712" width="10" height="10" rx="2" fill="#22d3ee" fill-opacity="0.5" stroke="#22d3ee"/>
+<text x="56" y="721" font-size="9" fill="#94a3b8">Hardware</text>
+<rect x="226" y="712" width="10" height="10" rx="2" fill="#34d399" fill-opacity="0.5" stroke="#34d399"/>
+<text x="242" y="721" font-size="9" fill="#94a3b8">Software / Daemon</text>
+<rect x="412" y="712" width="10" height="10" rx="2" fill="#a78bfa" fill-opacity="0.5" stroke="#a78bfa"/>
+<text x="428" y="721" font-size="9" fill="#94a3b8">Datenbank</text>
+<rect x="598" y="712" width="10" height="10" rx="2" fill="#fb923c" fill-opacity="0.5" stroke="#fb923c"/>
+<text x="614" y="721" font-size="9" fill="#94a3b8">Transport (WLAN)</text>
+<rect x="784" y="712" width="10" height="10" rx="2" fill="#fbbf24" fill-opacity="0.5" stroke="#fbbf24"/>
+<text x="800" y="721" font-size="9" fill="#94a3b8">Optional (LTE)</text>
+<rect x="970" y="712" width="10" height="10" rx="2" fill="#94a3b8" fill-opacity="0.5" stroke="#94a3b8"/>
+<text x="986" y="721" font-size="9" fill="#94a3b8">Optional (Client)</text>
+<text x="40" y="740" font-size="9" fill="#94a3b8">gestrichelt = optional · Batch-Sync: der Pi puffert lokal — WLAN-Reichweite bis zum Parkplatz ist unkritisch, ein paar Minuten Empfang reichen</text>
+</svg>

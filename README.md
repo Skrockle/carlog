@@ -20,6 +20,12 @@ Keine Cloud, keine pip-Pakete, nichts, was irgendwohin telefoniert.
 
 </div>
 
+## Plan & Architektur
+
+![Architektur](docs/architecture.svg)
+
+Der komplette Ausbauplan — Pi-Reader im Auto, Batch-Sync, optional IoT-SIM — steht in **[docs/PLAN.md](docs/PLAN.md)**.
+
 ## Features
 
 - ⛽ **Tanklog** mit Voll-zu-Voll-Verbrauch: l/100 km, €/100 km, €/Monat — serverseitig gerechnet, Teilfüllungen werden erst beim nächsten Volltanken verrechnet

@@ -35,6 +35,9 @@ td .del:hover{color:var(--acc)}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
 .stat b{display:block;font-size:20px;margin-top:3px}
 .stat span{font-size:12px;color:var(--mut)}
+.ranges{display:flex;gap:6px;flex-wrap:wrap}
+.ranges button{background:var(--card);border:1px solid var(--line);color:var(--mut);padding:8px 14px;border-radius:9px;cursor:pointer;font-size:13.5px}
+.ranges button.on{color:var(--txt);border-color:var(--acc)}
 .muted{color:var(--mut);font-size:12.5px}
 .urlbox{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .urlbox code{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;word-break:break-all;flex:1;min-width:240px}
@@ -50,6 +53,7 @@ svg{width:100%;height:auto;display:block}
 <nav>
 <button data-tab="tanken" class="on">Tanken</button>
 <button data-tab="wartung">Wartung</button>
+<button data-tab="fahrten">Fahrten</button>
 <button data-tab="stats">Statistik</button>
 <button data-tab="auto">Automatik</button>
 </nav>
@@ -91,6 +95,18 @@ svg{width:100%;height:auto;display:block}
   <div class="card"><h2>Historie</h2><div id="maint-table"></div></div>
 </section>
 
+<section class="tab" id="tab-fahrten">
+  <div class="card"><h2>Zeitraum</h2>
+    <div class="ranges" id="trip-ranges">
+      <button data-days="7">7 Tage</button>
+      <button data-days="30" class="on">30 Tage</button>
+      <button data-days="90">90 Tage</button>
+      <button data-days="365">1 Jahr</button>
+    </div>
+  </div>
+  <div class="cards" id="trip-cards"></div>
+  <p class="hint">Fahrten werden per Lückenerkennung zusammengefasst (Abstand &ge; 10 min = neue Fahrt). Strecke aus GPS-Punkten (Haversine), Höchstgeschwindigkeit aus OBD.</p>
+</section>
 <section class="tab" id="tab-stats">
   <div class="cards" id="stat-cards"></div>
   <div class="card"><h2>Verbrauch l/100 km (Voll-zu-Voll)</h2><div id="chart-l100"></div></div>
@@ -130,7 +146,7 @@ document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   b.classList.add('on');document.getElementById('tab-'+b.dataset.tab).classList.add('on');
   refreshTab(b.dataset.tab);
 });
-function refreshTab(t){if(t==='tanken')loadFill();else if(t==='wartung')loadMaint();else if(t==='stats')loadStats();else if(t==='auto')loadTelem()}
+function refreshTab(t){if(t==='tanken')loadFill();else if(t==='wartung')loadMaint();else if(t==='fahrten')loadTrips();else if(t==='stats')loadStats();else if(t==='auto')loadTelem()}
 
 /* Datum-Default */
 for(const f of ['fill-form','maint-form']){const el=document.forms[f];if(el)el.date.value=new Date().toISOString().slice(0,10)}
@@ -177,6 +193,31 @@ document.getElementById('maint-form').onsubmit=async ev=>{
   catch(e){m.textContent='✗ '+e.message}
 };
 async function delMaint(id){if(!confirm('Wartungs-Eintrag löschen?'))return;await api('/api/maintenance?id='+id,{method:'DELETE'});loadMaint()}
+
+/* Fahrten */
+let tripDays=30;
+document.querySelectorAll('#trip-ranges button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#trip-ranges button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');tripDays=+b.dataset.days;loadTrips();
+});
+async function loadTrips(){
+  const el=document.getElementById('trip-cards');
+  try{
+    const now=Math.floor(Date.now()/1000);
+    const d=await api('/api/trip?from='+(now-tripDays*86400)+'&to='+now);
+    const t=d[0]||{};
+    const mins=t['Fahrzeit (min)']||0;
+    const cards=[
+      ['Strecke',t['Strecke (km)']!=null?fmt(t['Strecke (km)'],1)+' km':'–'],
+      ['Höchstgeschw.',t['Hoechstgeschw. (km/h)']!=null?fmt(t['Hoechstgeschw. (km/h)'],0)+' km/h':'–'],
+      ['Fahrzeit',mins?Math.floor(mins/60)+' h '+(mins%60)+' min':'–'],
+      ['Fahrten',t['Fahrten']!=null?fmt(t['Fahrten'],0):'–'],
+      ['Ø Tempo',t['Schnitt (km/h)']!=null?fmt(t['Schnitt (km/h)'],1)+' km/h':'–'],
+      ['Tankstand',t['Tankstand (%)']!=null?fmt(t['Tankstand (%)'],0)+' %':'–'],
+    ];
+    el.innerHTML=cards.map(c=>'<div class="stat"><span>'+c[0]+'</span><b>'+c[1]+'</b></div>').join('');
+  }catch(e){el.innerHTML='<p class="muted">'+e.message+'</p>'}
+}
 
 /* Statistik + Charts */
 function chart(el,kind,labels,series,unit){

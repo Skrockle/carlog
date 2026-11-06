@@ -571,6 +571,35 @@ FILLUP_DEDUPE_DAYS = 2   # bestehender Eintrag in dem Fenster -> Sprung ist scho
 _FUEL_SCAN = {"ts": 0}   # letzter Scan-Stand (Modul-Cache, erstmalig volle Historie)
 
 
+def _gps_cum_at(need_ts):
+    """GPS-Kumulativedistanz (km, Haversine ueber alle Punkte) zu Zeitpunkten.
+    EIN Walk ueber alle Punkte; need_ts zwischen zwei Punkten bekommt die Distanz
+    bis zum letzten Punkt davor (der Tankstopp liegt zwischen Fahrten)."""
+    c = db()
+    try:
+        pts = c.execute("SELECT ts, lat, lon FROM gps_points ORDER BY ts").fetchall()
+    finally:
+        c.close()
+    need = sorted(set(need_ts))
+    res = {t: 0.0 for t in need}
+    km = 0.0
+    last = None
+    i = 0
+    for p in pts:
+        if last is not None:
+            la1, lo1, la2, lo2 = map(math.radians, (last[0], last[1], p["lat"], p["lon"]))
+            h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+            km += 2 * 6371.0 * math.asin(math.sqrt(h))
+        while i < len(need) and need[i] <= p["ts"]:
+            res[need[i]] = km
+            i += 1
+        last = (p["lat"], p["lon"])
+    while i < len(need):
+        res[need[i]] = km
+        i += 1
+    return res
+
+
 def detect_fillups():
     """Tankfuellungen automatisch aus Tankstands-Anstiegen erkennen.
 
@@ -613,19 +642,45 @@ def detect_fillups():
             day = datetime.fromtimestamp(ts).date()
             if not any(abs((day - d).days) <= FILLUP_DEDUPE_DAYS for d in ex_days):
                 liters = round((f - prev_f) / 100.0 * TRACK_TANK_L, 2)
-                new.append((day.isoformat(), liters, prev_f, f))
+                new.append((ts, day.isoformat(), liters, prev_f, f))
                 ex_days.add(day)
             prev_f = f  # Reset, damit der Rest des Anstiegs nicht doppelzaehlt
         prev_f = f
     if new:
+        # Odometer-Schaetzwert je Sprung aus der GPS-Kumulativen; der Faktor
+        # (Tanklog/GPS) wird aus der fertigen Tank-Kette kalibriert — so bekommt
+        # jeder ausstehende Eintrag seinen eigenen, nahezu echten km-Stand.
+        c3 = db()
+        try:
+            done = c3.execute(
+                "SELECT date, odometer FROM fillups WHERE odometer IS NOT NULL "
+                "AND (total_price IS NOT NULL OR price_per_l IS NOT NULL) ORDER BY date, id"
+            ).fetchall()
+        finally:
+            c3.close()
+        estimates = {}
+        if done:
+            first_d, first_odo = done[0]["date"], float(done[0]["odometer"])
+            last_d, last_odo2 = done[-1]["date"], float(done[-1]["odometer"])
+            def mid(dstr):
+                return datetime.strptime(dstr, "%Y-%m-%d").timestamp()
+            cums = _gps_cum_at([mid(first_d), mid(last_d)] + [j[0] for j in new])
+            span_gps = cums[mid(last_d)] - cums[mid(first_d)]
+            factor = (last_odo2 - first_odo) / span_gps if span_gps > 0 else 1.0
+            for j in new:
+                estimates[j[0]] = first_odo + (cums[j[0]] - cums[mid(first_d)]) * factor
+        else:
+            for j in new:
+                estimates[j[0]] = last_odo
         c = db()
         try:
-            for dstr, liters, fb, fa in new:
+            for j in new:
+                jts, dstr, liters, fb, fa = j
                 c.execute(
                     "INSERT INTO fillups (date, odometer, liters, full, note, created) "
                     "VALUES (?, ?, ?, 1, ?, ?)",
-                    (dstr, last_odo, liters,
-                     "automatisch erkannt (%.0f→%.0f %% Tankstand) — Preis und km nachtragen" % (fb, fa),
+                    (dstr, round(estimates[jts], 1), liters,
+                     "automatisch erkannt (%.0f→%.0f %% Tankstand) — Preis nachtragen" % (fb, fa),
                      time.time()))
             c.commit()
         finally:

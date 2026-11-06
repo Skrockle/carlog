@@ -61,6 +61,23 @@
           "url": "/api/series.csv?kind=rpm",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -119,6 +136,23 @@
           "url": "/api/series.csv?kind=oil_bar",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -162,6 +196,23 @@
           "url": "/api/series.csv?kind=gear_c",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -204,6 +255,23 @@
           "source": "url",
           "url": "/api/series.csv?kind=coolant",
           "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
         }
       ]
     },
@@ -263,6 +331,23 @@
           "refId": "B",
           "alias": "Adapter"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -305,6 +390,23 @@
           "source": "url",
           "url": "/api/series.csv?kind=speed",
           "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
         }
       ]
     },
@@ -349,6 +451,23 @@
           "url": "/api/series.csv?kind=gps_speed",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -392,6 +511,23 @@
           "url": "/api/series.csv?kind=map",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -434,6 +570,23 @@
           "source": "url",
           "url": "/api/series.csv?kind=intake",
           "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
         }
       ]
     },
@@ -480,6 +633,23 @@
           "url": "/api/series.csv?kind=load",
           "refId": "A"
         }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
       ]
     },
     {
@@ -522,6 +692,23 @@
           "source": "url",
           "url": "/api/series.csv?kind=fillup_cost",
           "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
         }
       ]
     }

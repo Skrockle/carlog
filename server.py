@@ -403,6 +403,52 @@ def series_rows(kind, t_from, t_to):
     return out
 
 
+TRIP_GAP_S = 600  # Abstand ab dem eine neue Fahrt beginnt (10 min)
+
+
+def trip_summary(t_from, t_to):
+    """Fahrt-Zusammenfassung fuer einen Zeitraum: GPS-Strecke (Haversine),
+    Hoechstgeschwindigkeit, Fahrzeit + Anzahl Fahrten (Luecken-basiert),
+    Durchschnitt und Tankstand am Ende."""
+    c = db()
+    try:
+        obd = c.execute("SELECT ts FROM obd_readings WHERE ts BETWEEN ? AND ? ORDER BY ts",
+                        (t_from, t_to)).fetchall()
+        max_kmh = c.execute(
+            "SELECT MAX(CAST(json_extract(data, '$.speed') AS REAL)) FROM obd_readings "
+            "WHERE ts BETWEEN ? AND ?", (t_from, t_to)).fetchone()[0]
+        tank = c.execute(
+            "SELECT CAST(json_extract(data, '$.fuel') AS REAL) AS f FROM obd_readings "
+            "WHERE ts BETWEEN ? AND ? AND json_extract(data, '$.fuel') IS NOT NULL ORDER BY ts",
+            (t_from, t_to)).fetchall()
+        gpts = c.execute("SELECT lat, lon FROM gps_points WHERE ts BETWEEN ? AND ? ORDER BY ts",
+                         (t_from, t_to)).fetchall()
+    finally:
+        c.close()
+    blocks = []
+    for r in obd:
+        ts = r["ts"]
+        if blocks and ts - blocks[-1][-1] <= TRIP_GAP_S:
+            blocks[-1].append(ts)
+        else:
+            blocks.append([ts])
+    fahren_min = sum((b[-1] - b[0]) / 60.0 for b in blocks)
+    km = 0.0
+    for a, b in zip(gpts, gpts[1:]):
+        la1, lo1, la2, lo2 = map(math.radians, (a["lat"], a["lon"], b["lat"], b["lon"]))
+        h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+        km += 2 * 6371.0 * math.asin(math.sqrt(h))
+    avg = km / (fahren_min / 60.0) if fahren_min > 0 else 0.0
+    return [{
+        "Strecke (km)": round(km, 1),
+        "Hoechstgeschw. (km/h)": round(float(max_kmh or 0)),
+        "Fahrzeit (min)": round(fahren_min),
+        "Fahrten": len(blocks),
+        "Schnitt (km/h)": round(avg, 1),
+        "Tankstand (%)": round(float(tank[-1]["f"]), 1) if tank else None,
+    }]
+
+
 def delete_row(table, row_id):
     if table not in ("fillups", "maintenance"):
         raise ValueError("ungueltige Tabelle")
@@ -672,6 +718,9 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(self.telemetry(qs))
             elif path in ("/api/series", "/api/series.csv"):
                 self.series(qs, path)
+            elif path == "/api/trip":
+                self._json(trip_summary(norm_ts(qs.get("from", [None])[0]) or time.time() - 30 * 86400,
+                                        norm_ts(qs.get("to", [None])[0]) or time.time()))
             elif path.startswith("/api/"):
                 self._json({"error": "unbekannter Endpunkt"}, 404)
             else:

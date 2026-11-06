@@ -21,6 +21,58 @@
   },
   "panels": [
     {
+      "type": "stat",
+      "title": "Zusammenfassung (Zeitraum)",
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "bg3i058esdxq8c"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "textMode": "value_and_name",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "bg3i058esdxq8c"
+          },
+          "type": "json",
+          "format": "table",
+          "source": "url",
+          "url": "/api/trip?from=${__from}&to=${__to}",
+          "refId": "A",
+          "parser": "backend",
+          "url_options": {
+            "method": "GET",
+            "data": ""
+          }
+        }
+      ]
+    },
+    {
       "type": "timeseries",
       "title": "Drehzahl",
       "datasource": {
@@ -31,7 +83,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 6
       },
       "fieldConfig": {
         "defaults": {
@@ -96,7 +148,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 6
       },
       "fieldConfig": {
         "defaults": {
@@ -176,7 +228,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -241,7 +293,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -306,7 +358,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 22
       },
       "fieldConfig": {
         "defaults": {
@@ -391,7 +443,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 22
       },
       "fieldConfig": {
         "defaults": {
@@ -456,7 +508,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 30
       },
       "fieldConfig": {
         "defaults": {
@@ -521,7 +573,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 30
       },
       "fieldConfig": {
         "defaults": {
@@ -586,7 +638,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 38
       },
       "fieldConfig": {
         "defaults": {
@@ -651,7 +703,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 38
       },
       "fieldConfig": {
         "defaults": {
@@ -718,7 +770,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 46
       },
       "fieldConfig": {
         "defaults": {
@@ -783,7 +835,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 54
       },
       "fieldConfig": {
         "defaults": {
@@ -850,7 +902,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 54
       },
       "fieldConfig": {
         "defaults": {

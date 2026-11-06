@@ -33,9 +33,22 @@ Pflicht-Teil** mehr (nur optional als Browser-Anzeige).
 | 6 | OBD2 → 5V-USB Stromadapter (Dauerplus, Pin 16) | <https://www.amazon.de/s?k=obd2+stromadapter+usb+12v+5v> | 15–25 € |
 | 7 | *Optional:* IoT-SIM 1NCE (10 € einmalig, 10 Jahre, 500 MB) | <https://www.1nce.com/en-us/1nce-connect/pricing> | 10 € |
 | 8 | *Optional:* USB-LTE-Modem (z. B. Huawei E3372) | <https://www.amazon.de/s?k=huawei+e3372> | 25–35 € |
+| 9 | **Micro-USB-OTG-Hub** (PFLICHT — der Zero 2 W hat nur EINEN USB-Port!) | [BerryBase 4-Port-Hub](https://www.berrybase.de/4-port-micro-usb-2.0-otg-hub-schwarz) | ~4 € |
+| 10 | *Optional:* Waveshare UPS HAT (C) für Zero (Li-po 1000 mAh, Pogo-Pins, lädt+versorgt gleichzeitig) | <https://waveshare.com/ups-hat-c.htm> | ~15–20 € |
+| 11 | *Optional:* micro-USB → USB-C-Adapter (der Zero 2 W hat micro-USB-Strom, kein USB-C) | <https://www.amazon.de/s?k=micro+usb+auf+usb+c+adapter> | ~4 € |
 
 Splitter + Stromadapter zusammen = Pi bleibt im geparkten Auto an Dauerplus; der Daemon schläft per
 ATRV-Wache selbst und synct, sobald das Heim-WLAN reicht.
+
+**Hinweise (Stand Nov 2026):**
+- Der Pi Zero 2 W hat **zwei micro-USB-Ports** (PWR IN + USB/OTG) — **kein USB-C**. Der OTG-Hub ist Pflicht,
+  weil ELM327 und GPS beide an den einen USB-Port müssen (das Datenblatt bestätigt: „Two micro-USB ports,
+  one for input power and one for USB On-The-Go").
+- **Alternativer Betrieb mit UPS (Design B):** Pi statt an Dauerplus an eine **zündungsgesteuerte Quelle**
+  (12V-Steckdose, Verhalten im GR Yaris am Abholtag prüfen) + UPS HAT (C) als Brücke: Zündung aus → der
+  Akku trägt den Pi (1000 mAh ≈ 6 h), der Daemon synchronisiert und fährt sauber herunter — **die
+  Autobatterie wird nie netto belastet**, und nach dem Shutdown ist alles aus. Benötigt eine kleine
+  Daemon-Änderung (bei Stromverlust: Sync → Shutdown statt Schlafmodus).
 
 Entfallene Teile: **Vgate iCar Pro** (war nur für die iPhone-Route nötig — der USB-ELM327 am Pi macht dasselbe)
 und **Handy-Apps** (GPSLogger/Traccar/Car Scanner) als Pflichtkomponente.

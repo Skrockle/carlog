@@ -1,9 +1,34 @@
-# carlog – Fahrzeug-Tracker (GR Yaris)
+<div align="center">
 
-Selbst gehosteter Tank-/Wartungs-/Telemetrie-Tracker. **Keine Cloud, keine externe
-Abhängigkeit**: Ein Container auf dem Tower, Daten in einer SQLite-Datei unter
-`/mnt/user/appdata/carlog`. Nur Python-Stdlib – keine pip-Pakete, nichts, was
-irgendwohin telefoniert.
+# 🚗 carlog
+
+**Selbst gehosteter Fahrzeug-Tracker – Tanken, Wartung & Telemetrie.**
+
+Ein Container auf dem eigenen Server, alle Daten in **einer** SQLite-Datei.
+Keine Cloud, keine pip-Pakete, nichts, was irgendwohin telefoniert.
+
+[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](server.py)
+[![Datenbank](https://img.shields.io/badge/Datenbank-SQLite-003B57?logo=sqlite&logoColor=white)](https://sqlite.org)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
+[![Cloud](https://img.shields.io/badge/Cloud-keine-success)](https://github.com/Skrockle/carlog#setup-auf-dem-tower)
+[![Abhängigkeiten](https://img.shields.io/badge/pip--Pakete-0-success)](#)
+[![Unraid](https://img.shields.io/badge/Unraid-ready-f15a24?logo=unraid&logoColor=white)](#setup-auf-dem-tower)
+
+![carlog Vorschau](docs/preview.svg)
+
+*Vorschau (Statistik-Ansicht) mit Beispieldaten — das echte UI läuft komplett lokal unter `http://TOWER-IP:8077`.*
+
+</div>
+
+## Features
+
+- ⛽ **Tanklog** mit Voll-zu-Voll-Verbrauch: l/100 km, €/100 km, €/Monat — serverseitig gerechnet, Teilfüllungen werden erst beim nächsten Volltanken verrechnet
+- 🔧 **Wartungshistorie** mit km-Stand, Kosten und Notizen
+- 📍 **Automatischer GPS-Ingest** (`/api/gps`) — kompatibel mit GPSLogger/OsmAnd/Traccar → km/Monat und Jahresleistung ohne Zutun
+- 🚗 **OBD2-Ingest** (`/api/obd`) im Torque-Webserver-Format → Drehzahl, Kühl-/Ansaugtemperatur, Bordspannung (12V-Frühwarnung!)
+- 📊 **Statistik-Tab** mit SVG-Charts — ohne externe JS-Libs, kein CDN
+- 📱 **Dunkles, deutschsprachiges Web-UI**, PWA-fähig („Zum Homescreen“)
+- 📤 **CSV-Export** für alle Datenarten · 🔐 optionaler **Token-Schutz** für schreibende Endpunkte
 
 ## Was macht Sinn zu tracken (GR Yaris, Benziner)
 
@@ -24,7 +49,7 @@ und Toyota-myT-Daten – bewusst weggelassen, weil Cloud.
 2. `docker compose up -d` (Unraid ≥ 7 hat Compose integriert) **oder** CA →
    „Add Container“: Image `carlog:latest` aus lokalem Build, Port `8077:8077`,
    Volume `/mnt/user/appdata/carlog:/data`.
-3. Öffnen: `http://TOWER-IP:8077` → am iPhone „Zum Homescreen“ (PWA-fähig).
+3. Öffnen: `http://TOWER-IP:8077` → am Handy „Zum Homescreen“ (PWA-fähig).
 
 Backup: nur die Datei `/mnt/user/appdata/carlog/carlog.db` sichern – fertig.
 

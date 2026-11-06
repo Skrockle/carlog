@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="720" viewBox="0 0 980 720" font-family="-apple-system, 'Segoe UI', system-ui, sans-serif">
+<rect width="980" height="720" rx="14" fill="#0f1216"/>
+<rect x="0.5" y="0.5" width="979" height="719" rx="13.5" fill="none" stroke="#242c36"/>
+<text x="26" y="42" font-size="20" font-weight="700" fill="#e8ecf1">🚗 carlog</text>
+<text x="136" y="42" font-size="13" fill="#8b96a5">Toyota GR Yaris</text>
+<text x="954" y="42" font-size="12" fill="#8b96a5" text-anchor="end">· 3 Tankungen · 3 GPS-Punkte · 0 OBD-Messungen</text>
+<rect x="26" y="60" width="72" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
+<text x="62.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Tanken</text>
+<rect x="106" y="60" width="80" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
+<text x="146.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Wartung</text>
+<rect x="194" y="60" width="86" height="30" rx="9" fill="#171c23" stroke="#ff5252" stroke-width="1.5"/>
+<text x="237.0" y="79" font-size="13" fill="#e8ecf1" text-anchor="middle">Statistik</text>
+<rect x="288" y="60" width="94" height="30" rx="9" fill="#171c23" stroke="#242c36" stroke-width="1"/>
+<text x="335.0" y="79" font-size="13" fill="#8b96a5" text-anchor="middle">Automatik</text>
+<rect x="26" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="42" y="126" font-size="11" fill="#8b96a5">km gesamt (Tanklog)</text>
+<text x="42" y="148" font-size="19" font-weight="700" fill="#e8ecf1">700</text>
+<rect x="340" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="356" y="126" font-size="11" fill="#8b96a5">Ø l/100 km</text>
+<text x="356" y="148" font-size="19" font-weight="700" fill="#e8ecf1">7,29</text>
+<rect x="654" y="106" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="670" y="126" font-size="11" fill="#8b96a5">Ø €/100 km</text>
+<text x="670" y="148" font-size="19" font-weight="700" fill="#e8ecf1">12,28</text>
+<rect x="26" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="42" y="188" font-size="11" fill="#8b96a5">Kosten gesamt</text>
+<text x="42" y="210" font-size="19" font-weight="700" fill="#e8ecf1">155,95 €</text>
+<rect x="340" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="356" y="188" font-size="11" fill="#8b96a5">km gesamt (GPS)</text>
+<text x="356" y="210" font-size="19" font-weight="700" fill="#e8ecf1">2</text>
+<rect x="654" y="168" width="300" height="52" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="670" y="188" font-size="11" fill="#8b96a5">GPS-Punkte</text>
+<text x="670" y="210" font-size="19" font-weight="700" fill="#e8ecf1">3</text>
+<rect x="26" y="236" width="928" height="230" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="42" y="260" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERBRAUCH L/100 KM (VOLL-ZU-VOLL)</text>
+<rect x="858" y="251" width="10" height="10" rx="2" fill="#ff5252"/>
+<text x="874" y="260" font-size="11" fill="#8b96a5">l/100 km</text>
+<line x1="86" y1="444.0" x2="938" y2="444.0" stroke="#242c36"/>
+<text x="78" y="448.0" font-size="10" fill="#8b96a5" text-anchor="end">7,0</text>
+<line x1="86" y1="388.0" x2="938" y2="388.0" stroke="#242c36"/>
+<text x="78" y="392.0" font-size="10" fill="#8b96a5" text-anchor="end">7,2</text>
+<line x1="86" y1="332.0" x2="938" y2="332.0" stroke="#242c36"/>
+<text x="78" y="336.0" font-size="10" fill="#8b96a5" text-anchor="end">7,3</text>
+<line x1="86" y1="276.0" x2="938" y2="276.0" stroke="#242c36"/>
+<text x="78" y="280.0" font-size="10" fill="#8b96a5" text-anchor="end">7,5</text>
+<polyline fill="none" stroke="#ff5252" stroke-width="2.5" points="512.0,287.6 938.0,432.4"/>
+<circle cx="512.0" cy="287.6" r="3.5" fill="#ff5252"/>
+<circle cx="938.0" cy="432.4" r="3.5" fill="#ff5252"/>
+<text x="86.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-01</text>
+<text x="512.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-10-15</text>
+<text x="938.0" y="462" font-size="10" fill="#8b96a5" text-anchor="middle">2026-11-01</text>
+<rect x="26" y="482" width="928" height="208" rx="12" fill="#171c23" stroke="#242c36"/>
+<text x="42" y="506" font-size="11" fill="#8b96a5" letter-spacing="0.06em">VERLAUF · VOLL-ZU-VOLL</text>
+<text x="42" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="start">Datum</text>
+<text x="210" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">km</text>
+<text x="282" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">Δ km</text>
+<text x="352" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">Liter</text>
+<text x="414" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">€/l</text>
+<text x="474" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">€</text>
+<text x="554" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">l/100km</text>
+<text x="644" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">€/100km</text>
+<text x="684" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="start">Notiz</text>
+<text x="938" y="534" font-size="12.5" font-weight="600" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="544" x2="938" y2="544" stroke="#242c36"/>
+<text x="42" y="568" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-01</text>
+<text x="210" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1.000</text>
+<text x="282" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="352" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">40,00</text>
+<text x="414" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">1,749</text>
+<text x="474" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">69,96</text>
+<text x="554" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="644" y="568" font-size="13" fill="#e8ecf1" text-anchor="end">–</text>
+<text x="684" y="568" font-size="13" fill="#8b96a5" text-anchor="start">Abholtag</text>
+<text x="938" y="568" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="578" x2="938" y2="578" stroke="#1d242e"/>
+<text x="42" y="596" font-size="13" fill="#e8ecf1" text-anchor="start">2026-10-15</text>
+<text x="210" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1.400</text>
+<text x="282" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">400,0</text>
+<text x="352" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">30,00</text>
+<text x="414" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">1,700</text>
+<text x="474" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">51,00</text>
+<text x="554" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">7,50</text>
+<text x="644" y="596" font-size="13" fill="#e8ecf1" text-anchor="end">12,75</text>
+<text x="684" y="596" font-size="13" fill="#8b96a5" text-anchor="start"></text>
+<text x="938" y="596" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="606" x2="938" y2="606" stroke="#1d242e"/>
+<text x="42" y="624" font-size="13" fill="#e8ecf1" text-anchor="start">2026-11-01</text>
+<text x="210" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1.700</text>
+<text x="282" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">300,0</text>
+<text x="352" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">21,00</text>
+<text x="414" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">1,666</text>
+<text x="474" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">34,99</text>
+<text x="554" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">7,00</text>
+<text x="644" y="624" font-size="13" fill="#e8ecf1" text-anchor="end">11,66</text>
+<text x="684" y="624" font-size="13" fill="#8b96a5" text-anchor="start">Winterumstellung</text>
+<text x="938" y="624" font-size="13" fill="#8b96a5" text-anchor="end">✕</text>
+<line x1="42" y1="634" x2="938" y2="634" stroke="#1d242e"/>
+<text x="954" y="708" font-size="10" fill="#4a5563" text-anchor="end">Beispieldaten · Vorschau</text>
+</svg>

@@ -104,7 +104,23 @@
         }
       ],
       "title": "Drehzahl",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -169,7 +185,23 @@
         }
       ],
       "title": "Öldruck",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -219,7 +251,23 @@
         }
       ],
       "title": "Getriebeöltemperatur",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -269,7 +317,23 @@
         }
       ],
       "title": "Kühlmitteltemperatur",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -338,7 +402,23 @@
         }
       ],
       "title": "Bordspannung (+B / Adapter)",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -388,7 +468,23 @@
         }
       ],
       "title": "Geschwindigkeit (OBD)",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -438,7 +534,23 @@
         }
       ],
       "title": "GPS-Geschwindigkeit",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -488,7 +600,23 @@
         }
       ],
       "title": "Ladedruck (MAP)",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -538,7 +666,23 @@
         }
       ],
       "title": "Ansaugtemperatur",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -590,7 +734,23 @@
         }
       ],
       "title": "Motorlast",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -644,7 +804,23 @@
         }
       ],
       "title": "Tankkosten je Tankung",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -696,7 +872,23 @@
         }
       ],
       "title": "Gaspedal",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -748,7 +940,23 @@
         }
       ],
       "title": "Tankfüllstand",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "time"
+              },
+              {
+                "destinationType": "number",
+                "targetField": "value"
+              }
+            ]
+          }
+        }
+      ],
       "type": "timeseries"
     }
   ],
@@ -767,5 +975,5 @@
   "timezone": "browser",
   "title": "carlog",
   "uid": "carlog-infinity",
-  "version": 9
+  "version": 10
 }

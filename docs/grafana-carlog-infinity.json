@@ -58,7 +58,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=rpm",
+          "url": "/api/series.csv?kind=rpm&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -138,7 +138,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=oil_bar",
+          "url": "/api/series.csv?kind=oil_bar&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -203,7 +203,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=gear_c",
+          "url": "/api/series.csv?kind=gear_c&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -268,7 +268,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=coolant",
+          "url": "/api/series.csv?kind=coolant&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -335,7 +335,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=bplus",
+          "url": "/api/series.csv?kind=bplus&from=${__from}&to=${__to}",
           "refId": "A",
           "alias": "+B (ELM ATRV)",
           "url_options": {
@@ -352,7 +352,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=voltage",
+          "url": "/api/series.csv?kind=voltage&from=${__from}&to=${__to}",
           "refId": "B",
           "alias": "Adapter",
           "url_options": {
@@ -418,7 +418,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=speed",
+          "url": "/api/series.csv?kind=speed&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -483,7 +483,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=gps_speed",
+          "url": "/api/series.csv?kind=gps_speed&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -548,7 +548,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=map",
+          "url": "/api/series.csv?kind=map&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -613,7 +613,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=intake",
+          "url": "/api/series.csv?kind=intake&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -680,7 +680,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=load",
+          "url": "/api/series.csv?kind=load&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -745,7 +745,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=fillup_cost",
+          "url": "/api/series.csv?kind=fillup_cost&from=${__from}&to=${__to}",
           "refId": "A",
           "url_options": {
             "method": "GET",
@@ -829,7 +829,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=throttle",
+          "url": "/api/series.csv?kind=throttle&from=${__from}&to=${__to}",
           "url_options": {
             "method": "GET",
             "data": ""
@@ -896,7 +896,7 @@
           "type": "csv",
           "format": "timeseries",
           "source": "url",
-          "url": "/api/series.csv?kind=fuel",
+          "url": "/api/series.csv?kind=fuel&from=${__from}&to=${__to}",
           "url_options": {
             "method": "GET",
             "data": ""

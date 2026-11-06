@@ -80,6 +80,28 @@ und **Handy-Apps** (GPSLogger/Traccar/Car Scanner) als Pflichtkomponente.
 4. WLAN-Reichweite bis zum Parkplatz ist **unkritisch**: ein paar Minuten Empfang reichen; sonst
    Access Point am Fenster Richtung Parkplatz (~20–30 €)
 
+## Sammelraten & Speicher (gemessen)
+
+| Was | Takt (Motor läuft) | Größe/Zeile | Volumen/h Fahrt |
+|---|---|---|---|
+| OBD (PIDs als JSON-Zeile) | 1 Zeile / 5 s = 720/h | ~207 B (JSON 147 B gemessen) | 145 KB |
+| GPS-Position | 1 Zeile / 5 s (zykluskoppelt) | ~120 B | 84 KB |
+| Tanken/Wartung | manuell | ~120 B | – |
+| **Gesamt** | | | **~230 KB/h Fahrt** |
+
+| Fahrt/Tag | pro Tag | pro Monat | pro Jahr |
+|---|---|---|---|
+| 30 min | 115 KB | 3,4 MB | 41 MB |
+| 1 h | 230 KB | 6,7 MB | 82 MB |
+| 2 h | 459 KB | 13,5 MB | 164 MB |
+| 5 h | 1,1 MB | 33,6 MB | 409 MB |
+
+Puffer-Dauer auf der SD (32 GB → ~70-350 Jahre; 8 GB → ~20-100 Jahre): **Speicher ist nie der
+Grund zum Syncen** — Datenfrische und Backup sind es. Der Sync läuft zeitbasiert: alle 60 s
+(`PILOG_SYNC_INTERVAL`) ein Versuch (`GET /api/health`, 4-s-Timeout); erreichbar → Flush in
+~80-KB-Chunks (500 Zeilen/Request, max. 40 Requests pro Durchlauf), nicht erreichbar → weiter puffern.
+GPS folgt dem Zyklustakt (5 s), nicht dem 1-Hz-Modultakt — für km/Monat via Haversine ausreichend.
+
 ## GR-Yaris-PIDs (Recherche)
 
 Quellen: [gr-yaris.co.uk „Reverse engineering PIDs"](https://www.gr-yaris.co.uk/threads/reverse-engineering-pids.4680),
